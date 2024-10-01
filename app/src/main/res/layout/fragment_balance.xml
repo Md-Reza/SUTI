@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".UI.FragmentBalance">
-
-
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -59,15 +58,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="170dp"
                 android:orientation="horizontal"
                 android:weightSum="6">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="2.5"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
@@ -86,33 +85,33 @@
 
                             <!-- ProgressBar that represents a total of 100% -->
                             <ProgressBar
-                                android:id="@+id/background_progressbar1"
+                                android:id="@+id/background_progressbarCasualLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="150dp"
-                                android:layout_height="130dp"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
                                 android:progressDrawable="@drawable/status_full"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintHorizontal_bias="0.2"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
                             <ProgressBar
-                                android:id="@+id/stats_progressbar1"
+                                android:id="@+id/stats_progressbarCasualLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="150dp"
-                                android:layout_height="130dp"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="75"
                                 android:progressDrawable="@drawable/stats_progress"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintHorizontal_bias="0.2"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -149,8 +148,8 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="2.5"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
@@ -169,10 +168,10 @@
 
                             <!-- ProgressBar that represents a total of 100% -->
                             <ProgressBar
-                                android:id="@+id/background_progressbar"
+                                android:id="@+id/background_progressbarSick"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="150dp"
-                                android:layout_height="130dp"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
@@ -185,10 +184,10 @@
 
                             <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
                             <ProgressBar
-                                android:id="@+id/stats_progressbar"
+                                android:id="@+id/stats_progressbarSick"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="150dp"
-                                android:layout_height="130dp"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="75"
@@ -201,7 +200,7 @@
 
                             <!-- The text that goes in a center of the chart -->
                             <TextView
-                                android:id="@+id/number_of_calories"
+                                android:id="@+id/txtNofSickLeave"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="01/10"
@@ -221,6 +220,89 @@
                             android:layout_marginTop="10dp"
                             android:gravity="center"
                             android:text="Sick"
+                            android:textColor="@color/colorPrimarySecond"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:layout_weight="2"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/constraintLayout2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent">
+
+                            <!-- ProgressBar that represents a total of 100% -->
+                            <ProgressBar
+                                android:id="@+id/background_progressbarEarnLeave"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:indeterminate="false"
+                                android:max="100"
+                                android:progress="100"
+                                android:progressDrawable="@drawable/casual_status_full"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!-- ProgressBar that represents a chart slice, where "android:progress" is the % value of the slice -->
+                            <ProgressBar
+                                android:id="@+id/stats_progressbarEarnLeave"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="120dp"
+                                android:layout_height="120dp"
+                                android:indeterminate="false"
+                                android:max="100"
+                                android:progress="75"
+                                android:progressDrawable="@drawable/stats_progress"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <!-- The text that goes in a center of the chart -->
+                            <TextView
+                                android:id="@+id/txtNoOfEarnLeave"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="01/10"
+                                android:textSize="15sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="Earn Leave"
                             android:textColor="@color/colorPrimarySecond"
                             android:textSize="15sp" />
 

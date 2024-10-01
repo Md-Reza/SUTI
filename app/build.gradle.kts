@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.suti"
+    namespace = "com.example.chuti"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.suti"
+        applicationId = "com.example.chuti"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

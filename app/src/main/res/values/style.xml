@@ -4,7 +4,7 @@
     <style name="Custom" parent="android:Theme.DeviceDefault.Dialog">
         <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
         <item name="DialogTitleText">Please wait</item>
-        <item name="DialogSpotColor">@color/colorPrimarySecond</item>
+        <item name="DialogSpotColor">@color/redOrange</item>
         <item name="DialogSpotCount">6</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

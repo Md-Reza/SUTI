@@ -25,10 +25,10 @@
                 android:layout_height="30dp">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="15dp"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/smartex_icon"/>
+                    android:src="@drawable/chuti_logo"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -38,7 +38,7 @@
                     android:gravity="center_vertical"
                     android:textStyle="bold"
                     android:textColor="@color/redOrange"
-                    android:text="SUTI"/>
+                    android:text="CHUTI"/>
 
             </LinearLayout>
 
@@ -114,7 +114,7 @@
                 app:helperText="Enter Password"
                 app:boxBackgroundMode="outline"
                 app:counterEnabled="true"
-                app:counterMaxLength="6"
+                app:counterMaxLength="10"
                 app:endIconMode="password_toggle"
                 app:endIconTint="@color/redOrange"
                 app:errorEnabled="true"
@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:drawablePadding="10dp"
                     android:padding="15dp"
-                    android:maxLength="6"
+                    android:maxLength="10"
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>

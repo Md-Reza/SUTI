@@ -9,29 +9,12 @@
     android:layout_height="match_parent"
     tools:context=".SplashActivity">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieErp"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:lottie_fileName="lottie_server_link.json"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
-
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
         android:layout_gravity="center"
-        android:visibility="gone"
-        android:src="@drawable/smartex_banner" />
-
-    <ImageView
-        android:id="@+id/splashScreenImage"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/smartex_banner" />
+        android:visibility="visible"
+        android:src="@drawable/chuti_logo" />
 
 </LinearLayout>
