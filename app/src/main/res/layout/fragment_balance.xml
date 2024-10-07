@@ -117,7 +117,7 @@
 
                             <!-- The text that goes in a center of the chart -->
                             <TextView
-                                android:id="@+id/number_of_calories1"
+                                android:id="@+id/txtCasualLeaveBalanceStatus"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="01/10"
@@ -131,6 +131,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <TextView
+                            android:id="@+id/txtCasualLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -215,6 +216,7 @@
 
 
                         <TextView
+                            android:id="@+id/txtSickLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -258,7 +260,7 @@
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
-                                android:progressDrawable="@drawable/casual_status_full"
+                                android:progressDrawable="@drawable/earn_status_full"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_bias="0.5"
@@ -298,6 +300,7 @@
 
 
                         <TextView
+                            android:id="@+id/txtEarnLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -330,7 +333,7 @@
                     android:text="History"/>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/inspectionGridHistoryRecyclerView"
+                    android:id="@+id/employeeLeaveRequestRecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     tools:listitem="@layout/balance_recycalerview" />

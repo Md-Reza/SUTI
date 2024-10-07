@@ -48,6 +48,7 @@
                     android:weightSum="2">
 
                     <TextView
+                        android:id="@+id/txtLeaveType"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -60,7 +61,7 @@
 
 
                     <TextView
-                        android:id="@+id/txtTransactionType"
+                        android:id="@+id/txtStatusCode"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
@@ -107,7 +108,7 @@
                         android:weightSum="4">
 
                         <TextView
-                            android:id="@+id/txtFromLocationBreadcrumb"
+                            android:id="@+id/txtFromDate"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
@@ -119,7 +120,7 @@
 
 
                         <TextView
-                            android:id="@+id/txtFromContainer"
+                            android:id="@+id/txtLeaveName"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
@@ -167,6 +168,7 @@
                         android:weightSum="4">
 
                         <TextView
+                            android:id="@+id/txtToDate"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
