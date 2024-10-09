@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 
 import com.example.chuti.UI.FragmentBalance;
+import com.example.chuti.UI.SettingFragment;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new FragmentBalance(),this);
                     break;
                 case R.id.settings:
-                    replaceFragment(new FragmentBalance(),this);
+                    replaceFragment(new SettingFragment(),this);
                     break;
                 case R.id.employee:
                     replaceFragment(new FragmentBalance(),this);

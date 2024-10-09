@@ -1,5 +1,6 @@
 package com.example.chuti.UI;
 
+import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ProgressBar;
@@ -54,6 +56,7 @@ public class FragmentBalance extends Fragment {
 
     EmployeeLeaveRequestAdapter employeeLeaveRequestAdapter;
     RecyclerView employeeLeaveRequestRecyclerView;
+    Button btnRequestLeave;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +81,9 @@ public class FragmentBalance extends Fragment {
         txtEarnLeaveName = root.findViewById(R.id.txtEarnLeaveName);
         txtNoOfEarnLeave = root.findViewById(R.id.txtNoOfEarnLeave);
         employeeLeaveRequestRecyclerView = root.findViewById(R.id.employeeLeaveRequestRecyclerView);
+        btnRequestLeave = root.findViewById(R.id.btnRequestLeave);
+
+        btnRequestLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
 
         EmployeeCurrentLeaveStatistics();
         GetEmployeeLeaveRequest();

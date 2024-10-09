@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".UI.RequestLeaveFragment">
+
+    <!--Spinner widget-->
+    <Spinner
+        android:id="@+id/coursesspinner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="20dp"
+        android:gravity="end"
+        android:text="/ days/"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal"
+        android:weightSum="6">
+
+        <ImageView
+            android:id="@+id/txtFromDateSelect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_calendar_month" />
+
+        <TextView
+            android:id="@+id/txtFromDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:hint="From Date"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:id="@+id/txtToDateSelect"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:src="@drawable/ic_calendar_month" />
+
+        <TextView
+            android:id="@+id/txtToDate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:hint="From Date"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="20dp"
+        android:gravity="end"
+        android:text="Number of requested Days: 1 days"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:backgroundTint="@color/redOrange"
+            android:text="Submit Request"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+</LinearLayout>
