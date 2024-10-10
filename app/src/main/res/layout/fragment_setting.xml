@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".UI.SettingFragment">
 
     <LinearLayout
@@ -69,8 +70,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_leave_type"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -82,8 +83,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_police"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -95,8 +96,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_language"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -109,7 +110,7 @@
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
         android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -121,8 +122,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_reset_balance"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <View
@@ -132,7 +133,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="Accounts Settings"
         android:textColor="@color/purple_500"
@@ -148,8 +149,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_person"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -161,8 +162,8 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/purple_500"
+        android:drawableStart="@drawable/icon_company_profile"
+        android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
@@ -174,8 +175,64 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
+        android:drawableStart="@drawable/icon_change_password"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:text="More"
         android:textColor="@color/purple_500"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Chat with support"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/icon_chat"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Share the App"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/icon_share"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Log Out"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/icon_logout"
+        android:textColor="@color/red"
         android:textSize="13sp" />
 
 </LinearLayout>
