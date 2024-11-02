@@ -2,24 +2,26 @@ package com.example.chuti;
 
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.SettingFragment;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class MainActivity extends AppCompatActivity {
-
-    LinearLayout id01;
 
     ChipNavigationBar bottomNavigationView;
 
@@ -59,5 +61,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+            // Bitmap bitmap=(Bitmap) data.getExtras().get("data");
+            if (requestCode==200){
+
+                Toast.makeText(getApplicationContext(),"Take Photo",Toast.LENGTH_LONG);
+            }
+            Toast.makeText(getApplicationContext(),"Take Photo",Toast.LENGTH_LONG);
+        }
     }
 }

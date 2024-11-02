@@ -16,8 +16,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,8 +30,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_gradient"
         android:orientation="horizontal"
         android:weightSum="6">
 
@@ -85,18 +87,93 @@
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="5dp" />
+        android:layout_height="120dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_gradient"
+        android:gravity="start" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:gravity="end"
         android:text="Number of requested Days: 1 days"
         android:textColor="@color/black"
         android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="2dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/takePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/dot_boarder"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/chuti_logo"
+                android:textStyle="normal" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/dot_boarder"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBrowse"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:backgroundTint="@color/lightgrey"
+            android:gravity="center"
+            android:text="@string/chose_file"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/txtFileName"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:text="ic_lunchar.jpg"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

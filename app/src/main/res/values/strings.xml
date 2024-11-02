@@ -14,4 +14,5 @@
     <string name="completed">COMPLETED</string>
     <string name="deleted">DELETED</string>
     <string name="inprocess">INPROCESS</string>
+    <string name="chose_file">Chose File</string>
 </resources>
