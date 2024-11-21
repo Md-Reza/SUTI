@@ -1,7 +1,6 @@
 package com.example.chuti.UI;
 
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
-import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 
@@ -18,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -45,7 +42,7 @@ import retrofit2.Response;
 public class FragmentBalance extends Fragment {
     Services retrofitApiInterface;
     Gson gson;
-    String token, userName;
+    String token, userName,accountID,companyID;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     List<EmployeeLeaveCatalogViewModel> employeeLeaveCatalogViewModel = new ArrayList<>();
@@ -69,6 +66,8 @@ public class FragmentBalance extends Fragment {
         spotsDialog = new SpotsDialog(getContext(), R.style.Custom);
         appKey = SharedPref.read("appKey", "");
         token = SharedPref.read("token", "");
+        companyID = SharedPref.read("companyID", "");
+        accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
 
         stats_progressbarCasualLeave = root.findViewById(R.id.stats_progressbarCasualLeave);
@@ -93,7 +92,7 @@ public class FragmentBalance extends Fragment {
     private void EmployeeCurrentLeaveStatistics() {
         try {
             spotsDialog.show();
-            Call<List<EmployeeLeaveCatalogViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveCatalogAsync("Bearer" + " " + token, appKey, 5021, 5013);
+            Call<List<EmployeeLeaveCatalogViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveCatalogAsync("Bearer" + " " + token, appKey, companyID, accountID);
             getContToLocCall.enqueue(new Callback<List<EmployeeLeaveCatalogViewModel>>() {
                 @Override
                 public void onResponse(Call<List<EmployeeLeaveCatalogViewModel>> call, Response<List<EmployeeLeaveCatalogViewModel>> response) {
@@ -104,36 +103,38 @@ public class FragmentBalance extends Fragment {
                                 employeeLeaveCatalogViewModel = response.body();
                                 Log.i("info", "employeeLeaveCatalogViewModel" + response.body());
 
+
                                 for (int i = 0; i < employeeLeaveCatalogViewModel.size(); i++) {
                                     //Calculate the slice size and update the pie chart:
-                                    if (employeeLeaveCatalogViewModel.get(i).getLeaveTypeName().equals("Casual Leave")) {
+                                    if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Casual Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getTotalHandDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
+                                        Log.i("info", "Avaiable Days" + employeeLeaveCatalogViewModel.get(i).getAvailableDays());
                                         stats_progressbarCasualLeave.setProgress(progress);
-                                        txtCasualLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getLeaveTypeName());
-                                        txtCasualLeaveBalanceStatus.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getTotalHandDays()));
+                                        txtCasualLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName());
+                                        txtCasualLeaveBalanceStatus.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getAvailableDays()));
                                     }
                                     //Calculate the slice size and update the pie chart:
-                                    if (employeeLeaveCatalogViewModel.get(i).getLeaveTypeName().equals("Sick Leave")) {
+                                    if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Sick Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getTotalHandDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
                                         stats_progressbarSick.setProgress(progress);
-                                        txtSickLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getLeaveTypeName());
-                                        txtNofSickLeave.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getTotalHandDays()));
+                                        txtSickLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName());
+                                        txtNofSickLeave.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getAvailableDays()));
                                     }
                                     //Calculate the slice size and update the pie chart:
-                                    if (employeeLeaveCatalogViewModel.get(i).getLeaveTypeName().equals("Earn Leave")) {
+                                    if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Earn Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getTotalHandDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
                                         stats_progressbarEarnLeave.setProgress(progress);
-                                        txtEarnLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getLeaveTypeName());
-                                        txtNoOfEarnLeave.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getTotalHandDays()));
+                                        txtEarnLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName());
+                                        txtNoOfEarnLeave.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getAvailableDays()));
                                     }
                                 }
 
@@ -172,7 +173,7 @@ public class FragmentBalance extends Fragment {
     private void GetEmployeeLeaveRequest() {
         try {
             spotsDialog.show();
-            Call<List<EmployeeLeaveRequestViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveRequestAsync("Bearer" + " " + token, appKey, 5021, 5013, 2024);
+            Call<List<EmployeeLeaveRequestViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveRequestAsync("Bearer" + " " + token, appKey, companyID, accountID, 2024);
             getContToLocCall.enqueue(new Callback<List<EmployeeLeaveRequestViewModel>>() {
                 @Override
                 public void onResponse(Call<List<EmployeeLeaveRequestViewModel>> call, Response<List<EmployeeLeaveRequestViewModel>> response) {

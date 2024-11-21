@@ -7,18 +7,18 @@ public class CompanyViewModel {
     @SerializedName("companyID")
     @Expose
     private Integer companyID;
-    @SerializedName("companyShortText")
-    @Expose
-    private String companyShortText;
     @SerializedName("countryViewModel")
     @Expose
     private CountryViewModel countryViewModel;
+    @SerializedName("companyCode")
+    @Expose
+    private String companyCode;
     @SerializedName("companyName")
     @Expose
     private String companyName;
-    @SerializedName("emailAdd")
+    @SerializedName("emailAddress")
     @Expose
-    private Object emailAdd;
+    private String emailAddress;
     @SerializedName("hasProAccess")
     @Expose
     private Boolean hasProAccess;
@@ -27,7 +27,7 @@ public class CompanyViewModel {
     private Boolean enabled;
     @SerializedName("logoUrl")
     @Expose
-    private Object logoUrl;
+    private String logoUrl;
     @SerializedName("createdDate")
     @Expose
     private String createdDate;
@@ -41,14 +41,6 @@ public class CompanyViewModel {
 
     public void setCompanyID(Integer companyID) {
         this.companyID = companyID;
-    }
-
-    public String getCompanyShortText() {
-        return companyShortText;
-    }
-
-    public void setCompanyShortText(String companyShortText) {
-        this.companyShortText = companyShortText;
     }
 
     public CountryViewModel getCountryViewModel() {
@@ -67,13 +59,6 @@ public class CompanyViewModel {
         this.companyName = companyName;
     }
 
-    public Object getEmailAdd() {
-        return emailAdd;
-    }
-
-    public void setEmailAdd(Object emailAdd) {
-        this.emailAdd = emailAdd;
-    }
 
     public Boolean getHasProAccess() {
         return hasProAccess;
@@ -91,11 +76,11 @@ public class CompanyViewModel {
         this.enabled = enabled;
     }
 
-    public Object getLogoUrl() {
+    public String getLogoUrl() {
         return logoUrl;
     }
 
-    public void setLogoUrl(Object logoUrl) {
+    public void setLogoUrl(String logoUrl) {
         this.logoUrl = logoUrl;
     }
 
@@ -115,4 +100,35 @@ public class CompanyViewModel {
         this.modifiedDate = modifiedDate;
     }
 
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "CompanyViewModel{" +
+                "companyID=" + companyID +
+                ", countryViewModel=" + countryViewModel +
+                ", companyCode='" + companyCode + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", hasProAccess=" + hasProAccess +
+                ", enabled=" + enabled +
+                ", logoUrl='" + logoUrl + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", modifiedDate='" + modifiedDate + '\'' +
+                '}';
+    }
 }

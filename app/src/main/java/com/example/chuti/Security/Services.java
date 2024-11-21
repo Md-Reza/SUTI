@@ -21,19 +21,19 @@ public interface Services {
             @Body LoginDto loginDto
     );
 
-    @GET("LeaveCatalog/{companyID}/EmployeeCurrentLeaveStatistics/{userID}")
+    @GET("EmployeeCatalog/{companyID}/CurrentEmployeeCatalog/{accountID}")
     Call<List<EmployeeLeaveCatalogViewModel>> GetEmployeeLeaveCatalogAsync(
             @Header("Authorization") String authHeader,
             @Header("AppKey") String AppKey,
-            @Path("companyID") long companyID,
-            @Path("userID") long userID
+            @Path("companyID") String companyID,
+            @Path("accountID") String userID
     );
-    @GET("LeaveCatalog/{companyID}/LeaveRequests/{userID}/{year}")
+    @GET("LeaveCatalog/{companyID}/LeaveRequests/{accountID}/{year}")
     Call<List<EmployeeLeaveRequestViewModel>> GetEmployeeLeaveRequestAsync(
             @Header("Authorization") String authHeader,
             @Header("AppKey") String AppKey,
-            @Path("companyID") long companyID,
-            @Path("userID") long userID,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
             @Path("year") long year
     );
 }

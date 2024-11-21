@@ -121,16 +121,16 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="2dp"
+            android:background="@drawable/dot_boarder"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/takePhoto"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/dot_boarder"
+                android:layout_height="150dp"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/chuti_logo"
+                android:src="@drawable/icon_upload"
                 android:textStyle="normal" />
 
         </LinearLayout>
@@ -142,10 +142,10 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="15dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/dot_boarder"
         android:gravity="center_vertical"
         android:orientation="horizontal">

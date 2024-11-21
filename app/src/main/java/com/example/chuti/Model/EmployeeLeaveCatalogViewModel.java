@@ -4,45 +4,30 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class EmployeeLeaveCatalogViewModel {
-    @SerializedName("employeeLeaveCatalogID")
+    @SerializedName("employeeCatalogID")
     @Expose
-    private Integer employeeLeaveCatalogID;
-    @SerializedName("policyID")
+    private Integer employeeCatalogID;
+    @SerializedName("employeePeriodViewModel")
     @Expose
-    private Integer policyID;
-    @SerializedName("policyName")
+    private EmployeePeriodViewModel employeePeriodViewModel;
+    @SerializedName("policyViewModel")
     @Expose
-    private Object policyName;
-    @SerializedName("policyLeaveID")
+    private PolicyViewModel policyViewModel;
+    @SerializedName("policyLeaveViewModel")
     @Expose
-    private Integer policyLeaveID;
-    @SerializedName("employeePeriodID")
+    private PolicyLeaveViewModel policyLeaveViewModel;
+    @SerializedName("policyInitialDays")
     @Expose
-    private Integer employeePeriodID;
-    @SerializedName("leaveTypeID")
+    private Integer policyInitialDays;
+    @SerializedName("carryFromLastYear")
     @Expose
-    private Integer leaveTypeID;
-    @SerializedName("leaveTypeName")
-    @Expose
-    private String leaveTypeName;
-    @SerializedName("leaveCycle")
-    @Expose
-    private Integer leaveCycle;
-    @SerializedName("allowOverRequest")
-    @Expose
-    private Boolean allowOverRequest;
-    @SerializedName("requiredDocument")
-    @Expose
-    private Boolean requiredDocument;
-    @SerializedName("allowAutoApprove")
-    @Expose
-    private Boolean allowAutoApprove;
-    @SerializedName("totalHandDays")
-    @Expose
-    private Integer totalHandDays;
+    private Integer carryFromLastYear;
     @SerializedName("availableDays")
     @Expose
     private Integer availableDays;
+    @SerializedName("adjustDays")
+    @Expose
+    private Integer adjustDays;
     @SerializedName("onHeldDays")
     @Expose
     private Integer onHeldDays;
@@ -50,100 +35,52 @@ public class EmployeeLeaveCatalogViewModel {
     @Expose
     private Integer usedDays;
 
-    public Integer getEmployeeLeaveCatalogID() {
-        return employeeLeaveCatalogID;
+    public Integer getEmployeeCatalogID() {
+        return employeeCatalogID;
     }
 
-    public void setEmployeeLeaveCatalogID(Integer employeeLeaveCatalogID) {
-        this.employeeLeaveCatalogID = employeeLeaveCatalogID;
+    public void setEmployeeCatalogID(Integer employeeCatalogID) {
+        this.employeeCatalogID = employeeCatalogID;
     }
 
-    public Integer getPolicyID() {
-        return policyID;
+    public EmployeePeriodViewModel getEmployeePeriodViewModel() {
+        return employeePeriodViewModel;
     }
 
-    public void setPolicyID(Integer policyID) {
-        this.policyID = policyID;
+    public void setEmployeePeriodViewModel(EmployeePeriodViewModel employeePeriodViewModel) {
+        this.employeePeriodViewModel = employeePeriodViewModel;
     }
 
-    public Object getPolicyName() {
-        return policyName;
+    public PolicyViewModel getPolicyViewModel() {
+        return policyViewModel;
     }
 
-    public void setPolicyName(Object policyName) {
-        this.policyName = policyName;
+    public void setPolicyViewModel(PolicyViewModel policyViewModel) {
+        this.policyViewModel = policyViewModel;
     }
 
-    public Integer getPolicyLeaveID() {
-        return policyLeaveID;
+    public PolicyLeaveViewModel getPolicyLeaveViewModel() {
+        return policyLeaveViewModel;
     }
 
-    public void setPolicyLeaveID(Integer policyLeaveID) {
-        this.policyLeaveID = policyLeaveID;
+    public void setPolicyLeaveViewModel(PolicyLeaveViewModel policyLeaveViewModel) {
+        this.policyLeaveViewModel = policyLeaveViewModel;
     }
 
-    public Integer getEmployeePeriodID() {
-        return employeePeriodID;
+    public Integer getPolicyInitialDays() {
+        return policyInitialDays;
     }
 
-    public void setEmployeePeriodID(Integer employeePeriodID) {
-        this.employeePeriodID = employeePeriodID;
+    public void setPolicyInitialDays(Integer policyInitialDays) {
+        this.policyInitialDays = policyInitialDays;
     }
 
-    public Integer getLeaveTypeID() {
-        return leaveTypeID;
+    public Integer getCarryFromLastYear() {
+        return carryFromLastYear;
     }
 
-    public void setLeaveTypeID(Integer leaveTypeID) {
-        this.leaveTypeID = leaveTypeID;
-    }
-
-    public String getLeaveTypeName() {
-        return leaveTypeName;
-    }
-
-    public void setLeaveTypeName(String leaveTypeName) {
-        this.leaveTypeName = leaveTypeName;
-    }
-
-    public Integer getLeaveCycle() {
-        return leaveCycle;
-    }
-
-    public void setLeaveCycle(Integer leaveCycle) {
-        this.leaveCycle = leaveCycle;
-    }
-
-    public Boolean getAllowOverRequest() {
-        return allowOverRequest;
-    }
-
-    public void setAllowOverRequest(Boolean allowOverRequest) {
-        this.allowOverRequest = allowOverRequest;
-    }
-
-    public Boolean getRequiredDocument() {
-        return requiredDocument;
-    }
-
-    public void setRequiredDocument(Boolean requiredDocument) {
-        this.requiredDocument = requiredDocument;
-    }
-
-    public Boolean getAllowAutoApprove() {
-        return allowAutoApprove;
-    }
-
-    public void setAllowAutoApprove(Boolean allowAutoApprove) {
-        this.allowAutoApprove = allowAutoApprove;
-    }
-
-    public Integer getTotalHandDays() {
-        return totalHandDays;
-    }
-
-    public void setTotalHandDays(Integer totalHandDays) {
-        this.totalHandDays = totalHandDays;
+    public void setCarryFromLastYear(Integer carryFromLastYear) {
+        this.carryFromLastYear = carryFromLastYear;
     }
 
     public Integer getAvailableDays() {
@@ -152,6 +89,14 @@ public class EmployeeLeaveCatalogViewModel {
 
     public void setAvailableDays(Integer availableDays) {
         this.availableDays = availableDays;
+    }
+
+    public Integer getAdjustDays() {
+        return adjustDays;
+    }
+
+    public void setAdjustDays(Integer adjustDays) {
+        this.adjustDays = adjustDays;
     }
 
     public Integer getOnHeldDays() {
@@ -173,19 +118,14 @@ public class EmployeeLeaveCatalogViewModel {
     @Override
     public String toString() {
         return "EmployeeLeaveCatalogViewModel{" +
-                "employeeLeaveCatalogID=" + employeeLeaveCatalogID +
-                ", policyID=" + policyID +
-                ", policyName='" + policyName + '\'' +
-                ", policyLeaveID=" + policyLeaveID +
-                ", employeePeriodID=" + employeePeriodID +
-                ", leaveTypeID=" + leaveTypeID +
-                ", leaveTypeName='" + leaveTypeName + '\'' +
-                ", leaveCycle='" + leaveCycle + '\'' +
-                ", allowOverRequest=" + allowOverRequest +
-                ", requiredDocument=" + requiredDocument +
-                ", allowAutoApprove=" + allowAutoApprove +
-                ", totalHandDays=" + totalHandDays +
+                "employeeCatalogID=" + employeeCatalogID +
+                ", employeePeriodViewModel=" + employeePeriodViewModel +
+                ", policyViewModel=" + policyViewModel +
+                ", policyLeaveViewModel=" + policyLeaveViewModel +
+                ", policyInitialDays=" + policyInitialDays +
+                ", carryFromLastYear=" + carryFromLastYear +
                 ", availableDays=" + availableDays +
+                ", adjustDays=" + adjustDays +
                 ", onHeldDays=" + onHeldDays +
                 ", usedDays=" + usedDays +
                 '}';

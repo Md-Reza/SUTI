@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     Gson gson;
     ToneGenerator toneGen1;
     TextInputEditText userIdName, userPassword;
-    String token, userName;
+    String token, userName,companyID,accountID;
     Integer userNameId;
     SpotsDialog spotsDialog;
     Call<LoginSuccessViewModel> loginResponseCall;
@@ -75,6 +75,9 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox chkRemember;
     SharedPreferences preferences;
     static String appKey;
+    String deviceName ;
+    String ipAddress ;
+    String macAddress ;
 
     @RequiresApi(api = Build.VERSION_CODES.N_MR1)
     @Override
@@ -100,9 +103,13 @@ public class LoginActivity extends AppCompatActivity {
         ivFingerPrint = findViewById(R.id.ivFingerPrint);
         chkRemember = findViewById(R.id.chkRemember);
 
+        deviceName = getDeviceName(LoginActivity.this);
+        ipAddress = getIPAddress(LoginActivity.this);
+        macAddress = getMacAddress();
+
         spotsDialog = new SpotsDialog(this, R.style.Custom);
 
-        appKey = "CF637E5D60454148826F8DDDDB628380";
+        appKey = "9C4D12DECD5F4594A2936A1415D47A00";
         SharedPref.write("appKey", appKey);
 
         token = SharedPref.read("token", "");
@@ -176,7 +183,10 @@ public class LoginActivity extends AppCompatActivity {
             LoginDto loginDto = new LoginDto();
             loginDto.setLoginID(userId);
             loginDto.setPassword(userPass);
-
+            loginDto.setDeviceUID(deviceName);
+            loginDto.setDeviceIP(ipAddress);
+            loginDto.setDeviceMAC(macAddress);
+            Log.i("info", "loginDto" + loginDto);
             spotsDialog.show();
             loginResponseCall = retrofitApiInterface.LoginAsync(appKey, loginDto);
             loginResponseCall.enqueue(new Callback<LoginSuccessViewModel>() {
@@ -190,7 +200,11 @@ public class LoginActivity extends AppCompatActivity {
                                 loginSuccessViewModel = response.body();
                                 Log.i("info", "Login" + response.body());
                                 token = loginSuccessViewModel.getAccessToken();
+                                accountID = loginSuccessViewModel.getAccountID().toString();
+                                companyID = loginSuccessViewModel.getCompanyID().toString();
                                 SharedPref.write("token", token);
+                                SharedPref.write("companyID", companyID);
+                                SharedPref.write("accountID", accountID);
 
                                 intentActivity(new MainActivity(), LoginActivity.this);
                             }
@@ -244,6 +258,9 @@ public class LoginActivity extends AppCompatActivity {
                         loginDto.setLoginID(uId);
                         String uPass = SharedPref.read("uPass", "");
                         loginDto.setPassword(uPass);
+                        loginDto.setDeviceUID(deviceName);
+                        loginDto.setDeviceIP(ipAddress);
+                        loginDto.setDeviceMAC(macAddress);
 
                         spotsDialog.show();
                         loginResponseCall = retrofitApiInterface.LoginAsync(appKey, loginDto);
@@ -256,7 +273,12 @@ public class LoginActivity extends AppCompatActivity {
                                             spotsDialog.dismiss();
                                             loginSuccessViewModel = new LoginSuccessViewModel();
                                             token = loginSuccessViewModel.getAccessToken();
+                                            token = loginSuccessViewModel.getAccessToken();
+                                            accountID = loginSuccessViewModel.getAccountID().toString();
+                                            companyID = loginSuccessViewModel.getCompanyID().toString();
                                             SharedPref.write("token", token);
+                                            SharedPref.write("companyID", companyID);
+                                            SharedPref.write("accountID", accountID);
 
                                             intentActivity(new MainActivity(), LoginActivity.this);
                                         }

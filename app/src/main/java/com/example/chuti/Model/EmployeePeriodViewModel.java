@@ -13,12 +13,15 @@ public class EmployeePeriodViewModel {
     @SerializedName("toDate")
     @Expose
     private String toDate;
-    @SerializedName("year")
+    @SerializedName("periodYear")
     @Expose
-    private Integer year;
+    private Integer periodYear;
     @SerializedName("isCurrent")
     @Expose
     private Boolean isCurrent;
+    @SerializedName("isClosed")
+    @Expose
+    private Boolean isClosed;
 
     public Integer getEmployeePeriodID() {
         return employeePeriodID;
@@ -44,12 +47,12 @@ public class EmployeePeriodViewModel {
         this.toDate = toDate;
     }
 
-    public Integer getYear() {
-        return year;
+    public Integer getPeriodYear() {
+        return periodYear;
     }
 
-    public void setYear(Integer year) {
-        this.year = year;
+    public void setPeriodYear(Integer periodYear) {
+        this.periodYear = periodYear;
     }
 
     public Boolean getCurrent() {
@@ -60,14 +63,23 @@ public class EmployeePeriodViewModel {
         isCurrent = current;
     }
 
+    public Boolean getClosed() {
+        return isClosed;
+    }
+
+    public void setClosed(Boolean closed) {
+        isClosed = closed;
+    }
+
     @Override
     public String toString() {
         return "EmployeePeriodViewModel{" +
                 "employeePeriodID=" + employeePeriodID +
                 ", fromDate='" + fromDate + '\'' +
                 ", toDate='" + toDate + '\'' +
-                ", year=" + year +
+                ", periodYear=" + periodYear +
                 ", isCurrent=" + isCurrent +
+                ", isClosed=" + isClosed +
                 '}';
     }
 }
