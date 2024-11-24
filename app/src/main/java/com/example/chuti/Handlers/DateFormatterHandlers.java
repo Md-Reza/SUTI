@@ -28,7 +28,7 @@ public class DateFormatterHandlers {
     }
     public static String DateTimeParseMonthYearFormatter(String dateTime) {
         parseSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        formatter_WorkDateDate = new SimpleDateFormat("MMMM yyyy");
+        formatter_WorkDateDate = new SimpleDateFormat("dd MMMM yyyy");
         try {
             dateTime = formatter_WorkDateDate.format(parseSimpleDateFormat.parse(dateTime));
         } catch (ParseException e) {

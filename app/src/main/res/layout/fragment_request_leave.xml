@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,24 +8,109 @@
 
     <!--Spinner widget-->
     <Spinner
-        android:id="@+id/coursesspinner"
+        android:id="@+id/catalogSpinner"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/spinner_item_background"
         android:spinnerMode="dropdown" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="20dp"
-        android:gravity="end"
-        android:text="/ days/"
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/available"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtAvailableDays"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/used"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtUsedDays"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="@string/held"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/txtHeldDays"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,7 +139,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             android:gravity="center_vertical"
-            android:hint="From Date"
+            android:hint="@string/from_date"
             android:padding="5dp"
             android:textColor="@color/black"
             android:textSize="12sp" />
@@ -77,7 +161,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2"
             android:gravity="center_vertical"
-            android:hint="From Date"
+            android:hint="@string/to_date"
             android:padding="5dp"
             android:textColor="@color/black"
             android:textSize="12sp" />
@@ -86,16 +170,20 @@
     </LinearLayout>
 
     <EditText
+        android:id="@+id/txtReason"
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:hint="@string/reason"
+        android:drawableStart="@drawable/icon_note"
         android:background="@drawable/bg_gradient"
-        android:gravity="start" />
+        android:gravity="top"/>
 
     <TextView
+        android:id="@+id/txtRequestedDays"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
@@ -103,9 +191,9 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="end"
-        android:text="Number of requested Days: 1 days"
-        android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:text="@string/number_of_requested_days_1_days"
+        android:textColor="@color/redOrange"
+        android:textSize="14sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,7 +215,7 @@
             <ImageView
                 android:id="@+id/takePhoto"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="match_parent"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/icon_upload"
@@ -170,7 +258,6 @@
             android:layout_gravity="center_vertical"
             android:layout_marginStart="5dp"
             android:gravity="center_vertical"
-            android:text="ic_lunchar.jpg"
             android:textColor="@color/black" />
 
     </LinearLayout>
@@ -183,16 +270,16 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
             android:layout_marginEnd="40dp"
             android:backgroundTint="@color/redOrange"
-            android:text="Submit Request"
+            android:text="@string/submit_request"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 

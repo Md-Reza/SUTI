@@ -28,6 +28,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txtEmployeeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="cmbd hr" />
@@ -223,6 +224,7 @@
         android:layout_height="20dp"/>
 
     <TextView
+        android:id="@+id/txtLogOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"

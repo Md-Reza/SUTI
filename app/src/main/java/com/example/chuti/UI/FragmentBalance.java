@@ -3,6 +3,8 @@ package com.example.chuti.UI;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
+import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
+import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,11 +19,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
-import com.example.chuti.Model.EmployeeLeaveRequestViewModel;
+import com.example.chuti.Model.LeaveRequestsViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
@@ -42,18 +45,19 @@ import retrofit2.Response;
 public class FragmentBalance extends Fragment {
     Services retrofitApiInterface;
     Gson gson;
-    String token, userName,accountID,companyID;
+    String token, accountID, companyID;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     List<EmployeeLeaveCatalogViewModel> employeeLeaveCatalogViewModel = new ArrayList<>();
     ProgressBar stats_progressbarCasualLeave, stats_progressbarSick, stats_progressbarEarnLeave;
-    String userID, appKey;
+    String userID, appKey, periodYear;
     TextView txtCasualLeaveName, txtCasualLeaveBalanceStatus, txtNofSickLeave,
             txtSickLeaveName, txtEarnLeaveName, txtNoOfEarnLeave;
 
     EmployeeLeaveRequestAdapter employeeLeaveRequestAdapter;
     RecyclerView employeeLeaveRequestRecyclerView;
     Button btnRequestLeave;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,7 +89,7 @@ public class FragmentBalance extends Fragment {
         btnRequestLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
 
         EmployeeCurrentLeaveStatistics();
-        GetEmployeeLeaveRequest();
+
         return root;
     }
 
@@ -109,6 +113,7 @@ public class FragmentBalance extends Fragment {
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Casual Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
+                                        periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
                                         Log.i("info", "Avaiable Days" + employeeLeaveCatalogViewModel.get(i).getAvailableDays());
@@ -119,6 +124,7 @@ public class FragmentBalance extends Fragment {
                                     //Calculate the slice size and update the pie chart:
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Sick Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
+                                        periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
                                         int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
@@ -132,13 +138,14 @@ public class FragmentBalance extends Fragment {
                                         int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
+                                        periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
                                         stats_progressbarEarnLeave.setProgress(progress);
                                         txtEarnLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName());
                                         txtNoOfEarnLeave.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getAvailableDays()));
                                     }
                                 }
 
-
+                                GetEmployeeLeaveRequest();
                             }
                         } else {
                             if (response.errorBody() != null) {
@@ -172,17 +179,14 @@ public class FragmentBalance extends Fragment {
 
     private void GetEmployeeLeaveRequest() {
         try {
-            spotsDialog.show();
-            Call<List<EmployeeLeaveRequestViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveRequestAsync("Bearer" + " " + token, appKey, companyID, accountID, 2024);
-            getContToLocCall.enqueue(new Callback<List<EmployeeLeaveRequestViewModel>>() {
+            Call<List<LeaveRequestsViewModel>> getContToLocCall = retrofitApiInterface.GetEmployeeLeaveRequestAsync("Bearer" + " " + token, appKey, companyID, accountID, periodYear);
+            getContToLocCall.enqueue(new Callback<List<LeaveRequestsViewModel>>() {
                 @Override
-                public void onResponse(Call<List<EmployeeLeaveRequestViewModel>> call, Response<List<EmployeeLeaveRequestViewModel>> response) {
+                public void onResponse(Call<List<LeaveRequestsViewModel>> call, Response<List<LeaveRequestsViewModel>> response) {
                     try {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
-                                Log.i("info", "employeeLeaveCatalogViewModel" + response.body());
-
                                 employeeLeaveRequestAdapter = new EmployeeLeaveRequestAdapter(getContext(), response.body());
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 employeeLeaveRequestRecyclerView.setLayoutManager(mLayoutManager);
@@ -207,7 +211,7 @@ public class FragmentBalance extends Fragment {
                 }
 
                 @Override
-                public void onFailure(Call<List<EmployeeLeaveRequestViewModel>> call, Throwable t) {
+                public void onFailure(Call<List<LeaveRequestsViewModel>> call, Throwable t) {
                     SAlertError(t.getMessage(), getContext());
                     spotsDialog.dismiss();
                 }
@@ -218,14 +222,14 @@ public class FragmentBalance extends Fragment {
         }
     }
 
-    public static class EmployeeLeaveRequestAdapter extends RecyclerView.Adapter<EmployeeLeaveRequestAdapter.ViewHolder> {
+    public class EmployeeLeaveRequestAdapter extends RecyclerView.Adapter<EmployeeLeaveRequestAdapter.ViewHolder> {
 
         Context context;
-        List<EmployeeLeaveRequestViewModel> agvTaskViewModelList;
+        List<LeaveRequestsViewModel> leaveRequestsViewModelList;
 
-        public EmployeeLeaveRequestAdapter(Context context, List<EmployeeLeaveRequestViewModel> agvTaskViewModelList) {
+        public EmployeeLeaveRequestAdapter(Context context, List<LeaveRequestsViewModel> leaveRequestsViewModelList) {
             this.context = context;
-            this.agvTaskViewModelList = agvTaskViewModelList;
+            this.leaveRequestsViewModelList = leaveRequestsViewModelList;
         }
 
         @NonNull
@@ -238,21 +242,28 @@ public class FragmentBalance extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull EmployeeLeaveRequestAdapter.ViewHolder holder, int position) {
-            final EmployeeLeaveRequestViewModel agvTaskViewModel = agvTaskViewModelList.get(position);
+            final LeaveRequestsViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
+
+            if (position == holder.getAdapterPosition()) {
+                holder.btnDelete.setOnClickListener(v -> {
+                    String leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
+                    DeleteLeaveRequest(leaveReqID);
+                });
+            }
 
             try {
 
                 try {
-                    holder.txtLeaveType.setText(String.format("%d %s", agvTaskViewModel.getNoOfDays(), agvTaskViewModel.getLeaveTypeName()));
+                    holder.txtLeaveType.setText(String.format("%d %s", leaveRequestsViewModel.getNoOfDays(), leaveRequestsViewModel.getLeaveTypeName()));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
 
-                    holder.txtLeaveName.setText(agvTaskViewModel.getLeaveTypeName());
-                    if (agvTaskViewModel.getLeaveTypeName().equals("Casual Leave"))
+                    holder.txtLeaveName.setText(leaveRequestsViewModel.getLeaveTypeName());
+                    if (leaveRequestsViewModel.getLeaveTypeName().equals("Casual Leave"))
                         holder.txtLeaveName.setBackgroundResource(R.drawable.casual_leave_button);
-                    else if (agvTaskViewModel.getLeaveTypeName().equals("Earn Leave")) {
+                    else if (leaveRequestsViewModel.getLeaveTypeName().equals("Earn Leave")) {
                         holder.txtLeaveName.setBackgroundResource(R.drawable.earn_leave_button);
                     } else
                         holder.txtLeaveName.setBackgroundResource(R.drawable.sick_leave_button);
@@ -260,7 +271,7 @@ public class FragmentBalance extends Fragment {
                     e.printStackTrace();
                 }
 
-                switch (agvTaskViewModel.getStatus()) {
+                switch (leaveRequestsViewModel.getStatus()) {
                     case 0:
                         holder.txtStatusCode.setText(R.string.created);
                         break;
@@ -291,12 +302,12 @@ public class FragmentBalance extends Fragment {
                 }
 
                 try {
-                    holder.txtFromDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(agvTaskViewModel.getFromDate())));
+                    holder.txtFromDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(leaveRequestsViewModel.getFromDate())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
-                    holder.txtToDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(agvTaskViewModel.getToDate())));
+                    holder.txtToDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(leaveRequestsViewModel.getToDate())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -307,16 +318,17 @@ public class FragmentBalance extends Fragment {
 
         @Override
         public int getItemCount() {
-            return agvTaskViewModelList.size();
+            return leaveRequestsViewModelList.size();
         }
 
-        public static class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder {
             public TextView
                     txtLeaveName,
                     txtToDate,
                     txtFromDate,
                     txtStatusCode,
                     txtLeaveType;
+            LinearLayout btnDelete;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -325,8 +337,51 @@ public class FragmentBalance extends Fragment {
                 txtFromDate = itemView.findViewById(R.id.txtFromDate);
                 txtStatusCode = itemView.findViewById(R.id.txtStatusCode);
                 txtLeaveType = itemView.findViewById(R.id.txtLeaveType);
+                btnDelete = itemView.findViewById(R.id.btnDelete);
             }
         }
 
     }
+
+    private void DeleteLeaveRequest(String leaveReqID) {
+        spotsDialog.show();
+        Call<String> saveMachineCall = retrofitApiInterface.DeleteLeaveRequestAsync("Bearer " + token, appKey, companyID, accountID, leaveReqID);
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            if (response.code() == 200) {
+                                EmployeeCurrentLeaveStatistics();
+                            }
+                        }
+                    } else if (!response.isSuccessful()) {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
+    }
+
 }

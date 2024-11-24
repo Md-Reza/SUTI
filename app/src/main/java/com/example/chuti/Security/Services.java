@@ -1,14 +1,18 @@
 package com.example.chuti.Security;
 
 import com.example.chuti.Dto.LoginDto;
+import com.example.chuti.Dto.SaveLeaveRequestDto;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeLeaveRequestViewModel;
+import com.example.chuti.Model.EmployeeProfile;
+import com.example.chuti.Model.LeaveRequestsViewModel;
 import com.example.chuti.Model.LoginSuccessViewModel;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -28,12 +32,37 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String userID
     );
-    @GET("LeaveCatalog/{companyID}/LeaveRequests/{accountID}/{year}")
-    Call<List<EmployeeLeaveRequestViewModel>> GetEmployeeLeaveRequestAsync(
+    @GET("LeaveService/{companyID}/LeaveRequests/{accountID}/{year}")
+    Call<List<LeaveRequestsViewModel>> GetEmployeeLeaveRequestAsync(
             @Header("Authorization") String authHeader,
             @Header("AppKey") String AppKey,
             @Path("companyID") String companyID,
             @Path("accountID") String accountID,
-            @Path("year") long year
+            @Path("year") String year
+    );
+    @POST("LeaveService/{companyID}/SaveLeaveRequest/{accountID}")
+    Call<String> SaveLeaveRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Body SaveLeaveRequestDto saveLeaveRequestDto
+    );
+
+    @DELETE("LeaveService/{companyID}/DeleteLeaveRequest/{accountID}/{leaveRequestID}")
+    Call<String> DeleteLeaveRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("leaveRequestID") String leaveRequestID
+    );
+
+    @GET("EmployeeService/{companyID}/Employee/{accountID}")
+    Call<EmployeeProfile> GetEmployeeServiceAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID
     );
 }

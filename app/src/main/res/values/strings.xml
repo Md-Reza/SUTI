@@ -15,4 +15,13 @@
     <string name="deleted">DELETED</string>
     <string name="inprocess">INPROCESS</string>
     <string name="chose_file">Chose File</string>
+    <string name="available">Available:</string>
+    <string name="used">Used :</string>
+    <string name="held">Held:</string>
+    <string name="number_of_requested_days_1_days">Number of requested Days: 1 days</string>
+    <string name="from_date">From Date</string>
+    <string name="to_date">To Date</string>
+    <string name="submit_request">Submit Request</string>
+    <string name="reason">Reason</string>
+    <string name="pending_approval">Pending Leave\n Approval</string>
 </resources>
