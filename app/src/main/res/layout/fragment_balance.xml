@@ -12,17 +12,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:weightSum="13">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="140dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="6">
@@ -38,6 +36,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,15 +52,15 @@
                             <ProgressBar
                                 android:id="@+id/background_progressbarCasualLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
                                 android:progressDrawable="@drawable/status_full"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.2"
+                                app:layout_constraintHorizontal_bias="0.1"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,15 +68,15 @@
                             <ProgressBar
                                 android:id="@+id/stats_progressbarCasualLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
                                 android:progressDrawable="@drawable/stats_progress"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.2"
+                                app:layout_constraintHorizontal_bias="0.1"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -99,7 +99,7 @@
                             android:id="@+id/txtCasualLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="2dp"
                             android:gravity="center"
                             android:text="Casual"
                             android:textColor="@color/redOrange"
@@ -122,6 +122,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -136,8 +138,8 @@
                             <ProgressBar
                                 android:id="@+id/background_progressbarSick"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
@@ -152,8 +154,8 @@
                             <ProgressBar
                                 android:id="@+id/stats_progressbarSick"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
@@ -183,7 +185,7 @@
                             android:id="@+id/txtSickLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="2dp"
                             android:gravity="center"
                             android:text="Sick"
                             android:textColor="@color/colorPrimarySecond"
@@ -205,6 +207,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -219,8 +223,8 @@
                             <ProgressBar
                                 android:id="@+id/background_progressbarEarnLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
@@ -235,8 +239,8 @@
                             <ProgressBar
                                 android:id="@+id/stats_progressbarEarnLeave"
                                 style="?android:attr/progressBarStyleHorizontal"
-                                android:layout_width="120dp"
-                                android:layout_height="120dp"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
                                 android:indeterminate="false"
                                 android:max="100"
                                 android:progress="100"
@@ -267,7 +271,7 @@
                             android:id="@+id/txtEarnLeaveName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="2dp"
                             android:gravity="center"
                             android:text="Earn Leave"
                             android:textColor="@color/colorPrimarySecond"
@@ -284,13 +288,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
                 android:weightSum="4">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -307,9 +313,9 @@
                         android:layout_height="40dp"
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
-                        android:text="@string/pending_approval"
                         android:gravity="center"
-                        android:textColor="@color/red"
+                        android:text="@string/pending_approval"
+                        android:textColor="@color/text_color"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -348,9 +354,9 @@
                         android:layout_height="40dp"
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
-                        android:text="Gate Pass \n Approval"
                         android:gravity="center"
-                        android:textColor="@color/red"
+                        android:text="Gate Pass \n Approval"
+                        android:textColor="@color/lightgrey"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -363,7 +369,7 @@
                         android:layout_height="20dp"
                         android:layout_marginBottom="24dp"
                         android:background="@drawable/circle_notification_counter"
-                        android:text="2"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textStyle="bold"
@@ -389,9 +395,9 @@
                         android:layout_height="40dp"
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
-                        android:text="My Gate\n Pass"
                         android:gravity="center"
-                        android:textColor="@color/red"
+                        android:text="My Gate\n Pass"
+                        android:textColor="@color/lightgrey"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -405,7 +411,7 @@
                         android:layout_height="20dp"
                         android:layout_marginBottom="24dp"
                         android:background="@drawable/circle_notification_counter"
-                        android:text="2"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textStyle="bold"
@@ -429,9 +435,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_round_shape"
-                        android:text="All\n Approval"
                         android:gravity="center"
-                        android:textColor="@color/red"
+                        android:text="All\n Approval"
+                        android:textColor="@color/lightgrey"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -445,7 +451,7 @@
                         android:layout_height="20dp"
                         android:layout_marginBottom="24dp"
                         android:background="@drawable/circle_notification_counter"
-                        android:text="2"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textStyle="bold"
@@ -461,7 +467,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="11"
+                android:layout_weight="6.5"
                 android:orientation="vertical">
 
                 <TextView
@@ -478,6 +484,23 @@
                     android:layout_height="match_parent"
                     tools:listitem="@layout/balance_recycalerview" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="4.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="20dp"
+                    android:text="Add View"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -487,16 +510,16 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnRequestLeave"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
                 android:backgroundTint="@color/redOrange"

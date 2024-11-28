@@ -101,31 +101,6 @@
         android:textColor="@color/black"
         android:textSize="13sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:text="Calender Options"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableStart="@drawable/ic_calendar_month"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:text="Reset Balance"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableStart="@drawable/icon_reset_balance"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
 
     <View
         android:layout_width="match_parent"
@@ -193,31 +168,6 @@
         android:textColor="@color/purple_500"
         android:textSize="15sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:text="Chat with support"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableStart="@drawable/icon_chat"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:text="Share the App"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:drawableStart="@drawable/icon_share"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
 
     <View
         android:layout_width="match_parent"

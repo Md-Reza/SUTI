@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/home"
-        android:icon="@drawable/ic_pie_chart"
-        android:title="Balance"
+        android:icon="@drawable/ic_home"
+        android:title="@string/home"
         app:cnb_iconColor="@color/redOrange"/>
     <item
         android:id="@+id/employee"
-        android:icon="@drawable/ic_employee"
-        android:title="Balance"
+        android:icon="@drawable/ic_pie_chart"
+        android:title="@string/balance"
         app:cnb_iconColor="@color/redOrange"/>
 
     <item
         android:id="@+id/favorites"
         android:icon="@drawable/ic_notifications"
-        android:title="Favorites"
+        android:title="@string/notice_board"
         app:cnb_iconColor="@color/redOrange" />
 
     <item
         android:id="@+id/settings"
         android:icon="@drawable/ic_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         app:cnb_iconColor="@color/redOrange" />
 
 </menu>

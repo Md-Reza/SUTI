@@ -24,4 +24,8 @@
     <string name="submit_request">Submit Request</string>
     <string name="reason">Reason</string>
     <string name="pending_approval">Pending Leave\n Approval</string>
+    <string name="balance">Balance</string>
+    <string name="notice_board">Notice Board</string>
+    <string name="settings">Settings</string>
+    <string name="home">Home</string>
 </resources>
