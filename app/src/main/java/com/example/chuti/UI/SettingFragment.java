@@ -1,5 +1,6 @@
 package com.example.chuti.UI;
 
+import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.chuti.FragmentMain;
 import com.example.chuti.LoginActivity;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeProfile;
@@ -42,7 +44,7 @@ public class SettingFragment extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    TextView textView, txtLogOut, txtEmployeeName;
+    TextView textView, txtLogOut, txtEmployeeName,txtResetPassword;
     EmployeeProfile employeeProfile;
 
     @Override
@@ -64,6 +66,7 @@ public class SettingFragment extends Fragment {
         textView = root.findViewById(R.id.textView);
         txtLogOut = root.findViewById(R.id.txtLogOut);
         txtEmployeeName = root.findViewById(R.id.txtEmployeeName);
+        txtResetPassword = root.findViewById(R.id.txtResetPassword);
 
         String text = "Go Pro Now";
         SpannableString spannableString = new SpannableString(text);
@@ -77,6 +80,9 @@ public class SettingFragment extends Fragment {
                     LoginActivity.class);
             startActivity(i1);
         });
+
+        txtResetPassword.setOnClickListener(v -> replaceFragment(new FragmentResetPassword(), getContext()));
+
         GetEmployee();
         return root;
     }

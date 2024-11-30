@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/bg_gradient_main"
+    android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".FragmentMain">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize">
+>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,8 +22,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:background="@drawable/bg_gradient_main"
+                android:layout_height="120dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -34,7 +35,7 @@
 
                     <LinearLayout
                         android:layout_width="100dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="80dp"
                         android:gravity="center_vertical"
                         android:layout_marginStart="5dp"
                         android:layout_gravity="center_vertical"
@@ -155,15 +156,77 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/banner_top_background"
+                android:elevation="3dp"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/icon_announcement"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="Upcoming Holidays"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/segoe_ui_regular"
+                        android:textColor="@color/black"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:text="Victory Day"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/segoe_ui_regular"
+                        android:textColor="@color/redOrange"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
                 android:background="@drawable/card_background"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="50dp"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:weightSum="5">

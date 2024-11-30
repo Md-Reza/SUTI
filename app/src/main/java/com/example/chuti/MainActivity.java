@@ -19,12 +19,15 @@ import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.chuti.UI.FragmentBalance;
+import com.example.chuti.UI.RequestLeaveFragment;
 import com.example.chuti.UI.SettingFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 public class MainActivity extends AppCompatActivity {
 
     ChipNavigationBar bottomNavigationView;
+    FloatingActionButton btnLeave, btnGatePass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
         toolbar.setTitle("CHUTI");
+        toolbar.setSubtitle("Leave Management System");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
+
+        btnLeave = findViewById(R.id.btnLeave);
+        btnLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), this));
+        btnGatePass = findViewById(R.id.btnGatePass);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setItemSelected(R.id.bottomNavigationView, true);

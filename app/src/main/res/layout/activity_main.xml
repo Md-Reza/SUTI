@@ -9,7 +9,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_fab"
+        android:id="@+id/btnLeave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -30,21 +30,21 @@
         android:gravity="center_vertical"
         android:text="Add"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/add_fab"
-        app:layout_constraintEnd_toStartOf="@+id/add_fab" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnLeave"
+        app:layout_constraintEnd_toStartOf="@+id/btnLeave" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_alarm_fab"
+        android:id="@+id/btnGatePass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:backgroundTint="@color/lightgrey"
         android:contentDescription="Gate Request"
         app:fabSize="normal"
-        app:layout_constraintBottom_toTopOf="@+id/add_fab"
-        app:layout_constraintEnd_toEndOf="@+id/add_fab"
+        app:layout_constraintBottom_toTopOf="@+id/btnLeave"
+        app:layout_constraintEnd_toEndOf="@+id/btnLeave"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/add_fab"
+        app:layout_constraintStart_toStartOf="@+id/btnLeave"
         app:srcCompat="@drawable/baseline_group_add_24" />
 
     <RelativeLayout
