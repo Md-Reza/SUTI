@@ -12,8 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,7 +69,7 @@ public class RequestLeaveFragment extends Fragment {
     private static final int GALLERY_REQ_CODE = 1000;
     private DatePickerDialog picker;
     ImageView txtFromDateSelect, txtToDateSelect;
-    TextView txtFromDate, txtToDate, txtFileName, txtHeldDays, txtUsedDays, txtAvailableDays,txtRequestedDays;
+    TextView txtFromDate, txtToDate, txtFileName, txtHeldDays, txtUsedDays, txtAvailableDays, txtRequestedDays;
     String fromDate, toDate;
     Button btnBrowse, btnSubmit;
     Bitmap bitmap;
@@ -82,7 +80,6 @@ public class RequestLeaveFragment extends Fragment {
     List<String> catalog;
     Spinner catalogSpinner;
     String employeeCatalogID, selectedItem, leaveTypeID;
-
     int fromYY, fromMM, fromDD, toYY, toMM, toDD;
     long daysDifference;
     EditText txtReason;

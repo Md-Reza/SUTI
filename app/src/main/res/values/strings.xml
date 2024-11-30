@@ -35,4 +35,5 @@
     <string name="change_password">Change Password</string>
     <string name="employee_id">Employee ID</string>
     <string name="enforce_to_login">Enforce To Login</string>
+    <string name="chuti">CHUTI</string>
 </resources>
