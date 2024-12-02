@@ -23,6 +23,8 @@
                 android:layout_height="140dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:weightSum="6">
 
                 <androidx.cardview.widget.CardView
@@ -202,6 +204,7 @@
                     android:layout_margin="5dp"
                     android:layout_weight="2"
                     app:cardCornerRadius="8dp"
+                    android:visibility="gone"
                     app:cardElevation="8dp">
 
                     <LinearLayout
@@ -291,8 +294,8 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -303,18 +306,18 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
                     <TextView
-                        android:id="@+id/txtPendingApproval"
+                        android:id="@+id/txtLeaveApproval"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
                         android:gravity="center"
-                        android:text="@string/pending_approval"
+                        android:text="My Leave \n Request"
                         android:textColor="@color/text_color"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -325,18 +328,20 @@
 
                     <TextView
                         android:id="@+id/txtPendingApprovalCounter"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginBottom="26dp"
                         android:background="@drawable/circle_notification_counter"
-                        android:text="2"
+                        android:gravity="center"
+                        android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/txtPendingApproval"
-                        app:layout_constraintEnd_toEndOf="@+id/txtPendingApproval"
+                        android:textSize="10sp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtLeaveApproval"
+                        app:layout_constraintEnd_toEndOf="@+id/txtLeaveApproval"
                         app:layout_constraintHorizontal_bias="1.05"
-                        app:layout_constraintStart_toStartOf="@+id/txtPendingApproval" />
+                        app:layout_constraintStart_toStartOf="@+id/txtLeaveApproval" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -344,19 +349,19 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
                     <TextView
-                        android:id="@+id/imageView"
+                        android:id="@+id/txtGatePass"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
                         android:gravity="center"
-                        android:text="Gate Pass \n Approval"
-                        android:textColor="@color/lightgrey"
+                        android:text="Out Pass \n Request"
+                        android:textColor="@color/text_color"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -364,19 +369,21 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginBottom="24dp"
+                        android:id="@+id/txtGatePassCount"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginBottom="26dp"
                         android:background="@drawable/circle_notification_counter"
+                        android:gravity="center"
                         android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        android:textSize="10sp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtGatePass"
+                        app:layout_constraintEnd_toEndOf="@+id/txtGatePass"
                         app:layout_constraintHorizontal_bias="1.05"
-                        app:layout_constraintStart_toStartOf="@+id/imageView" />
+                        app:layout_constraintStart_toStartOf="@+id/txtGatePass" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -385,7 +392,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="1.2"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
@@ -396,7 +403,7 @@
                         android:layout_marginEnd="5dp"
                         android:background="@drawable/bg_round_shape"
                         android:gravity="center"
-                        android:text="My Gate\n Pass"
+                        android:text="Pending \n Approval"
                         android:textColor="@color/lightgrey"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -407,14 +414,16 @@
 
                     <TextView
                         android:id="@+id/txtMyGatePassCounter"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginBottom="26dp"
                         android:background="@drawable/circle_notification_counter"
+                        android:gravity="center"
                         android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
+                        android:textSize="10sp"
+                        android:textStyle="normal"
                         app:layout_constraintBottom_toBottomOf="@+id/txtMyGatePass"
                         app:layout_constraintEnd_toEndOf="@+id/txtMyGatePass"
                         app:layout_constraintHorizontal_bias="1.05"
@@ -427,6 +436,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
@@ -434,6 +444,7 @@
                         android:id="@+id/txtAllApproval"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:layout_marginEnd="10dp"
                         android:background="@drawable/bg_round_shape"
                         android:gravity="center"
                         android:text="All\n Approval"
@@ -447,14 +458,16 @@
 
                     <TextView
                         android:id="@+id/txtAllApprovalCounter"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginBottom="24dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginBottom="26dp"
                         android:background="@drawable/circle_notification_counter"
+                        android:gravity="center"
                         android:text="0"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
+                        android:textSize="10sp"
+                        android:textStyle="normal"
                         app:layout_constraintBottom_toBottomOf="@+id/txtAllApproval"
                         app:layout_constraintEnd_toEndOf="@+id/txtAllApproval"
                         app:layout_constraintHorizontal_bias="1.05"
@@ -467,7 +480,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="6.5"
+                android:layout_weight="7"
                 android:orientation="vertical">
 
                 <TextView
@@ -478,11 +491,33 @@
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/employeeLeaveRequestRecyclerView"
+                <LinearLayout
+                    android:id="@+id/layoutLeaveApproval"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/employeeLeaveRequestRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/balance_recycalerview" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutGatePass"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/balance_recycalerview" />
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/outPassRecycalerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/my_outpass_request_recycalerview" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -490,7 +525,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="4.5"
+                android:layout_weight="6"
                 android:orientation="vertical">
 
                 <TextView
@@ -514,6 +549,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <Button

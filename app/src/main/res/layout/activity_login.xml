@@ -62,7 +62,7 @@
                 android:layout_marginLeft="30dp"
                 android:fontFamily="@font/segoe_ui_bold"
                 android:gravity="center_vertical"
-                android:text="Log In"
+                android:text="@string/log_in"
                 android:textColor="@color/redOrange"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -164,9 +164,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="Remember me"
+                    android:text="@string/remember_me"
                     android:textColor="@color/black"
-                    android:textSize="12dp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
@@ -203,10 +203,10 @@
                     android:layout_height="55dp"
                     android:layout_weight="1.3"
                     android:backgroundTint="@color/redOrange"
-                    android:text="Sign In"
+                    android:text="@string/sign_in"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="16dp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -219,6 +219,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="26dp"
+            android:visibility="invisible"
             android:orientation="horizontal">
 
             <TextView

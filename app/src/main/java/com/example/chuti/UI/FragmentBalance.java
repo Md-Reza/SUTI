@@ -1,15 +1,20 @@
 package com.example.chuti.UI;
 
+import static android.content.Intent.getIntent;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
+import static com.example.chuti.FragmentManager.FragmentManager.replaceFragmentWithBundle;
+import static com.example.chuti.FragmentManager.FragmentManager.replaceFragmentWithMultipleBundle;
+import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime;
+import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
-import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,8 +28,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.chuti.FragmentMain;
+import com.example.chuti.Model.EmployeeCompactViewModel;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.LeaveRequestsViewModel;
+import com.example.chuti.Model.OutPassViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
@@ -35,6 +43,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -50,14 +59,19 @@ public class FragmentBalance extends Fragment {
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     List<EmployeeLeaveCatalogViewModel> employeeLeaveCatalogViewModel = new ArrayList<>();
     ProgressBar stats_progressbarCasualLeave, stats_progressbarSick, stats_progressbarEarnLeave;
-    String userID, appKey, periodYear;
+    String userID, appKey, periodYear, outPassID;
     TextView txtCasualLeaveName, txtCasualLeaveBalanceStatus, txtNofSickLeave,
-            txtSickLeaveName, txtEarnLeaveName, txtNoOfEarnLeave;
-
+            txtSickLeaveName, txtEarnLeaveName, txtNoOfEarnLeave,
+            txtPendingApprovalCounter, txtGatePass, txtLeaveApproval, txtGatePassCount;
     EmployeeLeaveRequestAdapter employeeLeaveRequestAdapter;
-    RecyclerView employeeLeaveRequestRecyclerView;
+    EmployeeOutPassRequestAdapter employeeOutPassRequestAdapter;
+    RecyclerView employeeLeaveRequestRecyclerView, outPassRecycalerView;
     Button btnRequestLeave;
-
+    LinearLayout layoutLeaveApproval, layoutGatePass;
+    EmployeeCompactViewModel employeeCompactViewModel;
+    Toolbar toolbar;
+    int currentYear;
+    ArrayList<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +88,15 @@ public class FragmentBalance extends Fragment {
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
 
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        toolbar.setTitle("Dashboard");
+        toolbar.setSubtitle("");
+        toolbar.setNavigationOnClickListener(v -> {
+            toolbar.setTitle(R.string.chuti);
+            replaceFragment(new FragmentMain(), getContext());
+        });
+
         stats_progressbarCasualLeave = root.findViewById(R.id.stats_progressbarCasualLeave);
         stats_progressbarSick = root.findViewById(R.id.stats_progressbarSick);
         stats_progressbarEarnLeave = root.findViewById(R.id.stats_progressbarEarnLeave);
@@ -85,11 +108,36 @@ public class FragmentBalance extends Fragment {
         txtNoOfEarnLeave = root.findViewById(R.id.txtNoOfEarnLeave);
         employeeLeaveRequestRecyclerView = root.findViewById(R.id.employeeLeaveRequestRecyclerView);
         btnRequestLeave = root.findViewById(R.id.btnRequestLeave);
+        txtPendingApprovalCounter = root.findViewById(R.id.txtPendingApprovalCounter);
+        txtGatePass = root.findViewById(R.id.txtGatePass);
+        layoutLeaveApproval = root.findViewById(R.id.layoutLeaveApproval);
+        outPassRecycalerView = root.findViewById(R.id.outPassRecycalerView);
+        txtLeaveApproval = root.findViewById(R.id.txtLeaveApproval);
+        layoutGatePass = root.findViewById(R.id.layoutGatePass);
+        txtGatePassCount = root.findViewById(R.id.txtGatePassCount);
+
+        txtGatePass.setOnClickListener(v -> {
+            layoutLeaveApproval.setVisibility(View.GONE);
+            layoutGatePass.setVisibility(View.VISIBLE);
+            txtGatePass.setBackgroundResource(R.drawable.button_bg_round_shape);
+            txtLeaveApproval.setBackgroundResource(R.drawable.bg_round_shape);
+            GetEmployeeOutPass();
+        });
+        txtLeaveApproval.setOnClickListener(v -> {
+            layoutLeaveApproval.setVisibility(View.VISIBLE);
+            layoutGatePass.setVisibility(View.GONE);
+            txtGatePass.setBackgroundResource(R.drawable.bg_round_shape);
+            txtLeaveApproval.setBackgroundResource(R.drawable.button_bg_round_shape);
+            GetEmployeeLeaveRequest();
+        });
 
         btnRequestLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
 
         EmployeeCurrentLeaveStatistics();
 
+        Calendar calendar = Calendar.getInstance();
+
+        currentYear = calendar.get(Calendar.YEAR);
         return root;
     }
 
@@ -191,6 +239,7 @@ public class FragmentBalance extends Fragment {
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 employeeLeaveRequestRecyclerView.setLayoutManager(mLayoutManager);
                                 employeeLeaveRequestRecyclerView.setAdapter(employeeLeaveRequestAdapter);
+                                txtPendingApprovalCounter.setText(String.valueOf(response.body().size()));
                             }
                         } else {
                             if (response.errorBody() != null) {
@@ -384,4 +433,202 @@ public class FragmentBalance extends Fragment {
         });
     }
 
+    private void GetEmployeeOutPass() {
+        try {
+            Call<List<OutPassViewModel>> getContToLocCall = retrofitApiInterface.GetOutpassRequestsAsync("Bearer" + " " + token, appKey, companyID, accountID, currentYear);
+            getContToLocCall.enqueue(new Callback<List<OutPassViewModel>>() {
+                @Override
+                public void onResponse(Call<List<OutPassViewModel>> call, Response<List<OutPassViewModel>> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                spotsDialog.dismiss();
+                                leaveRequestsViewModelList = new ArrayList<>(response.body());
+                                employeeOutPassRequestAdapter = new EmployeeOutPassRequestAdapter(getContext(), leaveRequestsViewModelList);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                                outPassRecycalerView.setLayoutManager(mLayoutManager);
+                                outPassRecycalerView.setAdapter(employeeOutPassRequestAdapter);
+                                txtGatePassCount.setText(String.valueOf(response.body().size()));
+                            }
+                        } else {
+                            if (response.errorBody() != null) {
+                                spotsDialog.dismiss();
+                                gson = new GsonBuilder().create();
+                                try {
+                                    serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                    SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        spotsDialog.dismiss();
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<OutPassViewModel>> call, Throwable t) {
+                    SAlertError(t.getMessage(), getContext());
+                    spotsDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            spotsDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    public class EmployeeOutPassRequestAdapter extends RecyclerView.Adapter<EmployeeOutPassRequestAdapter.ViewHolder> {
+        Context context;
+        ArrayList<OutPassViewModel> leaveRequestsViewModelList;
+
+        public EmployeeOutPassRequestAdapter(Context context, ArrayList<OutPassViewModel> leaveRequestsViewModelList) {
+            this.context = context;
+            this.leaveRequestsViewModelList = leaveRequestsViewModelList;
+        }
+
+        @NonNull
+        @Override
+        public EmployeeOutPassRequestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.my_outpass_request_recycalerview, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull EmployeeOutPassRequestAdapter.ViewHolder holder, int position) {
+            final OutPassViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
+
+            if (position == holder.getAdapterPosition()) {
+                holder.btnDelete.setOnClickListener(v -> {
+                    String leaveReqID = leaveRequestsViewModel.getOutPassID().toString();
+                    DeleteLeaveRequest(leaveReqID);
+                });
+            }
+
+            try {
+
+                try {
+                    int hours = leaveRequestsViewModel.getDurationMin() / 60;  // Divide total minutes by 60 to get hours
+                    int minutes = leaveRequestsViewModel.getDurationMin() % 60;
+                    holder.txtDuration.setText(String.format("%dh,%dm", hours, minutes));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                switch (leaveRequestsViewModel.getStatus()) {
+                    case 0:
+                        holder.txtStatusCode.setText(R.string.created);
+                        break;
+                    case 1:
+                        holder.txtStatusCode.setText(R.string.pending);
+                        break;
+                    case 2:
+                        holder.txtStatusCode.setText(R.string.inprocess);
+                        break;
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        break;
+                    case 4:
+                        holder.txtStatusCode.setText(R.string.rework);
+                        break;
+                    case 5:
+                        holder.txtStatusCode.setText(R.string.approved);
+                        break;
+                    case 6:
+                        holder.txtStatusCode.setText(R.string.completed);
+                        break;
+                    case 7:
+                        holder.txtStatusCode.setText(R.string.deleted);
+                        break;
+
+                    default:
+                        break;
+                }
+                holder.txtStatusCode.setBackgroundResource(R.drawable.casual_leave_button);
+
+                try {
+                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtOutGate.setText(leaveRequestsViewModel.getOutGateCode());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtInGate.setText(leaveRequestsViewModel.getInGateCode());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtReason.setText(leaveRequestsViewModel.getReason());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtReqDate.setText(DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (position == holder.getAdapterPosition()) {
+                outPassID = leaveRequestsViewModel.getOutPassID().toString();
+            }
+            holder.btnView.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("key", leaveRequestsViewModel.getEmployeeCompactViewModel().getHrEmployeeID());
+                bundle.putString("key1", outPassID);
+                bundle.putString("key2", leaveRequestsViewModel.getEmployeeCompactViewModel().getEmployeeName());
+                bundle.putString("key3", leaveRequestsViewModel.getRequestDate());
+                replaceFragmentWithMultipleBundle(new GatePassQRFragment(), getContext(), bundle);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return leaveRequestsViewModelList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView
+                    txtDuration,
+                    txtFromTime,
+                    txtToTime,
+                    txtOutGate,
+                    txtReason,
+                    txtReqDate,
+                    txtStatusCode,
+                    txtInGate;
+            LinearLayout btnDelete, btnView;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                txtDuration = itemView.findViewById(R.id.txtDuration);
+                txtFromTime = itemView.findViewById(R.id.txtFromTime);
+                txtToTime = itemView.findViewById(R.id.txtToTime);
+                txtStatusCode = itemView.findViewById(R.id.txtStatusCode);
+                txtOutGate = itemView.findViewById(R.id.txtOutGate);
+                txtInGate = itemView.findViewById(R.id.txtInGate);
+                txtReason = itemView.findViewById(R.id.txtReason);
+                txtReqDate = itemView.findViewById(R.id.txtReqDate);
+                btnDelete = itemView.findViewById(R.id.btnDelete);
+                btnView = itemView.findViewById(R.id.btnView);
+            }
+        }
+    }
 }

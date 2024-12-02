@@ -1,5 +1,6 @@
 package com.example.chuti.UI;
 
+import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
@@ -12,11 +13,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -34,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.chuti.Dto.SaveLeaveRequestDto;
+import com.example.chuti.FragmentMain;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
@@ -52,6 +56,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -84,7 +89,7 @@ public class RequestLeaveFragment extends Fragment {
     long daysDifference;
     EditText txtReason;
     LocalDate localFromDate = null;
-
+    Toolbar toolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,6 +105,15 @@ public class RequestLeaveFragment extends Fragment {
         companyID = SharedPref.read("companyID", "");
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
+
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        toolbar.setTitle("New Leave Request");
+        toolbar.setSubtitle("");
+        toolbar.setNavigationOnClickListener(v -> {
+            toolbar.setTitle(R.string.chuti);
+            replaceFragment(new FragmentMain(), getContext());
+        });
 
         txtFromDateSelect = root.findViewById(R.id.txtFromDateSelect);
         txtToDateSelect = root.findViewById(R.id.txtToDateSelect);
@@ -117,7 +131,6 @@ public class RequestLeaveFragment extends Fragment {
         txtRequestedDays = root.findViewById(R.id.txtRequestedDays);
 
         btnBrowse.setOnClickListener(v -> {
-
             Intent iGallery = new Intent(Intent.ACTION_PICK);
             iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(iGallery, GALLERY_REQ_CODE);
@@ -133,23 +146,34 @@ public class RequestLeaveFragment extends Fragment {
 
     private void GetFromDateTime() {
         final Calendar c = Calendar.getInstance();
-        fromYY = c.get(Calendar.YEAR);
-        fromMM = c.get(Calendar.MONTH);
-        fromDD = c.get(Calendar.DAY_OF_MONTH);
-        txtFromDate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(fromYY).append("-").append(fromMM + 1).append("-")
-                .append(fromDD));
+        toYY = c.get(Calendar.YEAR);
+        toMM = c.get(Calendar.MONTH);
+        toDD = c.get(Calendar.DAY_OF_MONTH);
+
+// Correctly format the date using SimpleDateFormat
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        txtFromDate.setText(sdf.format(c.getTime())); // Use c.getTime() to get the Date object
+
         txtFromDateSelect.setOnClickListener(v -> {
             Drawable iconDrawable = txtFromDateSelect.getDrawable();
-            iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            if (iconDrawable != null) { // Check for null
+                iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            }
+
             final Calendar cldr = Calendar.getInstance();
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            // date picker dialog
+
+            // Date picker dialog
             picker = new DatePickerDialog(getContext(),
-                    (view, year1, monthOfYear, dayOfMonth) -> txtFromDate.setText(year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth), year, month, day);
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        // Set the selected date in the TextView
+                        cldr.set(Calendar.YEAR, year1);
+                        cldr.set(Calendar.MONTH, monthOfYear);
+                        cldr.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        txtFromDate.setText(sdf.format(cldr.getTime())); // Format the selected date
+                    }, year, month, day);
             picker.show();
         });
 
@@ -226,23 +250,34 @@ public class RequestLeaveFragment extends Fragment {
         toYY = c.get(Calendar.YEAR);
         toMM = c.get(Calendar.MONTH);
         toDD = c.get(Calendar.DAY_OF_MONTH);
-        txtToDate.setText(new StringBuilder()
-                // Month is 0 based, just add 1
-                .append(toYY).append("-").append(toMM + 1).append("-")
-                .append(toDD));
+
+// Correctly format the date using SimpleDateFormat
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        txtToDate.setText(sdf.format(c.getTime())); // Use c.getTime() to get the Date object
+
         txtToDateSelect.setOnClickListener(v -> {
             Drawable iconDrawable = txtToDateSelect.getDrawable();
-            iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            if (iconDrawable != null) { // Check for null
+                iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            }
 
             final Calendar cldr = Calendar.getInstance();
             int day = cldr.get(Calendar.DAY_OF_MONTH);
             int month = cldr.get(Calendar.MONTH);
             int year = cldr.get(Calendar.YEAR);
-            // date picker dialog
+
+            // Date picker dialog
             picker = new DatePickerDialog(getContext(),
-                    (view, year1, monthOfYear, dayOfMonth) -> txtToDate.setText(year1 + "-" + (monthOfYear + 1) + "-" + dayOfMonth), year, month, day);
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        // Set the selected date in the TextView
+                        cldr.set(Calendar.YEAR, year1);
+                        cldr.set(Calendar.MONTH, monthOfYear);
+                        cldr.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        txtToDate.setText(sdf.format(cldr.getTime())); // Format the selected date
+                    }, year, month, day);
             picker.show();
         });
+
 
         toDate = txtToDate.getText().toString();
     }
@@ -340,13 +375,22 @@ public class RequestLeaveFragment extends Fragment {
 
     private void SaveLeaveRequest() {
 
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            localFromDate = LocalDate.of(fromYY, fromMM, fromDD);
+//            LocalDate toDate = LocalDate.of(toYY, toMM, toDD);
+//            LocalDate adjustedFromDate = localFromDate.minusDays(1);
+//
+//            // Calculate the difference in days
+//            daysDifference = ChronoUnit.DAYS.between(adjustedFromDate, toDate);
+//        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            localFromDate = LocalDate.of(fromYY, fromMM, fromDD);
-            LocalDate toDate = LocalDate.of(toYY, toMM, toDD);
-            LocalDate adjustedFromDate = localFromDate.minusDays(1);
+            // Add 1 to the month values to adjust for 0-based indexing in Calendar
+            LocalDate startDate = LocalDate.parse(txtFromDate.getText().toString());  // Example start date
+            LocalDate endDate =LocalDate.parse(txtToDate.getText().toString());   // Example end date
 
             // Calculate the difference in days
-            daysDifference = ChronoUnit.DAYS.between(adjustedFromDate, toDate);
+            daysDifference = ChronoUnit.DAYS.between(startDate, endDate);
         }
 
         if (txtReason.getText().toString().isEmpty()) {
@@ -367,6 +411,10 @@ public class RequestLeaveFragment extends Fragment {
         saveLeaveRequestDto.setDocumentName(txtFileName.getText().toString());
         saveLeaveRequestDto.setDocumentString(encodeImage);
         spotsDialog.show();
+        Log.i("info","companyID "+companyID);
+        Log.i("info","accountID "+accountID);
+        Log.i("info","saveLeaveRequestDto "+saveLeaveRequestDto);
+        Log.i("info","token "+token);
         Call<String> saveMachineCall = retrofitApiInterface.SaveLeaveRequestAsync("Bearer " + token, appKey, companyID, accountID, saveLeaveRequestDto);
         saveMachineCall.enqueue(new Callback<String>() {
             @Override

@@ -65,6 +65,7 @@
                             android:gravity="center_vertical">
 
                             <TextView
+                                android:id="@+id/txtName"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
@@ -90,7 +91,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/txtUserName"
+                                    android:id="@+id/txtEmployeeID"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
@@ -250,6 +251,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:visibility="gone"
                                 android:background="?attr/selectableItemBackground"
                                 android:orientation="vertical">
 
@@ -273,7 +275,7 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/mnuQCProcess"
+                                android:id="@+id/mnuLeaveRequest"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -328,6 +330,35 @@
                                     android:textStyle="normal" />
                             </LinearLayout>
 
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:background="?attr/selectableItemBackground"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:layout_gravity="center"
+                                    app:srcCompat="@drawable/icon_leave_history" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginTop="5dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:gravity="center|center_vertical"
+                                    android:text="My Leave\n Requests"
+                                    android:textColor="@color/black"
+                                    android:textSize="15sp"
+                                    android:textStyle="normal" />
+
+
+                            </LinearLayout>
+
+
                         </LinearLayout>
 
 
@@ -352,6 +383,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
+                                android:visibility="gone"
                                 android:background="?attr/selectableItemBackground"
                                 android:orientation="vertical">
 
@@ -368,7 +400,7 @@
                                     android:layout_marginTop="5dp"
                                     android:layout_marginBottom="5dp"
                                     android:gravity="center|center_vertical"
-                                    android:text="Leave History"
+                                    android:text="My Leave\n Requests"
                                     android:textColor="@color/black"
                                     android:textSize="15sp"
                                     android:textStyle="normal" />
@@ -377,6 +409,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/txtGatepassHistory"
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
@@ -398,7 +431,7 @@
                                     android:layout_height="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:gravity="center|center_vertical"
-                                    android:text="Gatepass History"
+                                    android:text="My Outpass\n Requests"
                                     android:textColor="@color/black"
                                     android:textSize="15sp"
                                     android:textStyle="normal" />

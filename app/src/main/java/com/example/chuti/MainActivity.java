@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.chuti.UI.EmployeeGatepassFragment;
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.RequestLeaveFragment;
 import com.example.chuti.UI.SettingFragment;
@@ -42,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         Toolbar toolbar = findViewById(R.id.toolbar); //Ignore red line errors
-        toolbar.setTitle("CHUTI");
-        toolbar.setSubtitle("Leave Management System");
+        toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -51,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnLeave = findViewById(R.id.btnLeave);
         btnLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), this));
+
         btnGatePass = findViewById(R.id.btnGatePass);
+        btnGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), this));
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setItemSelected(R.id.bottomNavigationView, true);

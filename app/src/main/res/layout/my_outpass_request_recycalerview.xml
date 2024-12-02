@@ -48,20 +48,19 @@
                     android:weightSum="2">
 
                     <TextView
-                        android:id="@+id/txtLeaveType"
+                        android:id="@+id/txtDuration"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:text="1 Day off"
+                        android:text="0 Hour 30 Min."
                         android:textColor="@color/black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
-
                     <TextView
-                        android:id="@+id/txtStatusCode"
+                        android:id="@+id/txtReqDate"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
@@ -70,14 +69,12 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Accepted"
-                        android:textColor="@color/colorPrimarySecond"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
 
                 </LinearLayout>
 
-
             </RelativeLayout>
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -108,19 +105,29 @@
                         android:weightSum="4">
 
                         <TextView
-                            android:id="@+id/txtFromDate"
+                            android:id="@+id/txtFromTime"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:gravity="center_vertical"
-                            android:text="September 2024"
+                            android:text="10.00 AM"
+                            android:textColor="@color/black"
+                            android:textSize="9sp" />
+
+                        <TextView
+                            android:id="@+id/txtOutGate"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
                             android:textColor="@color/black"
                             android:textSize="9sp" />
 
 
                         <TextView
-                            android:id="@+id/txtLeaveName"
+                            android:id="@+id/txtStatusCode"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
@@ -168,15 +175,31 @@
                         android:weightSum="4">
 
                         <TextView
-                            android:id="@+id/txtToDate"
+                            android:id="@+id/txtToTime"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_gravity="center_vertical"
-                            android:layout_weight="3"
+                            android:layout_weight="2"
                             android:gravity="center_vertical"
-                            android:text="September 2024"
+                            android:text="10.30 AM"
                             android:textColor="@color/black"
                             android:textSize="9sp" />
+
+                        <TextView
+                            android:id="@+id/txtInGate"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="9sp" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="10dp"
+                            android:layout_weight="1" />
 
 
                     </LinearLayout>
@@ -189,27 +212,63 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:gravity="end"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/btnDelete"
-                    android:layout_width="30dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/delete_round">
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/ic_delete" />
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/txtReason"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Test"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnView"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
+                    <LinearLayout
+                        android:id="@+id/btnView"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/qr_round"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_qr_code" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnDelete"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/delete_round"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_delete" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 

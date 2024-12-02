@@ -168,7 +168,6 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         });
         btnLogin = findViewById(R.id.btnLogin);
-
     }
 
     private void UserLogin() {
@@ -206,15 +205,15 @@ public class LoginActivity extends AppCompatActivity {
                                 loginSuccessViewModel = response.body();
                                 Log.i("info", "Login" + response.body());
                                 token = loginSuccessViewModel.getAccessToken();
-                                accountID = loginSuccessViewModel.getAccountID().toString();
                                 companyID = loginSuccessViewModel.getCompanyID().toString();
+                                accountID = loginSuccessViewModel.getAccountID().toString();
                                 SharedPref.write("token", token);
                                 SharedPref.write("companyID", companyID);
                                 SharedPref.write("accountID", accountID);
 
                                 intentActivity(new MainActivity(), LoginActivity.this);
                             }
-                        } else if (!response.isSuccessful()) {
+                        } else  {
                             if (response.errorBody() != null) {
                                 spotsDialog.dismiss();
                                 if (response.code() == 400) {

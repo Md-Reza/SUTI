@@ -50,13 +50,23 @@ public class DateFormatterHandlers {
         return time;
     }
 
+    public static String ConvertDateToTime(String dateTime) {
+        parseSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        formatter_WorkDateDate = new SimpleDateFormat("h:mm a");
+        try {
+            dateTime = formatter_WorkDateDate.format(parseSimpleDateFormat.parse(dateTime));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateTime;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint("SimpleDateFormat")
     public static String CurrentOffsetDateTimeParser(String dateTime) {
         parseSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         formatter_WorkDateDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         formatter_WorkDateDate.setTimeZone(TimeZone.getTimeZone(ZoneOffset.UTC));
-        //long millis = book.getInteractionDuration().getStartTimeStamp().toInstant().toEpochMilli();
         try {
             dateTime = formatter_WorkDateDate.format(parseSimpleDateFormat.parse(dateTime));
         } catch (ParseException e) {

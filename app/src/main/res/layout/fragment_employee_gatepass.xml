@@ -38,6 +38,19 @@
             android:textColor="@color/black"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/txtFromDateTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:hint="From Time"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
         <ImageView
             android:id="@+id/txtToTimeSelect"
             android:layout_width="0dp"
@@ -60,6 +73,18 @@
             android:textColor="@color/black"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/txtToDateTime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:hint="From Time"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -77,7 +102,7 @@
         android:gravity="top"/>
 
     <TextView
-        android:id="@+id/txtRequestedDays"
+        android:id="@+id/txtRequestedTime"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_gravity="center_vertical"
@@ -85,7 +110,20 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:gravity="end"
-        android:text="@string/number_of_requested_days_1_days"
+        android:text="@string/total_duration_00_minutes"
+        android:textColor="@color/redOrange"
+        android:textSize="14sp" />
+
+    <CheckBox
+        android:id="@+id/txtCheckIsFullDay"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical"
+        android:text="Full Day"
         android:textColor="@color/redOrange"
         android:textSize="14sp" />
 

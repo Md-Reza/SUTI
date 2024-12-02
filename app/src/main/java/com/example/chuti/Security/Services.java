@@ -1,12 +1,14 @@
 package com.example.chuti.Security;
 
 import com.example.chuti.Dto.LoginDto;
+import com.example.chuti.Dto.OutpassDto;
 import com.example.chuti.Dto.SaveLeaveRequestDto;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeLeaveRequestViewModel;
 import com.example.chuti.Model.EmployeeProfile;
 import com.example.chuti.Model.LeaveRequestsViewModel;
 import com.example.chuti.Model.LoginSuccessViewModel;
+import com.example.chuti.Model.OutPassViewModel;
 
 import java.util.List;
 
@@ -64,5 +66,23 @@ public interface Services {
             @Header("AppKey") String AppKey,
             @Path("companyID") String companyID,
             @Path("accountID") String accountID
+    );
+
+    @POST("GateService/{companyID}/SaveOutpass/{accountID}")
+    Call<String> SaveOutpassAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Body OutpassDto outpassDto
+    );
+
+    @GET("GateService/{companyID}/OutpassRequests/{accountID}/{year}")
+    Call<List<OutPassViewModel>> GetOutpassRequestsAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("year") int year
     );
 }

@@ -1,0 +1,4 @@
+<resources>
+    <!-- Define a dimension for navigation icon size -->
+    <dimen name="navigation_icon_size">40dp</dimen>
+</resources>

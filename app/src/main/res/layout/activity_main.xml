@@ -29,6 +29,7 @@
         android:layout_marginEnd="10dp"
         android:gravity="center_vertical"
         android:text="Add"
+        android:visibility="gone"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="@+id/btnLeave"
         app:layout_constraintEnd_toStartOf="@+id/btnLeave" />
@@ -45,7 +46,7 @@
         app:layout_constraintEnd_toEndOf="@+id/btnLeave"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/btnLeave"
-        app:srcCompat="@drawable/baseline_group_add_24" />
+        app:srcCompat="@drawable/ic_gatepass" />
 
     <RelativeLayout
         android:layout_width="match_parent"

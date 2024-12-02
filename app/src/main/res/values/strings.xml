@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CHUTI</string>
+    <string name="app_name">Chuti</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="user_name">User Name</string>
     <string name="forgot_password">Forgot Password</string>
@@ -23,8 +23,8 @@
     <string name="to_date">To Date</string>
     <string name="submit_request">Submit Request</string>
     <string name="reason">Reason</string>
-    <string name="pending_approval">Pending Leave\n Approval</string>
-    <string name="balance">Balance</string>
+    <string name="pending_approval">Leave\n Approval</string>
+    <string name="balance">Dashboard</string>
     <string name="notice_board">Notice Board</string>
     <string name="settings">Settings</string>
     <string name="home">Home</string>
@@ -36,4 +36,8 @@
     <string name="employee_id">Employee ID</string>
     <string name="enforce_to_login">Enforce To Login</string>
     <string name="chuti">CHUTI</string>
+    <string name="total_duration_00_minutes">Total Duration: 00 Minutes</string>
+    <string name="sign_in">Sign In</string>
+    <string name="remember_me">Remember me</string>
+    <string name="log_in">Log In</string>
 </resources>
