@@ -8,6 +8,7 @@ import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
+import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.content.Context;
@@ -360,6 +361,11 @@ public class FragmentBalance extends Fragment {
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
+                try {
+                    holder.txtLastComment.setText(leaveRequestsViewModel.getLastComment());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
@@ -376,6 +382,7 @@ public class FragmentBalance extends Fragment {
                     txtToDate,
                     txtFromDate,
                     txtStatusCode,
+                    txtLastComment,
                     txtLeaveType;
             LinearLayout btnDelete;
 
@@ -386,6 +393,7 @@ public class FragmentBalance extends Fragment {
                 txtFromDate = itemView.findViewById(R.id.txtFromDate);
                 txtStatusCode = itemView.findViewById(R.id.txtStatusCode);
                 txtLeaveType = itemView.findViewById(R.id.txtLeaveType);
+                txtLastComment = itemView.findViewById(R.id.txtLastComment);
                 btnDelete = itemView.findViewById(R.id.btnDelete);
             }
         }
@@ -503,11 +511,10 @@ public class FragmentBalance extends Fragment {
 
             if (position == holder.getAdapterPosition()) {
                 holder.btnDelete.setOnClickListener(v -> {
-                    String leaveReqID = leaveRequestsViewModel.getOutPassID().toString();
-                    DeleteLeaveRequest(leaveReqID);
+                    String outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                    DeleteOutPassRequest(outPassID);
                 });
             }
-
             try {
 
                 try {
@@ -630,5 +637,48 @@ public class FragmentBalance extends Fragment {
                 btnView = itemView.findViewById(R.id.btnView);
             }
         }
+    }
+    private void DeleteOutPassRequest(String outPassID) {
+        spotsDialog.show();
+        Call<String> saveMachineCall = retrofitApiInterface.DeleteOutpassRequestAsync("Bearer " + token, appKey, companyID, accountID, outPassID);
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            if (response.code() == 200) {
+                                serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                GetEmployeeOutPass();
+                            }
+                        }
+                    } else if (!response.isSuccessful()) {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
     }
 }

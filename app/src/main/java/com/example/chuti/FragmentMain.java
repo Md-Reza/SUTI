@@ -27,6 +27,8 @@ import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
 import com.example.chuti.UI.EmployeeGatepassFragment;
 import com.example.chuti.UI.FragmentBalance;
+import com.example.chuti.UI.FragmentMyLeaveRequest;
+import com.example.chuti.UI.FragmentMyOutpassRequest;
 import com.example.chuti.UI.GatePassQRFragment;
 import com.example.chuti.UI.RequestLeaveFragment;
 import com.google.gson.Gson;
@@ -45,8 +47,8 @@ public class FragmentMain extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    LinearLayout mnuEmpGatePass,txtGatepassHistory,mnuLeaveRequest;
-    TextView txtEmployeeID,txtName;
+    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest;
+    TextView txtEmployeeID, txtName;
     EmployeeProfile employeeProfile;
     Toolbar toolbar;
 
@@ -90,9 +92,11 @@ public class FragmentMain extends Fragment {
         mnuEmpGatePass = root.findViewById(R.id.mnuEmpGatePass);
         mnuEmpGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), getContext()));
         txtGatepassHistory = root.findViewById(R.id.txtGatepassHistory);
-        txtGatepassHistory.setOnClickListener(v -> replaceFragment(new GatePassQRFragment(), getContext()));
+        txtGatepassHistory.setOnClickListener(v -> replaceFragment(new FragmentMyOutpassRequest(), getContext()));
         mnuLeaveRequest = root.findViewById(R.id.mnuLeaveRequest);
         mnuLeaveRequest.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
+        mnuMyLeaveRequest = root.findViewById(R.id.mnuMyLeaveRequest);
+        mnuMyLeaveRequest.setOnClickListener(v -> replaceFragment(new FragmentMyLeaveRequest(), getContext()));
 
         GetEmployee();
 
@@ -130,7 +134,7 @@ public class FragmentMain extends Fragment {
                 @Override
                 public void onFailure(Call<EmployeeProfile> call, Throwable t) {
                     // Handle network or other failures
-                   // SAlertError(t.getMessage(), getContext());
+                    // SAlertError(t.getMessage(), getContext());
                     spotsDialog.dismiss();
                 }
             });

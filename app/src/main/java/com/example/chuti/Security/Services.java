@@ -85,4 +85,13 @@ public interface Services {
             @Path("accountID") String accountID,
             @Path("year") int year
     );
+
+    @DELETE("GateService/{companyID}/DeleteOutpass/{accountID}/{outpassID}")
+    Call<String> DeleteOutpassRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("outpassID") String outpassID
+    );
 }

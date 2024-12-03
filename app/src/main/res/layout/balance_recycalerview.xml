@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/storage_grid_history_layout"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="105dp"
     android:layout_margin="3dp"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="4dp"
@@ -70,7 +70,8 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="Accepted"
-                        android:textColor="@color/colorPrimarySecond"
+                        android:textColor="@color/redOrange"
+                        android:textStyle="bold"
                         android:textSize="12sp" />
 
                 </LinearLayout>
@@ -189,26 +190,50 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="2dp"
                 android:gravity="end"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/btnDelete"
-                    android:layout_width="30dp"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/delete_round">
+                    android:layout_weight="1">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/ic_delete" />
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/txtLastComment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Test"
+                        android:textStyle="normal"
+                        android:textSize="11sp"
+                        android:textColor="@color/black"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <LinearLayout
+                        android:id="@+id/btnDelete"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:background="@drawable/delete_round"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_delete" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             </LinearLayout>
