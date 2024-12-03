@@ -12,6 +12,7 @@ import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -63,13 +64,13 @@ public class FragmentBalance extends Fragment {
     String userID, appKey, periodYear, outPassID;
     TextView txtCasualLeaveName, txtCasualLeaveBalanceStatus, txtNofSickLeave,
             txtSickLeaveName, txtEarnLeaveName, txtNoOfEarnLeave,
-            txtPendingApprovalCounter, txtGatePass, txtLeaveApproval, txtGatePassCount;
+            txtLeaveCounter, txtGatePass, txtLeaveApproval, txtGatePassCount,txtPendingApproval,
+            txtPendingApprovalCounter;
     EmployeeLeaveRequestAdapter employeeLeaveRequestAdapter;
     EmployeeOutPassRequestAdapter employeeOutPassRequestAdapter;
     RecyclerView employeeLeaveRequestRecyclerView, outPassRecycalerView;
     Button btnRequestLeave;
     LinearLayout layoutLeaveApproval, layoutGatePass;
-    EmployeeCompactViewModel employeeCompactViewModel;
     Toolbar toolbar;
     int currentYear;
     ArrayList<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
@@ -109,26 +110,30 @@ public class FragmentBalance extends Fragment {
         txtNoOfEarnLeave = root.findViewById(R.id.txtNoOfEarnLeave);
         employeeLeaveRequestRecyclerView = root.findViewById(R.id.employeeLeaveRequestRecyclerView);
         btnRequestLeave = root.findViewById(R.id.btnRequestLeave);
-        txtPendingApprovalCounter = root.findViewById(R.id.txtPendingApprovalCounter);
+        txtLeaveCounter = root.findViewById(R.id.txtLeaveCounter);
         txtGatePass = root.findViewById(R.id.txtGatePass);
         layoutLeaveApproval = root.findViewById(R.id.layoutLeaveApproval);
         outPassRecycalerView = root.findViewById(R.id.outPassRecycalerView);
         txtLeaveApproval = root.findViewById(R.id.txtLeaveApproval);
         layoutGatePass = root.findViewById(R.id.layoutGatePass);
         txtGatePassCount = root.findViewById(R.id.txtGatePassCount);
+        txtPendingApproval = root.findViewById(R.id.txtPendingApproval);
+        txtPendingApprovalCounter = root.findViewById(R.id.txtPendingApprovalCounter);
 
         txtGatePass.setOnClickListener(v -> {
             layoutLeaveApproval.setVisibility(View.GONE);
             layoutGatePass.setVisibility(View.VISIBLE);
-            txtGatePass.setBackgroundResource(R.drawable.button_bg_round_shape);
-            txtLeaveApproval.setBackgroundResource(R.drawable.bg_round_shape);
+            txtGatePass.setBackgroundResource(R.drawable.button_background_n);
+            txtLeaveApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             GetEmployeeOutPass();
         });
         txtLeaveApproval.setOnClickListener(v -> {
             layoutLeaveApproval.setVisibility(View.VISIBLE);
             layoutGatePass.setVisibility(View.GONE);
-            txtGatePass.setBackgroundResource(R.drawable.bg_round_shape);
-            txtLeaveApproval.setBackgroundResource(R.drawable.button_bg_round_shape);
+            txtLeaveApproval.setBackgroundResource(R.drawable.button_background_n);
+            txtGatePass.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             GetEmployeeLeaveRequest();
         });
 
@@ -240,7 +245,7 @@ public class FragmentBalance extends Fragment {
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 employeeLeaveRequestRecyclerView.setLayoutManager(mLayoutManager);
                                 employeeLeaveRequestRecyclerView.setAdapter(employeeLeaveRequestAdapter);
-                                txtPendingApprovalCounter.setText(String.valueOf(response.body().size()));
+                                txtLeaveCounter.setText(String.valueOf(response.body().size()));
                             }
                         } else {
                             if (response.errorBody() != null) {

@@ -21,10 +21,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="10dp"
                 android:gravity="center_vertical"
+                android:orientation="horizontal"
                 android:weightSum="6">
 
                 <androidx.cardview.widget.CardView
@@ -203,8 +203,8 @@
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="2"
-                    app:cardCornerRadius="8dp"
                     android:visibility="gone"
+                    app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
                     <LinearLayout
@@ -314,11 +314,13 @@
                         android:id="@+id/txtLeaveApproval"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginEnd="5dp"
-                        android:background="@drawable/bg_round_shape"
+                        android:background="@drawable/button_background_n"
+                        android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
                         android:text="My Leave \n Request"
-                        android:textColor="@color/text_color"
+                        android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -327,7 +329,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/txtPendingApprovalCounter"
+                        android:id="@+id/txtLeaveCounter"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginBottom="26dp"
@@ -357,11 +359,13 @@
                         android:id="@+id/txtGatePass"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginEnd="5dp"
-                        android:background="@drawable/bg_round_shape"
+                        android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Out Pass \n Request"
-                        android:textColor="@color/text_color"
+                        android:text="Outpass\n Requests"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -397,23 +401,24 @@
                     app:layout_constraintRight_toRightOf="parent">
 
                     <TextView
-                        android:id="@+id/txtMyGatePass"
+                        android:id="@+id/txtPendingApproval"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:layout_marginStart="10dp"
                         android:layout_marginEnd="5dp"
-                        android:background="@drawable/bg_round_shape"
+                        android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Pending \n Approval"
-                        android:textColor="@color/lightgrey"
+                        android:text="Pending\n Aprroval"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-
                     <TextView
-                        android:id="@+id/txtMyGatePassCounter"
+                        android:id="@+id/txtPendingApprovalCounter"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginBottom="26dp"
@@ -424,10 +429,10 @@
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="normal"
-                        app:layout_constraintBottom_toBottomOf="@+id/txtMyGatePass"
-                        app:layout_constraintEnd_toEndOf="@+id/txtMyGatePass"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtPendingApproval"
+                        app:layout_constraintEnd_toEndOf="@+id/txtPendingApproval"
                         app:layout_constraintHorizontal_bias="1.05"
-                        app:layout_constraintStart_toStartOf="@+id/txtMyGatePass" />
+                        app:layout_constraintStart_toStartOf="@+id/txtPendingApproval" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -476,6 +481,7 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -549,8 +555,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <Button
                 android:id="@+id/btnRequestLeave"

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_marginBottom="?attr/actionBarSize"
+    android:orientation="vertical"
     tools:context=".UI.SettingFragment">
 
     <LinearLayout
@@ -23,17 +23,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
             android:gravity="center"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtEmployeeName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="cmbd hr" />
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/txtEmployeeName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.4" />
+
+                <TextView
+                    android:id="@+id/txtStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight=".6"
+                    android:background="@drawable/round_text"
+                    android:gravity="center"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
 
             <TextView
+                android:id="@+id/txtEmployeeID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_location"
@@ -41,11 +62,10 @@
                 android:text="Bangladesh" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txtJoiningDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"
-                android:text="Go Pro Now" />
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -62,51 +82,51 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:text="Leave Types"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
+        android:layout_marginStart="15dp"
         android:drawableStart="@drawable/icon_leave_type"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Leave Types"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Leave Policies"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/icon_police"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Leave Policies"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Locations and Holidays"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
-        android:visibility="gone"
         android:drawableStart="@drawable/icon_language"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Locations and Holidays"
         android:textColor="@color/black"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -121,26 +141,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Employee Profile"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/icon_person"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Employee Profile"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Company Profile"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/icon_company_profile"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Company Profile"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
@@ -148,19 +168,19 @@
         android:id="@+id/txtResetPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Change Password"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/icon_change_password"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Change Password"
         android:textColor="@color/black"
         android:textSize="13sp" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -174,19 +194,19 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="20dp"/>
+        android:layout_height="20dp" />
 
     <TextView
         android:id="@+id/txtLogOut"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:text="Log Out"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/icon_logout"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Log Out"
         android:textColor="@color/red"
         android:textSize="13sp" />
 

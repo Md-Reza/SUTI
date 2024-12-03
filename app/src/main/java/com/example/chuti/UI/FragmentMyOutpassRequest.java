@@ -27,7 +27,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.chuti.FragmentMain;
-import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.OutPassViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
@@ -82,7 +81,6 @@ public class FragmentMyOutpassRequest extends Fragment {
         toolbar.setTitle("My Outpass Requests");
         toolbar.setSubtitle("");
         toolbar.setNavigationOnClickListener(v -> {
-            toolbar.setTitle(R.string.chuti);
             replaceFragment(new FragmentMain(), getContext());
         });
 

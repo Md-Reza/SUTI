@@ -1,6 +1,7 @@
 package com.example.chuti.UI;
 
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
+import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 
 import android.content.Intent;
@@ -44,7 +45,7 @@ public class SettingFragment extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    TextView textView, txtLogOut, txtEmployeeName,txtResetPassword;
+    TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus, txtEmployeeID;
     EmployeeProfile employeeProfile;
 
     @Override
@@ -63,16 +64,12 @@ public class SettingFragment extends Fragment {
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
 
-        textView = root.findViewById(R.id.textView);
+        txtJoiningDate = root.findViewById(R.id.txtJoiningDate);
         txtLogOut = root.findViewById(R.id.txtLogOut);
         txtEmployeeName = root.findViewById(R.id.txtEmployeeName);
         txtResetPassword = root.findViewById(R.id.txtResetPassword);
-
-        String text = "Go Pro Now";
-        SpannableString spannableString = new SpannableString(text);
-        spannableString.setSpan(new UnderlineSpan(), 0, text.length(), 0);
-
-        textView.setText(spannableString);
+        txtStatus = root.findViewById(R.id.txtStatus);
+        txtEmployeeID = root.findViewById(R.id.txtEmployeeID);
 
         txtLogOut.setOnClickListener(v -> {
             SharedPref.remove("token", "");
@@ -105,6 +102,13 @@ public class SettingFragment extends Fragment {
                             employeeProfile = new EmployeeProfile();
                             employeeProfile = response.body();
                             txtEmployeeName.setText(employeeProfile.getEmployeeName());
+                            txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
+                            txtJoiningDate.setText(DateTimeParseMonthYearFormatter(employeeProfile.getJoiningDate()));
+                            Boolean enable = employeeProfile.getEnabled();
+                            if (enable)
+                                txtStatus.setText("ACTIVE");
+                            else
+                                txtStatus.setText("INACTIVE");
 
                         } else {
                             // Handle API error response
