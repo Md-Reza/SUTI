@@ -44,6 +44,7 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="invisible"
                 android:text="Go Pro Now" />
 
         </LinearLayout>
@@ -97,6 +98,7 @@
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:drawablePadding="10dp"
+        android:visibility="gone"
         android:drawableStart="@drawable/icon_language"
         android:textColor="@color/black"
         android:textSize="13sp" />
