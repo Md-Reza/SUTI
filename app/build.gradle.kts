@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -37,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -63,5 +65,8 @@ dependencies {
     implementation ("com.airbnb.android:lottie:6.0.0")
     implementation ("com.google.zxing:core:3.5.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
+    // Firebase/Google dependencies (example)
+    implementation ("com.google.firebase:firebase-bom:33.7.0")
 
 }

@@ -4,8 +4,9 @@ import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertDialog;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
+import static com.example.chuti.Security.SDeviceInfo.getDeviceIpAddress;
 import static com.example.chuti.Security.SDeviceInfo.getDeviceName;
-import static com.example.chuti.Security.SDeviceInfo.getIPAddress;
+import static com.example.chuti.Security.SDeviceInfo.getDeviceUID;
 import static com.example.chuti.Security.SDeviceInfo.getMacAddress;
 
 import android.app.Activity;
@@ -49,6 +50,7 @@ import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
 import com.example.chuti.Security.SharedPrefServer;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -77,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
     CheckBox chkRemember;
     SharedPreferences preferences;
     static String appKey;
-    String deviceName ;
+    String deviceName,fcmToken,deviceUID ;
     String ipAddress ;
     String macAddress ;
 
@@ -109,8 +111,9 @@ public class LoginActivity extends AppCompatActivity {
         ivFingerPrint = findViewById(R.id.ivFingerPrint);
         chkRemember = findViewById(R.id.chkRemember);
 
-        deviceName = getDeviceName(LoginActivity.this);
-        ipAddress = getIPAddress(LoginActivity.this);
+        deviceName = getDeviceName();
+        deviceUID = getDeviceUID(LoginActivity.this);
+        ipAddress = getDeviceIpAddress(LoginActivity.this);
         macAddress = getMacAddress();
 
         spotsDialog = new SpotsDialog(this, R.style.Custom);
@@ -168,6 +171,16 @@ public class LoginActivity extends AppCompatActivity {
             return false;
         });
         btnLogin = findViewById(R.id.btnLogin);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        fcmToken = task.getResult();
+                        SharedPref.write("fcmToken", fcmToken);
+                    }
+                });
+
+        fcmToken = SharedPref.read("fcmToken", "");
     }
 
     private void UserLogin() {
@@ -188,7 +201,9 @@ public class LoginActivity extends AppCompatActivity {
             LoginDto loginDto = new LoginDto();
             loginDto.setLoginID(userId);
             loginDto.setPassword(userPass);
-            loginDto.setDeviceUID(deviceName);
+            loginDto.setGoogleFCMID(fcmToken);
+            loginDto.setDeviceUID(deviceUID);
+            loginDto.setDeviceName(deviceName);
             loginDto.setDeviceIP(ipAddress);
             loginDto.setDeviceMAC(macAddress);
             Log.i("info", "loginDto" + loginDto);
@@ -263,7 +278,9 @@ public class LoginActivity extends AppCompatActivity {
                         loginDto.setLoginID(uId);
                         String uPass = SharedPref.read("uPass", "");
                         loginDto.setPassword(uPass);
-                        loginDto.setDeviceUID(deviceName);
+                        loginDto.setGoogleFCMID(fcmToken);
+                        loginDto.setDeviceUID(deviceUID);
+                        loginDto.setDeviceName(deviceName);
                         loginDto.setDeviceIP(ipAddress);
                         loginDto.setDeviceMAC(macAddress);
 

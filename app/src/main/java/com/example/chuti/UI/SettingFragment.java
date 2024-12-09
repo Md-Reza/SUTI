@@ -7,21 +7,17 @@ import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.chuti.FragmentMain;
 import com.example.chuti.LoginActivity;
-import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeProfile;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
@@ -30,9 +26,6 @@ import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -47,6 +40,7 @@ public class SettingFragment extends Fragment {
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus, txtEmployeeID;
     EmployeeProfile employeeProfile;
+    Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +57,15 @@ public class SettingFragment extends Fragment {
         companyID = SharedPref.read("companyID", "");
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
+
+        toolbar = getActivity().findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
+        toolbar.setTitle("Setting");
+        toolbar.setSubtitle("");
+        toolbar.setNavigationOnClickListener(v -> {
+            toolbar.setTitle(R.string.chuti);
+            replaceFragment(new FragmentMain(), getContext());
+        });
 
         txtJoiningDate = root.findViewById(R.id.txtJoiningDate);
         txtLogOut = root.findViewById(R.id.txtLogOut);

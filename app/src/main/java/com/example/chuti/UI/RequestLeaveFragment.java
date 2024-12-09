@@ -48,7 +48,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -82,13 +81,11 @@ public class RequestLeaveFragment extends Fragment {
     byte[] byteImageArray;
     ImageView takePhoto;
     String encodeImage;
-    List<String> catalog;
     Spinner catalogSpinner;
-    String employeeCatalogID, selectedItem, leaveTypeID;
-    int fromYY, fromMM, fromDD, toYY, toMM, toDD;
+    String employeeCatalogID, leaveTypeID;
+    int toYY, toMM, toDD;
     long daysDifference;
     EditText txtReason;
-    LocalDate localFromDate = null;
     Toolbar toolbar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,6 +128,11 @@ public class RequestLeaveFragment extends Fragment {
         txtRequestedDays = root.findViewById(R.id.txtRequestedDays);
 
         btnBrowse.setOnClickListener(v -> {
+            Intent iGallery = new Intent(Intent.ACTION_PICK);
+            iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(iGallery, GALLERY_REQ_CODE);
+        });
+        takePhoto.setOnClickListener(v -> {
             Intent iGallery = new Intent(Intent.ACTION_PICK);
             iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             startActivityForResult(iGallery, GALLERY_REQ_CODE);
@@ -375,15 +377,6 @@ public class RequestLeaveFragment extends Fragment {
 
     private void SaveLeaveRequest() {
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            localFromDate = LocalDate.of(fromYY, fromMM, fromDD);
-//            LocalDate toDate = LocalDate.of(toYY, toMM, toDD);
-//            LocalDate adjustedFromDate = localFromDate.minusDays(1);
-//
-//            // Calculate the difference in days
-//            daysDifference = ChronoUnit.DAYS.between(adjustedFromDate, toDate);
-//        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Add 1 to the month values to adjust for 0-based indexing in Calendar
             LocalDate startDate = LocalDate.parse(txtFromDate.getText().toString());  // Example start date
@@ -411,10 +404,7 @@ public class RequestLeaveFragment extends Fragment {
         saveLeaveRequestDto.setDocumentName(txtFileName.getText().toString());
         saveLeaveRequestDto.setDocumentString(encodeImage);
         spotsDialog.show();
-        Log.i("info","companyID "+companyID);
-        Log.i("info","accountID "+accountID);
-        Log.i("info","saveLeaveRequestDto "+saveLeaveRequestDto);
-        Log.i("info","token "+token);
+
         Call<String> saveMachineCall = retrofitApiInterface.SaveLeaveRequestAsync("Bearer " + token, appKey, companyID, accountID, saveLeaveRequestDto);
         saveMachineCall.enqueue(new Callback<String>() {
             @Override
@@ -462,7 +452,6 @@ public class RequestLeaveFragment extends Fragment {
             }
         });
     }
-
     private void Clear() {
         txtReason.setText("");
         takePhoto.setImageResource(R.drawable.icon_upload);

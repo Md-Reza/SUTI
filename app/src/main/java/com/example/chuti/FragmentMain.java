@@ -89,12 +89,9 @@ public class FragmentMain extends Fragment {
         txtEmployeeID = root.findViewById(R.id.txtEmployeeID);
         txtName = root.findViewById(R.id.txtName);
 
-        mnuEmpGatePass = root.findViewById(R.id.mnuEmpGatePass);
-        mnuEmpGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), getContext()));
+
         txtGatepassHistory = root.findViewById(R.id.txtGatepassHistory);
         txtGatepassHistory.setOnClickListener(v -> replaceFragment(new FragmentMyOutpassRequest(), getContext()));
-        mnuLeaveRequest = root.findViewById(R.id.mnuLeaveRequest);
-        mnuLeaveRequest.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
         mnuMyLeaveRequest = root.findViewById(R.id.mnuMyLeaveRequest);
         mnuMyLeaveRequest.setOnClickListener(v -> replaceFragment(new FragmentMyLeaveRequest(), getContext()));
 

@@ -222,29 +222,12 @@ public class FragmentMyLeaveRequest extends Fragment {
                 switch (leaveRequestsViewModel.getStatus()) {
                     case 0:
                         holder.txtStatusCode.setText(R.string.created);
-                        break;
-                    case 1:
-                        holder.txtStatusCode.setText(R.string.pending);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.created_button);
                         break;
                     case 2:
-                        holder.txtStatusCode.setText(R.string.inprocess);
-                        break;
-                    case 3:
-                        holder.txtStatusCode.setText(R.string.rejected);
-                        break;
-                    case 4:
-                        holder.txtStatusCode.setText(R.string.rework);
-                        break;
-                    case 5:
                         holder.txtStatusCode.setText(R.string.approved);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
-                    case 6:
-                        holder.txtStatusCode.setText(R.string.completed);
-                        break;
-                    case 7:
-                        holder.txtStatusCode.setText(R.string.deleted);
-                        break;
-
                     default:
                         break;
                 }

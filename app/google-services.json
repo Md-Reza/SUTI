@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877055118808",
+    "project_id": "fir-chuti-app",
+    "storage_bucket": "fir-chuti-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877055118808:android:70b6587f4a0010dce1b6ad",
+        "android_client_info": {
+          "package_name": "com.example.chuti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBe4dbpnqxBDHhKCzFhprgTZOpz3nXdr1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

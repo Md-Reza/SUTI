@@ -17,7 +17,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="15dp"
-            android:src="@drawable/icon_rezwan" />
+            android:src="@drawable/icon_profile" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,6 +37,7 @@
                 <TextView
                     android:id="@+id/txtEmployeeName"
                     android:layout_width="0dp"
+                    android:drawableStart="@drawable/icon_person"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.4" />
 
@@ -52,14 +53,11 @@
 
             </LinearLayout>
 
-
             <TextView
                 android:id="@+id/txtEmployeeID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_location"
-                android:drawablePadding="5dp"
-                android:text="Bangladesh" />
+                android:drawablePadding="5dp" />
 
             <TextView
                 android:id="@+id/txtJoiningDate"
@@ -151,18 +149,6 @@
         android:textColor="@color/black"
         android:textSize="13sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:drawableStart="@drawable/icon_company_profile"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:text="Company Profile"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/txtResetPassword"

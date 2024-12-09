@@ -3,17 +3,18 @@ package com.example.chuti.Dto;
 public class LoginDto {
     public String LoginID ;
     public String Password ;
-    public boolean IsWebApp ;
     public String DeviceUID ;
     public String DeviceName ;
     public String DeviceIP ;
     public String DeviceMAC ;
-    public boolean isWebApp() {
-        return IsWebApp;
+    public String GoogleFCMID;
+
+    public String getGoogleFCMID() {
+        return GoogleFCMID;
     }
 
-    public void setWebApp(boolean webApp) {
-        IsWebApp = webApp;
+    public void setGoogleFCMID(String googleFCMID) {
+        GoogleFCMID = googleFCMID;
     }
 
     public String getDeviceUID() {
@@ -69,11 +70,11 @@ public class LoginDto {
         return "LoginDto{" +
                 "LoginID='" + LoginID + '\'' +
                 ", Password='" + Password + '\'' +
-                ", IsWebApp=" + IsWebApp +
                 ", DeviceUID='" + DeviceUID + '\'' +
                 ", DeviceName='" + DeviceName + '\'' +
                 ", DeviceIP='" + DeviceIP + '\'' +
                 ", DeviceMAC='" + DeviceMAC + '\'' +
+                ", GoogleFCMID='" + GoogleFCMID + '\'' +
                 '}';
     }
 }

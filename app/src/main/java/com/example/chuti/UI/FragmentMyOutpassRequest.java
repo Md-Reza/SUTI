@@ -213,33 +213,16 @@ public class FragmentMyOutpassRequest extends Fragment {
                 switch (leaveRequestsViewModel.getStatus()) {
                     case 0:
                         holder.txtStatusCode.setText(R.string.created);
-                        break;
-                    case 1:
-                        holder.txtStatusCode.setText(R.string.pending);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.created_button);
                         break;
                     case 2:
-                        holder.txtStatusCode.setText(R.string.inprocess);
-                        break;
-                    case 3:
-                        holder.txtStatusCode.setText(R.string.rejected);
-                        break;
-                    case 4:
-                        holder.txtStatusCode.setText(R.string.rework);
-                        break;
-                    case 5:
                         holder.txtStatusCode.setText(R.string.approved);
-                        break;
-                    case 6:
-                        holder.txtStatusCode.setText(R.string.completed);
-                        break;
-                    case 7:
-                        holder.txtStatusCode.setText(R.string.deleted);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
 
                     default:
                         break;
                 }
-                holder.txtStatusCode.setBackgroundResource(R.drawable.casual_leave_button);
 
                 try {
                     holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
