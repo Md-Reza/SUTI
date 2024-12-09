@@ -64,13 +64,15 @@ public class FragmentBalance extends Fragment {
     String userID, appKey, periodYear, outPassID;
     TextView txtCasualLeaveName, txtCasualLeaveBalanceStatus, txtNofSickLeave,
             txtSickLeaveName, txtEarnLeaveName, txtNoOfEarnLeave,
-            txtLeaveCounter, txtGatePass, txtLeaveApproval, txtGatePassCount,txtPendingApproval,
+            txtLeaveCounter, txtGatePass, txtLeaveApproval, txtGatePassCount, txtPendingApproval, txtOutPassApproval, txtOutPassApprovalCounter,
             txtPendingApprovalCounter;
     EmployeeLeaveRequestAdapter employeeLeaveRequestAdapter;
     EmployeeOutPassRequestAdapter employeeOutPassRequestAdapter;
-    RecyclerView employeeLeaveRequestRecyclerView, outPassRecycalerView;
+    EmployeeOutPassApprovalAdapter employeeOutPassApprovalAdapter;
+    EmployeePendingLeaveApprovalAdapter employeePendingLeaveApprovalAdapter;
+    RecyclerView employeeLeaveRequestRecyclerView, outPassRecycalerView, outPassApprovalRecycalerView, pendingLeaveApprovalRecycalerView;
     Button btnRequestLeave;
-    LinearLayout layoutLeaveApproval, layoutGatePass;
+    LinearLayout layoutLeaveApproval, layoutGatePass, layoutOutPassApproval, layoutPendingLeaveApproval;
     Toolbar toolbar;
     int currentYear;
     ArrayList<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
@@ -119,6 +121,12 @@ public class FragmentBalance extends Fragment {
         txtGatePassCount = root.findViewById(R.id.txtGatePassCount);
         txtPendingApproval = root.findViewById(R.id.txtPendingApproval);
         txtPendingApprovalCounter = root.findViewById(R.id.txtPendingApprovalCounter);
+        txtOutPassApproval = root.findViewById(R.id.txtOutPassApproval);
+        txtOutPassApprovalCounter = root.findViewById(R.id.txtOutPassApprovalCounter);
+        layoutOutPassApproval = root.findViewById(R.id.layoutOutPassApproval);
+        outPassApprovalRecycalerView = root.findViewById(R.id.outPassApprovalRecycalerView);
+        layoutPendingLeaveApproval = root.findViewById(R.id.layoutPendingLeaveApproval);
+        pendingLeaveApprovalRecycalerView = root.findViewById(R.id.pendingLeaveApprovalRecycalerView);
 
         txtGatePass.setOnClickListener(v -> {
             layoutLeaveApproval.setVisibility(View.GONE);
@@ -131,10 +139,34 @@ public class FragmentBalance extends Fragment {
         txtLeaveApproval.setOnClickListener(v -> {
             layoutLeaveApproval.setVisibility(View.VISIBLE);
             layoutGatePass.setVisibility(View.GONE);
+            layoutPendingLeaveApproval.setVisibility(View.GONE);
+            layoutOutPassApproval.setVisibility(View.GONE);
             txtLeaveApproval.setBackgroundResource(R.drawable.button_background_n);
             txtGatePass.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             GetEmployeeLeaveRequest();
+        });
+        txtOutPassApproval.setOnClickListener(v -> {
+            layoutOutPassApproval.setVisibility(View.VISIBLE);
+            layoutLeaveApproval.setVisibility(View.GONE);
+            layoutGatePass.setVisibility(View.GONE);
+            layoutPendingLeaveApproval.setVisibility(View.GONE);
+            txtOutPassApproval.setBackgroundResource(R.drawable.button_background_n);
+            txtGatePass.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtLeaveApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            GetEmployeeOutPassApproval();
+        });
+        txtPendingApproval.setOnClickListener(v -> {
+            layoutOutPassApproval.setVisibility(View.GONE);
+            layoutLeaveApproval.setVisibility(View.GONE);
+            layoutGatePass.setVisibility(View.GONE);
+            layoutPendingLeaveApproval.setVisibility(View.VISIBLE);
+            txtPendingApproval.setBackgroundResource(R.drawable.button_background_n);
+            txtGatePass.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtOutPassApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtLeaveApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            GetEmployeePendingLeaveApproval();
         });
 
         btnRequestLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), getContext()));
@@ -252,6 +284,9 @@ public class FragmentBalance extends Fragment {
                                 spotsDialog.dismiss();
                                 gson = new GsonBuilder().create();
                                 try {
+                                    txtLeaveCounter.setText("0");
+                                    employeeLeaveRequestRecyclerView.setAdapter(null);
+                                    employeeLeaveRequestAdapter = null;
                                     serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
                                     SAlertError(serviceResponseViewModel.getMessage(), getContext());
                                 } catch (IOException e) {
@@ -351,7 +386,7 @@ public class FragmentBalance extends Fragment {
                     e.printStackTrace();
                 }
                 try {
-                    holder.txtLastComment.setText(leaveRequestsViewModel.getLastComment());
+                    holder.txtLastComment.setText(leaveRequestsViewModel.getReason());
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -452,6 +487,9 @@ public class FragmentBalance extends Fragment {
                                 spotsDialog.dismiss();
                                 gson = new GsonBuilder().create();
                                 try {
+                                    txtGatePassCount.setText("0");
+                                    outPassRecycalerView.setAdapter(null);
+                                    employeeOutPassRequestAdapter = null;
                                     serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
                                     SAlertError(serviceResponseViewModel.getMessage(), getContext());
                                 } catch (IOException e) {
@@ -610,6 +648,7 @@ public class FragmentBalance extends Fragment {
             }
         }
     }
+
     private void DeleteOutPassRequest(String outPassID) {
         spotsDialog.show();
         Call<String> saveMachineCall = retrofitApiInterface.DeleteOutpassRequestAsync("Bearer " + token, appKey, companyID, accountID, outPassID);
@@ -652,5 +691,450 @@ public class FragmentBalance extends Fragment {
                 SConnectionFail(t.getMessage(), getContext());
             }
         });
+    }
+
+    private void GetEmployeeOutPassApproval() {
+        try {
+            Call<List<OutPassViewModel>> getContToLocCall = retrofitApiInterface.GetOutpassRequestsForApprovalAsync("Bearer" + " " + token, appKey, companyID, accountID);
+            getContToLocCall.enqueue(new Callback<List<OutPassViewModel>>() {
+                @Override
+                public void onResponse(Call<List<OutPassViewModel>> call, Response<List<OutPassViewModel>> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                spotsDialog.dismiss();
+                                leaveRequestsViewModelList = new ArrayList<>(response.body());
+                                employeeOutPassApprovalAdapter = new EmployeeOutPassApprovalAdapter(getContext(), leaveRequestsViewModelList);
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                                outPassApprovalRecycalerView.setLayoutManager(mLayoutManager);
+                                outPassApprovalRecycalerView.setAdapter(employeeOutPassApprovalAdapter);
+                                txtOutPassApprovalCounter.setText(String.valueOf(response.body().size()));
+                            }
+                        } else {
+                            if (response.errorBody() != null) {
+                                spotsDialog.dismiss();
+                                gson = new GsonBuilder().create();
+                                try {
+                                    outPassApprovalRecycalerView.setAdapter(null);
+                                    employeeOutPassApprovalAdapter = null;
+                                    txtOutPassApprovalCounter.setText("0");
+                                    serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                    SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        spotsDialog.dismiss();
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<OutPassViewModel>> call, Throwable t) {
+                    SAlertError(t.getMessage(), getContext());
+                    spotsDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            spotsDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    public class EmployeeOutPassApprovalAdapter extends RecyclerView.Adapter<EmployeeOutPassApprovalAdapter.ViewHolder> {
+        Context context;
+        ArrayList<OutPassViewModel> leaveRequestsViewModelList;
+
+        public EmployeeOutPassApprovalAdapter(Context context, ArrayList<OutPassViewModel> leaveRequestsViewModelList) {
+            this.context = context;
+            this.leaveRequestsViewModelList = leaveRequestsViewModelList;
+        }
+
+        @NonNull
+        @Override
+        public EmployeeOutPassApprovalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.outpass_approval_recycalerview, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull EmployeeOutPassApprovalAdapter.ViewHolder holder, int position) {
+            final OutPassViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
+
+            if (position == holder.getAdapterPosition()) {
+                holder.btnApprove.setOnClickListener(v -> {
+                    String outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                    ApproveOutPassRequest(outPassID);
+                });
+            }
+            try {
+
+                try {
+                    int hours = leaveRequestsViewModel.getDurationMin() / 60;  // Divide total minutes by 60 to get hours
+                    int minutes = leaveRequestsViewModel.getDurationMin() % 60;
+                    holder.txtDuration.setText(String.format("%dh,%dm", hours, minutes));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                switch (leaveRequestsViewModel.getStatus()) {
+                    case 0:
+                        holder.txtStatusCode.setText(R.string.created);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.created_button);
+                        break;
+                    case 2:
+                        holder.txtStatusCode.setText(R.string.approved);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                try {
+                    holder.txtEmployeeName.setText(leaveRequestsViewModel.getEmployeeCompactViewModel().getEmployeeName() + "(" + leaveRequestsViewModel.getEmployeeCompactViewModel().getHrEmployeeID() + ")");
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtJoinedDate.setText("Joined Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getEmployeeCompactViewModel().getJoiningDate()));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtOutGate.setText(leaveRequestsViewModel.getOutGateCode());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtInGate.setText(leaveRequestsViewModel.getInGateCode());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtReason.setText(leaveRequestsViewModel.getReason());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtReqDate.setText("Request Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (position == holder.getAdapterPosition()) {
+                outPassID = leaveRequestsViewModel.getOutPassID().toString();
+            }
+            holder.btnReject.setOnClickListener(v -> {
+                String outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                RejectOutPassRequest(outPassID);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return leaveRequestsViewModelList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView
+                    txtDuration,
+                    txtFromTime,
+                    txtToTime,
+                    txtOutGate,
+                    txtReason,
+                    txtReqDate,
+                    txtStatusCode, txtEmployeeName, txtJoinedDate,
+                    txtInGate;
+            LinearLayout btnReject, btnApprove;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                txtDuration = itemView.findViewById(R.id.txtDuration);
+                txtFromTime = itemView.findViewById(R.id.txtFromTime);
+                txtToTime = itemView.findViewById(R.id.txtToTime);
+                txtStatusCode = itemView.findViewById(R.id.txtStatusCode);
+                txtOutGate = itemView.findViewById(R.id.txtOutGate);
+                txtInGate = itemView.findViewById(R.id.txtInGate);
+                txtReason = itemView.findViewById(R.id.txtReason);
+                txtReqDate = itemView.findViewById(R.id.txtReqDate);
+                txtEmployeeName = itemView.findViewById(R.id.txtEmployeeName);
+                txtJoinedDate = itemView.findViewById(R.id.txtJoinedDate);
+                btnApprove = itemView.findViewById(R.id.btnApprove);
+                btnReject = itemView.findViewById(R.id.btnReject);
+            }
+        }
+    }
+
+    private void ApproveOutPassRequest(String outPassID) {
+        spotsDialog.show();
+        Call<String> saveMachineCall = retrofitApiInterface.ApproveOutpassRequestAsync("Bearer " + token, appKey, companyID, accountID, outPassID);
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            if (response.code() == 200) {
+                                serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                GetEmployeeOutPassApproval();
+                            }
+                        }
+                    } else if (!response.isSuccessful()) {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
+    }
+
+    private void RejectOutPassRequest(String outPassID) {
+        spotsDialog.show();
+        Call<String> saveMachineCall = retrofitApiInterface.RejectOutpassRequestAsync("Bearer " + token, appKey, companyID, accountID, outPassID);
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            if (response.code() == 200) {
+                                serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                GetEmployeeOutPassApproval();
+                            }
+                        }
+                    } else if (!response.isSuccessful()) {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
+    }
+
+    private void GetEmployeePendingLeaveApproval() {
+        try {
+            Call<List<LeaveRequestsViewModel>> getContToLocCall = retrofitApiInterface.GetLeaveRequestsForApprovalAsync("Bearer" + " " + token, appKey, companyID, accountID);
+            getContToLocCall.enqueue(new Callback<List<LeaveRequestsViewModel>>() {
+                @Override
+                public void onResponse(Call<List<LeaveRequestsViewModel>> call, Response<List<LeaveRequestsViewModel>> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            if (response.body() != null) {
+                                spotsDialog.dismiss();
+                                employeePendingLeaveApprovalAdapter = new EmployeePendingLeaveApprovalAdapter(getContext(), response.body());
+                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+                                pendingLeaveApprovalRecycalerView.setLayoutManager(mLayoutManager);
+                                pendingLeaveApprovalRecycalerView.setAdapter(employeePendingLeaveApprovalAdapter);
+                                txtPendingApprovalCounter.setText(String.valueOf(response.body().size()));
+                            }
+                        } else {
+                            if (response.errorBody() != null) {
+                                spotsDialog.dismiss();
+                                gson = new GsonBuilder().create();
+                                try {
+                                    pendingLeaveApprovalRecycalerView.setAdapter(null);
+                                    employeePendingLeaveApprovalAdapter = null;
+                                    txtPendingApprovalCounter.setText("0");
+                                    serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                    SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        spotsDialog.dismiss();
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<LeaveRequestsViewModel>> call, Throwable t) {
+                    SAlertError(t.getMessage(), getContext());
+                    spotsDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            spotsDialog.dismiss();
+            e.printStackTrace();
+        }
+    }
+
+    public class EmployeePendingLeaveApprovalAdapter extends RecyclerView.Adapter<EmployeePendingLeaveApprovalAdapter.ViewHolder> {
+        Context context;
+        List<LeaveRequestsViewModel> leaveRequestsViewModelList;
+
+        public EmployeePendingLeaveApprovalAdapter(Context context, List<LeaveRequestsViewModel> leaveRequestsViewModelList) {
+            this.context = context;
+            this.leaveRequestsViewModelList = leaveRequestsViewModelList;
+        }
+
+        @NonNull
+        @Override
+        public EmployeePendingLeaveApprovalAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater inflater = LayoutInflater.from(context);
+            View view = inflater.inflate(R.layout.pending_leave_approval_recycalerview, parent, false);
+            return new EmployeePendingLeaveApprovalAdapter.ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull EmployeePendingLeaveApprovalAdapter.ViewHolder holder, int position) {
+            final LeaveRequestsViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
+
+            if (position == holder.getAdapterPosition()) {
+                holder.btnDelete.setOnClickListener(v -> {
+                    String leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
+                    DeleteLeaveRequest(leaveReqID);
+                });
+            }
+
+            try {
+
+                try {
+                    holder.txtLeaveType.setText(String.format("%d %s", leaveRequestsViewModel.getNoOfDays(), leaveRequestsViewModel.getLeaveTypeName()));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+
+                    holder.txtLeaveName.setText(leaveRequestsViewModel.getLeaveTypeName());
+                    if (leaveRequestsViewModel.getLeaveTypeName().equals("Casual Leave"))
+                        holder.txtLeaveName.setBackgroundResource(R.drawable.casual_leave_button);
+                    else if (leaveRequestsViewModel.getLeaveTypeName().equals("Earn Leave")) {
+                        holder.txtLeaveName.setBackgroundResource(R.drawable.earn_leave_button);
+                    } else
+                        holder.txtLeaveName.setBackgroundResource(R.drawable.sick_leave_button);
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtFromDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(leaveRequestsViewModel.getFromDate())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtToDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(leaveRequestsViewModel.getToDate())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtLastComment.setText(leaveRequestsViewModel.getReason());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                } try {
+                    holder.txtNoOfDays.setText(leaveRequestsViewModel.getNoOfDays()+" Days");
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtEmployeeName.setText(leaveRequestsViewModel.getEmployeeCompactViewModel().getEmployeeName()+"["+leaveRequestsViewModel.getEmployeeCompactViewModel().getHrEmployeeID()+"]");
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtReqDate.setText(String.valueOf(DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate())));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return leaveRequestsViewModelList.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView
+                    txtLeaveName,
+                    txtEmployeeName,
+                    txtReqDate,
+                    txtToDate,
+                    txtFromDate,
+                    txtNoOfDays,
+                    txtLastComment,
+                    txtLeaveType;
+            LinearLayout btnDelete;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                txtLeaveName = itemView.findViewById(R.id.txtLeaveName);
+                txtToDate = itemView.findViewById(R.id.txtToDate);
+                txtFromDate = itemView.findViewById(R.id.txtFromDate);
+                txtNoOfDays = itemView.findViewById(R.id.txtNoOfDays);
+                txtLeaveType = itemView.findViewById(R.id.txtLeaveType);
+                txtLastComment = itemView.findViewById(R.id.txtLastComment);
+                txtEmployeeName = itemView.findViewById(R.id.txtEmployeeName);
+                txtReqDate = itemView.findViewById(R.id.txtReqDate);
+                btnDelete = itemView.findViewById(R.id.btnDelete);
+            }
+        }
     }
 }

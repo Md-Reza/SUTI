@@ -306,7 +306,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
@@ -351,7 +351,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
@@ -396,7 +396,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1.2"
+                    android:layout_weight="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
@@ -408,7 +408,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Pending\n Aprroval"
+                        android:text="Leave\n Aprroval"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -441,19 +441,21 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent">
 
                     <TextView
-                        android:id="@+id/txtAllApproval"
+                        android:id="@+id/txtOutPassApproval"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/bg_round_shape"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="5dp"
+                        android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="All\n Approval"
-                        android:textColor="@color/lightgrey"
+                        android:text="Outpass\n Aprroval"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -462,7 +464,7 @@
 
 
                     <TextView
-                        android:id="@+id/txtAllApprovalCounter"
+                        android:id="@+id/txtOutPassApprovalCounter"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:layout_marginBottom="26dp"
@@ -473,10 +475,10 @@
                         android:textColor="@color/white"
                         android:textSize="10sp"
                         android:textStyle="normal"
-                        app:layout_constraintBottom_toBottomOf="@+id/txtAllApproval"
-                        app:layout_constraintEnd_toEndOf="@+id/txtAllApproval"
+                        app:layout_constraintBottom_toBottomOf="@+id/txtOutPassApproval"
+                        app:layout_constraintEnd_toEndOf="@+id/txtOutPassApproval"
                         app:layout_constraintHorizontal_bias="1.05"
-                        app:layout_constraintStart_toStartOf="@+id/txtAllApproval" />
+                        app:layout_constraintStart_toStartOf="@+id/txtOutPassApproval" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -486,7 +488,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
+                android:layout_weight="8"
                 android:orientation="vertical">
 
                 <TextView
@@ -524,6 +526,34 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/layoutOutPassApproval"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/outPassApprovalRecycalerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/outpass_approval_recycalerview" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutPendingLeaveApproval"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/pendingLeaveApprovalRecycalerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:listitem="@layout/pending_leave_approval_recycalerview" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -531,7 +561,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
-                android:layout_weight="6"
+                android:layout_weight="5"
                 android:orientation="vertical">
 
                 <TextView
@@ -539,7 +569,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="20dp"
-                    android:text="Add View"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 

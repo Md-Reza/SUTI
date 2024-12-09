@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/bg_gradient_main"
     android:layout_marginBottom="?attr/actionBarSize"
+    android:background="@drawable/bg_gradient_main"
+    android:orientation="vertical"
     tools:context=".FragmentMain">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
->
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,9 +35,9 @@
                     <LinearLayout
                         android:layout_width="100dp"
                         android:layout_height="80dp"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="5dp"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginStart="5dp"
+                        android:gravity="center_vertical"
                         android:orientation="vertical">
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -70,7 +69,6 @@
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
                                 android:letterSpacing="0.050"
-                                android:text="Rezwan"
                                 android:textColor="@color/white"
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
@@ -96,7 +94,6 @@
                                     android:layout_height="wrap_content"
                                     android:gravity="center_vertical"
                                     android:letterSpacing="0.025"
-                                    android:text="Asst. Manager"
                                     android:textColor="@color/white"
                                     android:textSize="18sp" />
 
@@ -160,9 +157,9 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/banner_top_background"
                 android:elevation="3dp"
-                android:layout_marginBottom="15dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -179,8 +176,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/icon_announcement"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:src="@drawable/icon_announcement" />
 
                 </LinearLayout>
 
@@ -196,22 +193,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/segoe_ui_regular"
                         android:gravity="center_vertical"
                         android:text="Upcoming Holidays"
-                        android:textSize="18sp"
-                        android:fontFamily="@font/segoe_ui_regular"
                         android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="normal" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:fontFamily="@font/segoe_ui_regular"
                         android:gravity="center_vertical"
                         android:text="Victory Day"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/segoe_ui_regular"
                         android:textColor="@color/redOrange"
+                        android:textSize="16sp"
                         android:textStyle="normal" />
 
                 </LinearLayout>
@@ -229,142 +226,109 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="50dp"
                     android:background="@color/white"
-                    android:orientation="vertical"
-                    android:weightSum="5">
+                    android:orientation="vertical">
+
 
                     <LinearLayout
+                        android:id="@+id/idMnu01"
                         android:layout_width="match_parent"
                         android:layout_height="110dp"
-                        android:orientation="vertical">
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="2dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
 
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:id="@+id/mnuMyLeaveRequest"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="2dp"
-                            android:orientation="horizontal"
-                            android:weightSum="3">
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical">
 
-                            <LinearLayout
-                                android:id="@+id/mnuStyle"
-                                android:layout_width="0dp"
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/icon_leave_history" />
+
+                            <TextView
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:visibility="gone"
-                                android:background="?attr/selectableItemBackground"
-                                android:orientation="vertical">
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center|center_vertical"
+                                android:text="My Leave\n Requests"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="normal" />
 
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="60dp"
-                                    android:layout_gravity="center"
-                                    app:srcCompat="@drawable/icon_attendance" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center|center_vertical"
-                                    android:text="Attendance"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="normal" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/mnuMyLeaveRequest"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="?attr/selectableItemBackground"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="50dp"
-                                    android:layout_gravity="center"
-                                    app:srcCompat="@drawable/icon_leave_history" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:gravity="center|center_vertical"
-                                    android:text="My Leave\n Requests"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="normal" />
-
-
-                            </LinearLayout>
-                            <LinearLayout
-                                android:id="@+id/txtGatepassHistory"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="?attr/selectableItemBackground"
-                                android:orientation="vertical">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="8dp" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="50dp"
-                                    android:layout_gravity="center"
-                                    app:srcCompat="@drawable/icon_history" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:gravity="center|center_vertical"
-                                    android:text="My Outpass\n Requests"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="normal" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:background="?attr/selectableItemBackground"
-                                android:orientation="vertical">
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="8dp" />
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="50dp"
-                                    android:layout_gravity="center"
-                                    app:srcCompat="@drawable/icon_notice_board" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:gravity="center|center_vertical"
-                                    android:text="Notice Board"
-                                    android:textColor="@color/black"
-                                    android:textSize="15sp"
-                                    android:textStyle="normal" />
-                            </LinearLayout>
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:id="@+id/txtGatepassHistory"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/icon_history" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center|center_vertical"
+                                android:text="My Outpass\n Requests"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:background="?attr/selectableItemBackground"
+                            android:orientation="vertical">
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="8dp" />
+
+                            <ImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/icon_notice_board" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"
+                                android:gravity="center|center_vertical"
+                                android:text="Notice Board"
+                                android:textColor="@color/black"
+                                android:textSize="15sp"
+                                android:textStyle="normal" />
+                        </LinearLayout>
 
                     </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -379,21 +343,22 @@
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="2dp"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             android:weightSum="3">
 
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:visibility="gone"
                                 android:background="?attr/selectableItemBackground"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="visible">
 
                                 <ImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="50dp"
                                     android:layout_gravity="center"
-                                    app:srcCompat="@drawable/icon_leave_history" />
+                                    app:srcCompat="@drawable/icon_outpass" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -402,14 +367,13 @@
                                     android:layout_marginTop="5dp"
                                     android:layout_marginBottom="5dp"
                                     android:gravity="center|center_vertical"
-                                    android:text="My Leave\n Requests"
+                                    android:text="Outpass Gate\n Approval"
                                     android:textColor="@color/black"
                                     android:textSize="15sp"
                                     android:textStyle="normal" />
 
 
                             </LinearLayout>
-
 
 
                         </LinearLayout>

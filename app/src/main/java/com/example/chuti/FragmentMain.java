@@ -3,23 +3,29 @@ package com.example.chuti;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeProfile;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.Security.BaseURL;
@@ -34,6 +40,10 @@ import com.example.chuti.UI.RequestLeaveFragment;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -47,10 +57,15 @@ public class FragmentMain extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest;
+    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest, idMnu01;
     TextView txtEmployeeID, txtName;
     EmployeeProfile employeeProfile;
+    EmployeeAccount employeeAccount;
     Toolbar toolbar;
+    String accountType;
+
+    Dialog dialogClose;
+    View logoutView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +103,7 @@ public class FragmentMain extends Fragment {
 
         txtEmployeeID = root.findViewById(R.id.txtEmployeeID);
         txtName = root.findViewById(R.id.txtName);
+        idMnu01 = root.findViewById(R.id.idMnu01);
 
 
         txtGatepassHistory = root.findViewById(R.id.txtGatepassHistory);
@@ -95,7 +111,57 @@ public class FragmentMain extends Fragment {
         mnuMyLeaveRequest = root.findViewById(R.id.mnuMyLeaveRequest);
         mnuMyLeaveRequest.setOnClickListener(v -> replaceFragment(new FragmentMyLeaveRequest(), getContext()));
 
-        GetEmployee();
+        try {
+            String[] parts = token.split("\\.", 0);
+
+            for (String part : parts) {
+                byte[] decodedBytes = Base64.decode(part, Base64.URL_SAFE);
+                String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
+                System.out.println("Decoded 1: " + decodedString);
+                try {
+                    accountType = (new JSONObject(decodedString)).getString("http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+                    SharedPref.write("accountType", accountType);
+
+                    System.out.println("Decoded value: " + accountType);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        if (accountType.equals("EMPLOYEE")) {
+            GetEmployee();
+        } else {
+            GetEmployeeAccount();
+        }
+
+        dialogClose = new Dialog(getActivity());
+        logoutView = getActivity().getLayoutInflater().inflate(R.layout.logout_message, null);
+        dialogClose.setCancelable(false);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                dialogClose.setContentView(logoutView);
+                TextView txtMessage = logoutView.findViewById(R.id.txtMessage);
+                txtMessage.setText(R.string.are_you_sure_you_want_to_exit);
+                Button btnOk = logoutView.findViewById(R.id.btnOk);
+                btnOk.setOnClickListener(v1 -> {
+                    dialogClose.dismiss();
+                    getActivity().finish();
+                    SharedPref.remove("Token", "");
+                });
+                Button btnClose = logoutView.findViewById(R.id.btnClose);
+                btnClose.setOnClickListener(v1 -> {
+                    dialogClose.dismiss();
+                });
+                dialogClose.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialogClose.show();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
         return root;
     }
@@ -113,8 +179,13 @@ public class FragmentMain extends Fragment {
                             // Successfully received response
                             employeeProfile = new EmployeeProfile();
                             employeeProfile = response.body();
+                            Log.i("info", "employeeProfile " + employeeProfile);
                             txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
                             txtName.setText(employeeProfile.getEmployeeName());
+
+                            if (employeeProfile.getAccountType().equals(3)) {
+                                idMnu01.setEnabled(false);
+                            }
 
                         } else {
                             if (response.errorBody() != null) {
@@ -142,4 +213,57 @@ public class FragmentMain extends Fragment {
         }
 
     }
+
+    private void GetEmployeeAccount() {
+        try {
+            Call<EmployeeAccount> getContToLocCall = retrofitApiInterface.GetUserAsync("Bearer " + token, appKey, companyID, accountID);
+
+            getContToLocCall.enqueue(new Callback<EmployeeAccount>() {
+                @Override
+                public void onResponse(Call<EmployeeAccount> call, Response<EmployeeAccount> response) {
+
+                    try {
+                        if (response.isSuccessful() && response.body() != null) {
+                            // Successfully received response
+                            employeeAccount = new EmployeeAccount();
+                            employeeAccount = response.body();
+                            txtEmployeeID.setText(accountType);
+                            txtName.setText(employeeAccount.getDisplayName());
+
+                            if (employeeAccount.getAccountType().equals(3)) {
+                                Log.i("info", "employeeAccount " + employeeAccount);
+                                boolean isEnabled = idMnu01.isEnabled();
+                                for (int i = 0; i < idMnu01.getChildCount(); i++) {
+                                    View child = idMnu01.getChildAt(i);
+                                    child.setEnabled(false); // Enable individual child views
+                                }
+                            }
+
+                        } else {
+                            if (response.errorBody() != null) {
+                                gson = new GsonBuilder().create();
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmployeeAccount> call, Throwable t) {
+                    // Handle network or other failures
+                    // SAlertError(t.getMessage(), getContext());
+                    spotsDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            // Handle general exceptions
+            spotsDialog.dismiss();
+            e.printStackTrace();
+        }
+
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.chuti.Security;
 import com.example.chuti.Dto.LoginDto;
 import com.example.chuti.Dto.OutpassDto;
 import com.example.chuti.Dto.SaveLeaveRequestDto;
+import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeLeaveRequestViewModel;
 import com.example.chuti.Model.EmployeeProfile;
@@ -41,6 +42,14 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String accountID,
             @Path("year") String year
+    );
+
+    @GET("LeaveService/{companyID}/LeaveRequestsForApproval/{accountID}")
+    Call<List<LeaveRequestsViewModel>> GetLeaveRequestsForApprovalAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID
     );
     @POST("LeaveService/{companyID}/SaveLeaveRequest/{accountID}")
     Call<String> SaveLeaveRequestAsync(
@@ -88,6 +97,47 @@ public interface Services {
 
     @DELETE("GateService/{companyID}/DeleteOutpass/{accountID}/{outpassID}")
     Call<String> DeleteOutpassRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("outpassID") String outpassID
+    );
+
+    @GET("EmployeeService/{companyID}/User/{accountID}")
+    Call<EmployeeAccount> GetUserAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID
+    );
+    @GET("GateService/{companyID}/OutpassRequest/{accountID}")
+    Call<OutPassViewModel> GetOutpassRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID
+    );
+
+    @GET("GateService/{companyID}/OutpassRequestsForApproval/{accountID}")
+    Call<List<OutPassViewModel>> GetOutpassRequestsForApprovalAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID
+    );
+
+    @GET("GateService/{companyID}/ApproveOutpassRequest/{accountID}/{outpassID}")
+    Call<String> ApproveOutpassRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("outpassID") String outpassID
+    );
+
+    @GET("GateService/{companyID}/RejectOutpassRequest/{accountID}/{outpassID}")
+    Call<String> RejectOutpassRequestAsync(
             @Header("Authorization") String authHeader,
             @Header("AppKey") String AppKey,
             @Path("companyID") String companyID,

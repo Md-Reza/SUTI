@@ -15,4 +15,6 @@
     <color name="text_color">#1E4175</color>
     <color name="teal_700">#FF018786</color>
     <color name="colorYellow">#FFD24C</color>
+    <color name="lightGrey">#D3D3D3</color>
+    <color name="textColor">#2C2C2C</color>
 </resources>

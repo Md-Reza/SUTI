@@ -287,24 +287,25 @@ public class LoginActivity extends AppCompatActivity {
                         spotsDialog.show();
                         loginResponseCall = retrofitApiInterface.LoginAsync(appKey, loginDto);
                         loginResponseCall.enqueue(new Callback<LoginSuccessViewModel>() {
+                            @RequiresApi(api = Build.VERSION_CODES.O)
                             @Override
                             public void onResponse(@NonNull Call<LoginSuccessViewModel> call, Response<LoginSuccessViewModel> response) {
                                 try {
                                     if (response.isSuccessful()) {
                                         if (response.body() != null) {
                                             spotsDialog.dismiss();
-                                            loginSuccessViewModel = new LoginSuccessViewModel();
+                                            loginSuccessViewModel = response.body();
+                                            Log.i("info", "Login" + response.body());
                                             token = loginSuccessViewModel.getAccessToken();
-                                            token = loginSuccessViewModel.getAccessToken();
-                                            accountID = loginSuccessViewModel.getAccountID().toString();
                                             companyID = loginSuccessViewModel.getCompanyID().toString();
+                                            accountID = loginSuccessViewModel.getAccountID().toString();
                                             SharedPref.write("token", token);
                                             SharedPref.write("companyID", companyID);
                                             SharedPref.write("accountID", accountID);
 
                                             intentActivity(new MainActivity(), LoginActivity.this);
                                         }
-                                    } else if (!response.isSuccessful()) {
+                                    } else  {
                                         if (response.errorBody() != null) {
                                             spotsDialog.dismiss();
                                             if (response.code() == 400) {
@@ -321,10 +322,10 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 } catch (NullPointerException e) {
                                     spotsDialog.dismiss();
-                                    SAlertDialog("Error: ", clientResponseModel.getMessage()
-                                            + response.errorBody(), R.drawable.error_read_64, LoginActivity.this, false);
+                                    loginSuccessViewModel = response.body();
+                                    Log.i("info", "Login" + response.body());
+                                    SAlertDialog("Error: ", e.getMessage(), R.drawable.error_read_64, LoginActivity.this, false);
                                 }
-
                             }
 
                             @Override

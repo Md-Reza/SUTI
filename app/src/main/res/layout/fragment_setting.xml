@@ -69,43 +69,6 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:text="Company Settings"
-        android:textColor="@color/purple_500"
-        android:textSize="15sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="15dp"
-        android:drawableStart="@drawable/icon_leave_type"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:text="Leave Types"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:drawableStart="@drawable/icon_police"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:text="Leave Policies"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"
