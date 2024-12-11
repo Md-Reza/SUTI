@@ -234,7 +234,7 @@ public class FragmentBalance extends Fragment {
                                     //Calculate the slice size and update the pie chart:
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Casual Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays()+employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
@@ -247,7 +247,7 @@ public class FragmentBalance extends Fragment {
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Sick Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays()+employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
                                         stats_progressbarSick.setProgress(progress);
@@ -405,6 +405,11 @@ public class FragmentBalance extends Fragment {
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
+                        break;
+
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
                         break;
 
                     default:
@@ -596,6 +601,10 @@ public class FragmentBalance extends Fragment {
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
+                        break;
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
                         break;
 
                     default:
@@ -826,6 +835,10 @@ public class FragmentBalance extends Fragment {
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
+                        break;
 
                     default:
                         break;
@@ -911,7 +924,6 @@ public class FragmentBalance extends Fragment {
                 txtDuration = itemView.findViewById(R.id.txtDuration);
                 txtFromTime = itemView.findViewById(R.id.txtFromTime);
                 txtToTime = itemView.findViewById(R.id.txtToTime);
-                txtStatusCode = itemView.findViewById(R.id.txtStatusCode);
                 txtOutGate = itemView.findViewById(R.id.txtOutGate);
                 txtInGate = itemView.findViewById(R.id.txtInGate);
                 txtReason = itemView.findViewById(R.id.txtReason);
@@ -1107,12 +1119,13 @@ public class FragmentBalance extends Fragment {
 
                 holder.btnReject.setOnClickListener(v -> {
                     leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
-                    approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
-                    approveLeaveRequestDto.setApproverAccountID(accountID);
                     rejectLeaveDialog.setContentView(rejectLeaveView);
                     rejectLeaveDialog.setCancelable(true);
                     rejectLeaveDialog.show();
                     txtRejectReason.requestFocus();
+                    approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
+                    approveLeaveRequestDto.setApproverAccountID(accountID);
+                    approveLeaveRequestDto.setRejectComment(txtRejectReason.getText().toString());
                     btnSave.setOnClickListener(v1 -> RejectLeave(approveLeaveRequestDto));
                     btnClose.setOnClickListener(v1 -> rejectLeaveDialog.dismiss());
                 });

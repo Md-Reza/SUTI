@@ -120,21 +120,21 @@
             android:id="@+id/viewOutpass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginTop="30dp"
             android:layout_marginEnd="20dp"
-            android:visibility="visible"
-            app:cardElevation="8dp"
-            android:layout_gravity="center_vertical"
-            app:cardCornerRadius="8dp">
+            android:visibility="gone"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_margin="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_margin="5dp"
+                android:orientation="vertical"
                 android:visibility="visible">
 
                 <LinearLayout
@@ -233,12 +233,12 @@
                         android:layout_marginStart="40dp"
                         android:layout_marginEnd="40dp"
                         android:backgroundTint="#4ea061"
-                        app:icon="@drawable/ic_approve"
                         android:text="Approve"
-                        app:iconGravity="textStart"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:icon="@drawable/ic_approve"
+                        app:iconGravity="textStart" />
 
 
                 </LinearLayout>

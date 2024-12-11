@@ -170,4 +170,21 @@ public interface Services {
             @Path("accountID") String accountID,
             @Body ResetPasswordDto resetPasswordDto
     );
+
+    @GET("LeaveService/{companyID}/LeaveRequest/{leaveRequestID}")
+    Call<LeaveRequestsViewModel> GetLeaveRequestsForApprovalByIDAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("leaveRequestID") String leaveRequestID
+    );
+
+    @GET("GateService/{companyID}/ExecuteOutpassInOut/{accountID}/{outpassID}")
+    Call<String> ExecuteOutpassInOutAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Path("outpassID") String outpassID
+    );
 }

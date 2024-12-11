@@ -1,7 +1,10 @@
 package com.example.chuti.UI;
 
+import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
+import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
+import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -31,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.chuti.MainActivity;
 import com.example.chuti.Model.OutPassViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
@@ -94,7 +98,7 @@ public class FragmentOutpassApproval extends Fragment {
         userID = SharedPref.read("uId", "");
 
         toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Outpass Approval");
+        toolbar.setTitle(R.string.outpass_approval);
         toolbar.setSubtitle("");
 
         toolbar = getActivity().findViewById(R.id.toolbar);
@@ -162,6 +166,7 @@ public class FragmentOutpassApproval extends Fragment {
             }
         });
 
+        btnSubmit.setOnClickListener(v -> ApproveOutpass());
 
         return root;
     }
@@ -242,6 +247,50 @@ public class FragmentOutpassApproval extends Fragment {
             spotsDialog.dismiss();
             e.printStackTrace();
         }
+    }
+
+    private void ApproveOutpass(){
+        spotsDialog.show();
+        Call<String> saveMachineCall = retrofitApiInterface.ExecuteOutpassInOutAsync("Bearer " + token, appKey, companyID,accountID, txtOutPassID.getText().toString());
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            if (response.code() == 200) {
+                                serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                viewOutpass.setVisibility(View.GONE);
+                            }
+                        }
+                    } else {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
     }
 
     private void GatePassIDScanner() {

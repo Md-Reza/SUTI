@@ -32,7 +32,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".UI.GateNotificationMessageActivity"
+            android:name=".UI.GatepassNotificationMessageActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name=".UI.GateNotificationMessageActivity" />
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.PushNotificationMessageActivity"
+            android:name=".UI.LeaveNotificationMessageActivity"
             android:exported="false">
 
             <intent-filter>

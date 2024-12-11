@@ -15,16 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.chuti.FragmentMain;
-import com.example.chuti.Model.EmployeeCompactViewModel;
-import com.example.chuti.Model.OutPassViewModel;
 import com.example.chuti.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class GatePassQRFragment extends Fragment {
@@ -32,9 +26,7 @@ public class GatePassQRFragment extends Fragment {
     ImageView txtBarcode;
     Toolbar toolbar;
     Bundle bundle;
-    String outPassID, reqDate,hrmsID,name;
-    List<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
-    EmployeeCompactViewModel employeeCompactViewModel = new EmployeeCompactViewModel();
+    String outPassID, reqDate, hrmsID, name;
     TextView txtEmployeeID, txtName, txtReqDate;
 
     @Override

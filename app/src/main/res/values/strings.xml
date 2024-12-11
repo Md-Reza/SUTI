@@ -45,4 +45,5 @@
     <string name="leave_request_reject_reason">Leave Request Reject Reason</string>
     <string name="close">Close</string>
     <string name="announcement">Announcement</string>
+    <string name="outpass_approval">Outpass Approval</string>
 </resources>

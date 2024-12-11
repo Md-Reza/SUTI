@@ -62,7 +62,7 @@ public class FragmentMyLeaveRequest extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View root= inflater.inflate(R.layout.fragment_my_leave_request, container, false);
+        View root = inflater.inflate(R.layout.fragment_my_leave_request, container, false);
 
         retrofitApiInterface = BaseURL.getRetrofit().create(Services.class);
         SharedPref.init(getContext());
@@ -120,7 +120,7 @@ public class FragmentMyLeaveRequest extends Fragment {
             });
         }
 
-        return  root;
+        return root;
     }
 
     private void GetEmployeeLeaveRequest() {
@@ -228,6 +228,10 @@ public class FragmentMyLeaveRequest extends Fragment {
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
+                        break;
                     default:
                         break;
                 }
@@ -295,6 +299,7 @@ public class FragmentMyLeaveRequest extends Fragment {
                                 serviceResponseViewModel = new ServiceResponseViewModel();
                                 serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                GetEmployeeLeaveRequest();
                             }
                         }
                     } else if (!response.isSuccessful()) {

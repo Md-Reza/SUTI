@@ -219,7 +219,10 @@ public class FragmentMyOutpassRequest extends Fragment {
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
-
+                    case 3:
+                        holder.txtStatusCode.setText(R.string.rejected);
+                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
+                        break;
                     default:
                         break;
                 }

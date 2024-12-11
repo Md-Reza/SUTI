@@ -28,7 +28,8 @@ import com.example.chuti.Security.SharedPref;
 import com.example.chuti.UI.EmployeeGatepassFragment;
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.FragmentOutpassApproval;
-import com.example.chuti.UI.PushNotificationMessageActivity;
+import com.example.chuti.UI.GatepassNotificationMessageActivity;
+import com.example.chuti.UI.LeaveNotificationMessageActivity;
 import com.example.chuti.UI.RequestLeaveFragment;
 import com.example.chuti.UI.SettingFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        SharedPref.init(this);
         intent = getIntent();
         token = SharedPref.read("token", "");
         try {
@@ -106,15 +108,22 @@ public class MainActivity extends AppCompatActivity {
 
             if (getIntent().getExtras() != null) {
                 requestData = getIntent().getParcelableExtra("remoteMessageViewModel");
-                if (requestData.getRequestType()!= null)  {
-                    System.out.println("main requestData: " + requestData);
-                    Intent i = new Intent(getApplicationContext(), PushNotificationMessageActivity.class);
-                    i.putExtra("remoteMessageViewModel", requestData);
-                    startActivity(i);
-                } else {
-                    replaceFragment(new FragmentBalance(), this);
+                if (requestData.getRequestType() != null) {
+                    switch (requestData.getRequestType()) {
+                        case "LEAVE":
+                            intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                            startActivity(intent);
+                            break;
+                        case "OUTPASS":
+                            intent = new Intent(this, GatepassNotificationMessageActivity.class);
+                            startActivity(intent);
+                            break;
+                        default:
+                            replaceFragment(new FragmentBalance(), this);
+                            break;
+                    }
                 }
-            }else {
+            } else {
                 replaceFragment(new FragmentBalance(), this);
             }
 
@@ -167,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (intent.getExtras() != null) {
             requestData = getIntent().getParcelableExtra("remoteMessageViewModel"); // Retrieve the data passed from the notification
-            if (requestData.getRequestType()!= null) {
+            if (requestData.getRequestType() != null) {
                 getIntent().putExtra("remoteMessageViewModel", requestData);
-                Intent i = new Intent(getApplicationContext(), PushNotificationMessageActivity.class);
+                Intent i = new Intent(getApplicationContext(), LeaveNotificationMessageActivity.class);
                 startActivity(i);
             } else {
                 replaceFragment(new FragmentBalance(), this);

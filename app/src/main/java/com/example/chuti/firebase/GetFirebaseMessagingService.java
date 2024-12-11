@@ -16,8 +16,8 @@ import com.example.chuti.R;
 import java.util.Map;
 
 
-import com.example.chuti.UI.GateNotificationMessageActivity;
-import com.example.chuti.UI.PushNotificationMessageActivity;
+import com.example.chuti.UI.GatepassNotificationMessageActivity;
+import com.example.chuti.UI.LeaveNotificationMessageActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -40,14 +40,19 @@ public class GetFirebaseMessagingService extends FirebaseMessagingService {
                 data.get("RequestType")
         );
         intent = new Intent();
-        assert remoteMessageViewModel != null;
-        if (remoteMessageViewModel.getRequestType().equals("LEAVE")) {
-            intent = new Intent(this, PushNotificationMessageActivity.class);
-            intent = new Intent(this, MainActivity.class);
-        } else {
-            intent = new Intent(this, GateNotificationMessageActivity.class);
-            intent = new Intent(this, MainActivity.class);
+        switch (remoteMessageViewModel.getRequestType()) {
+            case "LEAVE":
+                intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                intent = new Intent(this, MainActivity.class);
+                break;
+            case "OUTPASS":
+                intent = new Intent(this, GatepassNotificationMessageActivity.class);
+                intent = new Intent(this, MainActivity.class);
+                break;
+            default:
+                break;
         }
+        System.out.println("remoteMessageViewModel :1 " + remoteMessageViewModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("remoteMessageViewModel", remoteMessageViewModel);
 
@@ -82,8 +87,6 @@ public class GetFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentIntent(pendingIntent);
 
         manager.notify(1, builder.build());
-
-
         // Show notification
         showNotification(title, body, data);
     }
@@ -91,29 +94,37 @@ public class GetFirebaseMessagingService extends FirebaseMessagingService {
     private void showNotification(String title, String body, Map<String, String> data) {
 
         intent = new Intent();
-        assert remoteMessageViewModel != null;
-        if (remoteMessageViewModel.getRequestType().equals("LEAVE")) {
-            intent = new Intent(this, PushNotificationMessageActivity.class);
-            intent = new Intent(this, MainActivity.class);
-        } else {
-            intent = new Intent(this, GateNotificationMessageActivity.class);
-            intent = new Intent(this, MainActivity.class);
-        }
+        PendingIntent pendingIntent;
 
         remoteMessageViewModel = new RemoteMessageViewModel(
                 data.get("Status"),
                 data.get("RequestID"),
                 data.get("RequestType")
         );
+        switch (remoteMessageViewModel.getRequestType()) {
+            case "LEAVE":
+                intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                intent = new Intent(this, MainActivity.class);
+                intent.putExtra("remoteMessageViewModel", remoteMessageViewModel);
+                break;
+            case "OUTPASS":
+                intent = new Intent(this, GatepassNotificationMessageActivity.class);
+                intent = new Intent(this, MainActivity.class);
+                intent.putExtra("remoteMessageViewModel", remoteMessageViewModel);
+                break;
+            default:
+                break;
+        }
+        System.out.println("remoteMessageViewModel :2 " + remoteMessageViewModel);
         intent.putExtra("remoteMessageViewModel", remoteMessageViewModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Create a PendingIntent for the notification
-        PendingIntent pendingIntent = PendingIntent.getActivity(
+        pendingIntent = PendingIntent.getActivity(
                 this,
                 0,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_ONE_SHOT
+                PendingIntent.FLAG_UPDATE_CURRENT
         );     // Create a PendingIntent for the notification
 
         // Notification channel setup for Android O and above

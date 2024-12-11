@@ -1,6 +1,5 @@
 package com.example.chuti;
 
-import static android.content.ContentValues.TAG;
 import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetDateTimeParser;
 
@@ -10,20 +9,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Base64;
-import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chuti.Model.RemoteMessageViewModel;
 import com.example.chuti.Security.SharedPref;
-import com.example.chuti.Security.SharedPrefServer;
-import com.example.chuti.UI.PushNotificationMessageActivity;
 
 import org.json.JSONObject;
 
