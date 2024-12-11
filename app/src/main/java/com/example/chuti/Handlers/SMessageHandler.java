@@ -14,7 +14,7 @@ import com.example.chuti.R;
 public class SMessageHandler {
     public static AlertDialog.Builder alertBox;
     static AlertDialog alertDialog;
-    static Button btnSuccessOk;
+    static Button btnSuccessOk,successDone;
     static TextView txtSuccessDesc;
 
     public static void SAlertDialog(final String title, String message, int icon,
@@ -55,14 +55,14 @@ public class SMessageHandler {
 
     public static void SAlertSuccess(String message, final Context context) {
         View viewSuccess = LayoutInflater.from(context).inflate(R.layout.message_dialog, null);
-        btnSuccessOk = viewSuccess.findViewById(R.id.successDone);
+        successDone = viewSuccess.findViewById(R.id.successDone);
         txtSuccessDesc = viewSuccess.findViewById(R.id.txtSuccessDesc);
         alertBox = new AlertDialog.Builder(context);
 
         alertBox.setView(viewSuccess);
         alertDialog = alertBox.create();
 
-        btnSuccessOk.setOnClickListener(v -> alertDialog.dismiss());
+        successDone.setOnClickListener(v -> alertDialog.dismiss());
         if (alertDialog.getWindow() != null) {
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }

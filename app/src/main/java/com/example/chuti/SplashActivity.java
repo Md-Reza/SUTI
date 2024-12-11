@@ -1,9 +1,16 @@
 package com.example.chuti;
 
+import static android.content.ContentValues.TAG;
+import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
+import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetDateTimeParser;
+
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 import android.view.WindowManager;
 
 import androidx.activity.EdgeToEdge;
@@ -13,36 +20,94 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.chuti.Model.RemoteMessageViewModel;
+import com.example.chuti.Security.SharedPref;
 import com.example.chuti.Security.SharedPrefServer;
+import com.example.chuti.UI.PushNotificationMessageActivity;
+
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 public class SplashActivity extends AppCompatActivity {
+
+    String token, expireDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        SharedPrefServer.init(this);
+        SharedPref.init(this);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        new Handler().postDelayed(() -> {
+        token = SharedPref.read("token", "");
 
-            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-            ActivityOptions options = ActivityOptions.makeCustomAnimation(
-                    getApplicationContext(),
-                    R.anim.slide_in_left,
-                    R.anim.slide_out_right
-            );
-            startActivity(i, options.toBundle());
-            finish();
+        if (token.isEmpty()) {
+            new Handler().postDelayed(() -> {
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                ActivityOptions options = ActivityOptions.makeCustomAnimation(
+                        getApplicationContext(),
+                        R.anim.slide_in_left,
+                        R.anim.slide_out_right
+                );
+                startActivity(i, options.toBundle());
+                finish();
 
-        }, 5000);
+            }, 5000);
+        } else {
+            try {
+                String[] parts = token.split("\\.", 0);
+
+                for (String part : parts) {
+                    byte[] decodedBytes = Base64.decode(part, Base64.URL_SAFE);
+                    String decodedString = new String(decodedBytes, StandardCharsets.UTF_8);
+                    System.out.println("Decoded 1: " + decodedString);
+                    try {
+                        expireDate = (new JSONObject(decodedString)).getString("exp");
+                        System.out.println("Decoded value: " + expireDate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                String currentOffsetDateTime;
+                long currentTimeInMilliseconds;
+                LocalDateTime localDate;
+                try {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        currentOffsetDateTime = CurrentOffsetDateTimeParser(OffsetDateTime.now().toString());
+                        localDate = LocalDateTime.parse(currentOffsetDateTime);
+                        currentTimeInMilliseconds = localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli() / 1000;
+
+                        if (Long.parseLong(expireDate) > currentTimeInMilliseconds) {
+                            intentActivity(new MainActivity(), this);
+
+                        } else {
+                            new Handler().postDelayed(() -> {
+                                System.out.println("Decoded value 2: " + currentTimeInMilliseconds);
+                                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                                ActivityOptions options = ActivityOptions.makeCustomAnimation(
+                                        getApplicationContext(),
+                                        R.anim.slide_in_left,
+                                        R.anim.slide_out_right
+                                );
+                                startActivity(i, options.toBundle());
+                                finish();
+
+                            }, 5000);
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

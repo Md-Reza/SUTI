@@ -1,7 +1,9 @@
 package com.example.chuti.Security;
 
+import com.example.chuti.Dto.ApproveLeaveRequestDto;
 import com.example.chuti.Dto.LoginDto;
 import com.example.chuti.Dto.OutpassDto;
+import com.example.chuti.Dto.ResetPasswordDto;
 import com.example.chuti.Dto.SaveLeaveRequestDto;
 import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
@@ -143,5 +145,29 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String accountID,
             @Path("outpassID") String outpassID
+    );
+
+    @POST("LeaveService/{companyID}/ApproveLeaveRequest")
+    Call<String> ApproveLeaveRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Body ApproveLeaveRequestDto approveLeaveRequestDto
+    );
+
+    @POST("LeaveService/{companyID}/RejectLeaveRequest")
+    Call<String> RejectLeaveRequestAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Body ApproveLeaveRequestDto approveLeaveRequestDto
+    );
+    @POST("EmployeeService/{companyID}/ChangePassword/{accountID}")
+    Call<String> ChangePasswordAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Body ResetPasswordDto resetPasswordDto
     );
 }

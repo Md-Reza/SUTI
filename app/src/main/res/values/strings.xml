@@ -42,4 +42,7 @@
     <string name="remember_me">Remember me</string>
     <string name="log_in">Log In</string>
     <string name="are_you_sure_you_want_to_exit">Are you sure, you want to exit?</string>
+    <string name="leave_request_reject_reason">Leave Request Reject Reason</string>
+    <string name="close">Close</string>
+    <string name="announcement">Announcement</string>
 </resources>

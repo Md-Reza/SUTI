@@ -3,8 +3,11 @@ package com.example.chuti.Security;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+
 public class SharedPref {
     public static final String SHARED_PREF_MAIN="shared_preference_main";
+    private static final String PREF_NAME = "app_preferences";
     private static SharedPreferences mSharedPref;
     public static final String NAME = "mysharedpref";
 

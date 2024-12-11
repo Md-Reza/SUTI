@@ -66,6 +66,7 @@ public class FragmentMain extends Fragment {
 
     Dialog dialogClose;
     View logoutView;
+    String employeeName,hrmsID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -176,12 +177,14 @@ public class FragmentMain extends Fragment {
 
                     try {
                         if (response.isSuccessful() && response.body() != null) {
-                            // Successfully received response
                             employeeProfile = new EmployeeProfile();
                             employeeProfile = response.body();
-                            Log.i("info", "employeeProfile " + employeeProfile);
                             txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
                             txtName.setText(employeeProfile.getEmployeeName());
+                            employeeName=employeeProfile.getEmployeeName();
+                            hrmsID=employeeProfile.getHrEmployeeID();
+                            SharedPref.write("employeeName",employeeName);
+                            SharedPref.write("hrmsID",hrmsID);
 
                             if (employeeProfile.getAccountType().equals(3)) {
                                 idMnu01.setEnabled(false);

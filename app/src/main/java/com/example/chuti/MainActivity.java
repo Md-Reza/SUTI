@@ -10,12 +10,11 @@ import android.util.Base64;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -24,10 +23,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.chuti.Model.RemoteMessageViewModel;
 import com.example.chuti.Security.SharedPref;
 import com.example.chuti.UI.EmployeeGatepassFragment;
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.FragmentOutpassApproval;
+import com.example.chuti.UI.PushNotificationMessageActivity;
 import com.example.chuti.UI.RequestLeaveFragment;
 import com.example.chuti.UI.SettingFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -46,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
     Dialog dialogClose;
     View logoutView;
+    RemoteMessageViewModel requestData;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.redOrange));
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
+        intent = getIntent();
         token = SharedPref.read("token", "");
         try {
             String[] parts = token.split("\\.", 0);
@@ -101,7 +103,21 @@ public class MainActivity extends AppCompatActivity {
             btnGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), this));
 
             bottomNavigationView.setItemSelected(R.id.bottomNavigationView, true);
-            replaceFragment(new FragmentBalance(), this);
+
+            if (getIntent().getExtras() != null) {
+                requestData = getIntent().getParcelableExtra("remoteMessageViewModel");
+                if (requestData.getRequestType()!= null)  {
+                    System.out.println("main requestData: " + requestData);
+                    Intent i = new Intent(getApplicationContext(), PushNotificationMessageActivity.class);
+                    i.putExtra("remoteMessageViewModel", requestData);
+                    startActivity(i);
+                } else {
+                    replaceFragment(new FragmentBalance(), this);
+                }
+            }else {
+                replaceFragment(new FragmentBalance(), this);
+            }
+
             bottomNavigationView.setBackground(null);
             bottomNavigationView.setOnItemSelectedListener(i -> {
                 switch (i) {
@@ -144,6 +160,21 @@ public class MainActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
+    }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        if (intent.getExtras() != null) {
+            requestData = getIntent().getParcelableExtra("remoteMessageViewModel"); // Retrieve the data passed from the notification
+            if (requestData.getRequestType()!= null) {
+                getIntent().putExtra("remoteMessageViewModel", requestData);
+                Intent i = new Intent(getApplicationContext(), PushNotificationMessageActivity.class);
+                startActivity(i);
+            } else {
+                replaceFragment(new FragmentBalance(), this);
+            }
+        }
     }
 
     @Override

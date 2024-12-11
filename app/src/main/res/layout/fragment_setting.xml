@@ -100,20 +100,6 @@
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:drawableStart="@drawable/icon_person"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:text="Employee Profile"
-        android:textColor="@color/black"
-        android:textSize="13sp" />
-
-
-    <TextView
         android:id="@+id/txtResetPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

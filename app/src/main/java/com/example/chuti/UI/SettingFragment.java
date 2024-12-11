@@ -41,6 +41,7 @@ public class SettingFragment extends Fragment {
     TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus, txtEmployeeID;
     EmployeeProfile employeeProfile;
     Toolbar toolbar;
+    String employeeName,hrmsID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,6 +108,10 @@ public class SettingFragment extends Fragment {
                             txtEmployeeName.setText(employeeProfile.getEmployeeName());
                             txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
                             txtJoiningDate.setText(DateTimeParseMonthYearFormatter(employeeProfile.getJoiningDate()));
+                            employeeName=employeeProfile.getEmployeeName();
+                            hrmsID=employeeProfile.getHrEmployeeID();
+                            SharedPref.write("employeeName",employeeName);
+                            SharedPref.write("hrmsID",hrmsID);
                             Boolean enable = employeeProfile.getEnabled();
                             if (enable)
                                 txtStatus.setText("ACTIVE");

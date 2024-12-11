@@ -321,7 +321,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:gravity="center|center_vertical"
-                                android:text="Notice Board"
+                                android:text="Announcement"
                                 android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="normal" />

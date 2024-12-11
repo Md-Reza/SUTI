@@ -230,10 +230,9 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
+                android:layout_height="wrap_content"
                 android:layout_margin="2dp"
-                android:gravity="end"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -242,22 +241,37 @@
                     android:layout_weight="1">
 
                     <TextView
-                        android:id="@+id/txtLastComment"
+                        android:id="@+id/txtReason"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
                         android:gravity="center_vertical"
-                        android:textStyle="normal"
-                        android:textSize="11sp"
+                        android:text="Test"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+                        app:layout_constraintEnd_toStartOf="@+id/btnApprove"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <LinearLayout
+                        android:id="@+id/btnApprove"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginEnd="15dp"
+                        android:background="@drawable/approve_round"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btnReject"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_approve" />
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/btnDelete"
+                        android:id="@+id/btnReject"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:background="@drawable/delete_round"
@@ -267,13 +281,12 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_delete" />
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_reject" />
                     </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
 
             </LinearLayout>
 
