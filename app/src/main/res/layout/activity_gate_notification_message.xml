@@ -184,7 +184,6 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="2"
                             android:gravity="center_vertical"
-                            android:text="10.00 AM"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
 
@@ -307,8 +306,8 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:src="@drawable/ic_approve" />
                     </LinearLayout>
 
@@ -323,8 +322,8 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
                             android:src="@drawable/ic_reject" />
                     </LinearLayout>
 

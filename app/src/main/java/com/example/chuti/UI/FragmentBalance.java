@@ -1,12 +1,13 @@
 package com.example.chuti.UI;
 
-import static android.content.Intent.getIntent;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
-import static com.example.chuti.FragmentManager.FragmentManager.replaceFragmentWithBundle;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragmentWithMultipleBundle;
 import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime;
+import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetTimeParser;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
+import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearUTCFormatter;
+import static com.example.chuti.Handlers.DateFormatterHandlers.OffsetTimeParser;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
@@ -14,9 +15,11 @@ import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -36,7 +39,7 @@ import android.widget.TextView;
 
 import com.example.chuti.Dto.ApproveLeaveRequestDto;
 import com.example.chuti.FragmentMain;
-import com.example.chuti.Model.EmployeeCompactViewModel;
+import com.example.chuti.Handlers.DateFormatterHandlers;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.LeaveRequestsViewModel;
 import com.example.chuti.Model.OutPassViewModel;
@@ -82,7 +85,7 @@ public class FragmentBalance extends Fragment {
     LinearLayout layoutLeaveApproval, layoutGatePass, layoutOutPassApproval, layoutPendingLeaveApproval;
     Toolbar toolbar;
     int currentYear;
-    ArrayList<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
+    List<OutPassViewModel> leaveRequestsViewModelList = new ArrayList<>();
 
     AlertDialog.Builder builder;
     AlertDialog alert;
@@ -227,18 +230,15 @@ public class FragmentBalance extends Fragment {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
                                 employeeLeaveCatalogViewModel = response.body();
-                                Log.i("info", "employeeLeaveCatalogViewModel" + response.body());
-
 
                                 for (int i = 0; i < employeeLeaveCatalogViewModel.size(); i++) {
                                     //Calculate the slice size and update the pie chart:
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Casual Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays()+employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays() + employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
-                                        Log.i("info", "Avaiable Days" + employeeLeaveCatalogViewModel.get(i).getAvailableDays());
                                         stats_progressbarCasualLeave.setProgress(progress);
                                         txtCasualLeaveName.setText(employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName());
                                         txtCasualLeaveBalanceStatus.setText(String.format("%d/%d", employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays(), employeeLeaveCatalogViewModel.get(i).getAvailableDays()));
@@ -247,7 +247,7 @@ public class FragmentBalance extends Fragment {
                                     if (employeeLeaveCatalogViewModel.get(i).getPolicyLeaveViewModel().getLeaveTypeViewModel().getLeaveTypeName().equals("Sick Leave")) {
                                         int calsBurned = employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         periodYear = employeeLeaveCatalogViewModel.get(i).getEmployeePeriodViewModel().getPeriodYear().toString();
-                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays()+employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
+                                        int totalLeave = employeeLeaveCatalogViewModel.get(i).getAvailableDays() + employeeLeaveCatalogViewModel.get(i).getUsedDays() + employeeLeaveCatalogViewModel.get(i).getOnHeldDays();
                                         double d = (double) calsBurned / (double) totalLeave;
                                         int progress = (int) (d * 100);
                                         stats_progressbarSick.setProgress(progress);
@@ -405,6 +405,7 @@ public class FragmentBalance extends Fragment {
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
+                        holder.btnDelete.setVisibility(View.INVISIBLE);
                         break;
 
                     case 3:
@@ -417,6 +418,7 @@ public class FragmentBalance extends Fragment {
                 }
 
                 try {
+
                     holder.txtFromDate.setText(String.valueOf(DateTimeParseMonthYearFormatter(leaveRequestsViewModel.getFromDate())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
@@ -517,7 +519,7 @@ public class FragmentBalance extends Fragment {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
                                 leaveRequestsViewModelList = new ArrayList<>(response.body());
-                                employeeOutPassRequestAdapter = new EmployeeOutPassRequestAdapter(getContext(), leaveRequestsViewModelList);
+                                employeeOutPassRequestAdapter = new EmployeeOutPassRequestAdapter(getContext(), response.body());
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 outPassRecycalerView.setLayoutManager(mLayoutManager);
                                 outPassRecycalerView.setAdapter(employeeOutPassRequestAdapter);
@@ -558,9 +560,9 @@ public class FragmentBalance extends Fragment {
 
     public class EmployeeOutPassRequestAdapter extends RecyclerView.Adapter<EmployeeOutPassRequestAdapter.ViewHolder> {
         Context context;
-        ArrayList<OutPassViewModel> leaveRequestsViewModelList;
+        List<OutPassViewModel> leaveRequestsViewModelList;
 
-        public EmployeeOutPassRequestAdapter(Context context, ArrayList<OutPassViewModel> leaveRequestsViewModelList) {
+        public EmployeeOutPassRequestAdapter(Context context, List<OutPassViewModel> leaveRequestsViewModelList) {
             this.context = context;
             this.leaveRequestsViewModelList = leaveRequestsViewModelList;
         }
@@ -574,6 +576,7 @@ public class FragmentBalance extends Fragment {
         }
 
         @Override
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void onBindViewHolder(@NonNull EmployeeOutPassRequestAdapter.ViewHolder holder, int position) {
             final OutPassViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
 
@@ -601,6 +604,7 @@ public class FragmentBalance extends Fragment {
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
+                        holder.btnDelete.setVisibility(View.INVISIBLE);
                         break;
                     case 3:
                         holder.txtStatusCode.setText(R.string.rejected);
@@ -612,12 +616,12 @@ public class FragmentBalance extends Fragment {
                 }
 
                 try {
-                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                    holder.txtFromTime.setText(String.valueOf(OffsetTimeParser(leaveRequestsViewModel.getFromTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
-                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
+                    holder.txtToTime.setText(String.valueOf(OffsetTimeParser(leaveRequestsViewModel.getToTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -640,7 +644,7 @@ public class FragmentBalance extends Fragment {
                 }
 
                 try {
-                    holder.txtReqDate.setText(DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                    holder.txtReqDate.setText(CurrentOffsetTimeParser(leaveRequestsViewModel.getRequestDate()));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -749,8 +753,8 @@ public class FragmentBalance extends Fragment {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
-                                leaveRequestsViewModelList = new ArrayList<>(response.body());
-                                employeeOutPassApprovalAdapter = new EmployeeOutPassApprovalAdapter(getContext(), leaveRequestsViewModelList);
+                                employeeOutPassApprovalAdapter = new EmployeeOutPassApprovalAdapter(getContext(), response.body());
+                                Log.i("info","res out app "+ response.body());
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 outPassApprovalRecycalerView.setLayoutManager(mLayoutManager);
                                 outPassApprovalRecycalerView.setAdapter(employeeOutPassApprovalAdapter);
@@ -791,9 +795,9 @@ public class FragmentBalance extends Fragment {
 
     public class EmployeeOutPassApprovalAdapter extends RecyclerView.Adapter<EmployeeOutPassApprovalAdapter.ViewHolder> {
         Context context;
-        ArrayList<OutPassViewModel> leaveRequestsViewModelList;
+        List<OutPassViewModel> leaveRequestsViewModelList;
 
-        public EmployeeOutPassApprovalAdapter(Context context, ArrayList<OutPassViewModel> leaveRequestsViewModelList) {
+        public EmployeeOutPassApprovalAdapter(Context context, List<OutPassViewModel> leaveRequestsViewModelList) {
             this.context = context;
             this.leaveRequestsViewModelList = leaveRequestsViewModelList;
         }
@@ -808,84 +812,66 @@ public class FragmentBalance extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull EmployeeOutPassApprovalAdapter.ViewHolder holder, int position) {
-            final OutPassViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
+            final OutPassViewModel outPassViewModel = leaveRequestsViewModelList.get(position);
 
             if (position == holder.getAdapterPosition()) {
                 holder.btnApprove.setOnClickListener(v -> {
-                    String outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                    String outPassID = outPassViewModel.getOutPassID().toString();
                     ApproveOutPassRequest(outPassID);
                 });
             }
             try {
 
                 try {
-                    int hours = leaveRequestsViewModel.getDurationMin() / 60;  // Divide total minutes by 60 to get hours
-                    int minutes = leaveRequestsViewModel.getDurationMin() % 60;
+                    int hours = outPassViewModel.getDurationMin() / 60;  // Divide total minutes by 60 to get hours
+                    int minutes = outPassViewModel.getDurationMin() % 60;
                     holder.txtDuration.setText(String.format("%dh,%dm", hours, minutes));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
-                switch (leaveRequestsViewModel.getStatus()) {
-                    case 0:
-                        holder.txtStatusCode.setText(R.string.created);
-                        holder.txtStatusCode.setBackgroundResource(R.drawable.created_button);
-                        break;
-                    case 2:
-                        holder.txtStatusCode.setText(R.string.approved);
-                        holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
-                        break;
-                    case 3:
-                        holder.txtStatusCode.setText(R.string.rejected);
-                        holder.txtStatusCode.setBackgroundResource(R.drawable.reject_button);
-                        break;
-
-                    default:
-                        break;
-                }
-
                 try {
-                    holder.txtEmployeeName.setText(leaveRequestsViewModel.getEmployeeCompactViewModel().getEmployeeName() + "(" + leaveRequestsViewModel.getEmployeeCompactViewModel().getHrEmployeeID() + ")");
+                    holder.txtEmployeeName.setText(outPassViewModel.getEmployeeCompactViewModel().getEmployeeName() + "(" + outPassViewModel.getEmployeeCompactViewModel().getHrEmployeeID() + ")");
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    holder.txtJoinedDate.setText("Joined Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getEmployeeCompactViewModel().getJoiningDate()));
+                    holder.txtJoinedDate.setText("Joined Date: " + DateTimeParseFormatter(outPassViewModel.getEmployeeCompactViewModel().getJoiningDate()));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(outPassViewModel.getFromTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
-                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    holder.txtOutGate.setText(leaveRequestsViewModel.getOutGateCode());
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    holder.txtInGate.setText(leaveRequestsViewModel.getInGateCode());
+                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(outPassViewModel.getToTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    holder.txtReason.setText(leaveRequestsViewModel.getReason());
+                    holder.txtOutGate.setText(outPassViewModel.getOutGateCode());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    holder.txtInGate.setText(outPassViewModel.getInGateCode());
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
 
                 try {
-                    holder.txtReqDate.setText("Request Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                    holder.txtReason.setText(outPassViewModel.getReason());
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    holder.txtReqDate.setText("Request Date: " + DateTimeParseFormatter(outPassViewModel.getRequestDate()));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -894,10 +880,10 @@ public class FragmentBalance extends Fragment {
                 e.printStackTrace();
             }
             if (position == holder.getAdapterPosition()) {
-                outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                outPassID = outPassViewModel.getOutPassID().toString();
             }
             holder.btnReject.setOnClickListener(v -> {
-                String outPassID = leaveRequestsViewModel.getOutPassID().toString();
+                String outPassID = outPassViewModel.getOutPassID().toString();
                 RejectOutPassRequest(outPassID);
             });
         }
@@ -915,7 +901,7 @@ public class FragmentBalance extends Fragment {
                     txtOutGate,
                     txtReason,
                     txtReqDate,
-                    txtStatusCode, txtEmployeeName, txtJoinedDate,
+                    txtEmployeeName, txtJoinedDate,
                     txtInGate;
             LinearLayout btnReject, btnApprove;
 
@@ -1024,7 +1010,6 @@ public class FragmentBalance extends Fragment {
         });
     }
 
-
     // Leave Approval
     private void GetEmployeePendingLeaveApproval() {
         try {
@@ -1078,7 +1063,6 @@ public class FragmentBalance extends Fragment {
     public class EmployeePendingLeaveApprovalAdapter extends RecyclerView.Adapter<EmployeePendingLeaveApprovalAdapter.ViewHolder> {
         Context context;
         List<LeaveRequestsViewModel> leaveRequestsViewModelList;
-        String leaveReqID;
         ApproveLeaveRequestDto approveLeaveRequestDto;
 
         public EmployeePendingLeaveApprovalAdapter(Context context, List<LeaveRequestsViewModel> leaveRequestsViewModelList) {
@@ -1101,11 +1085,10 @@ public class FragmentBalance extends Fragment {
             if (position == holder.getAdapterPosition()) {
                 approveLeaveRequestDto = new ApproveLeaveRequestDto();
                 holder.btnApprove.setOnClickListener(v -> {
-                    leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
-                    approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
+                    approveLeaveRequestDto.setLeaveRequestID(leaveRequestsViewModel.getLeaveRequestID().toString());
                     approveLeaveRequestDto.setApproverAccountID(accountID);
                     builder.setTitle("Chuti Aleart");
-                    builder.setMessage("Are You Sure to Approve Leave Request ID: " + leaveReqID+"?")
+                    builder.setMessage("Are You Sure to Approve Leave Request ID: " + leaveRequestsViewModel.getLeaveRequestID() + "?")
                             .setCancelable(false)
                             .setPositiveButton("Yes", (dialog, id) -> {
                                 ApproveLeave(approveLeaveRequestDto);
@@ -1117,19 +1100,62 @@ public class FragmentBalance extends Fragment {
                     alert.show();
                 });
 
-                holder.btnReject.setOnClickListener(v -> {
-                    leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
-                    rejectLeaveDialog.setContentView(rejectLeaveView);
-                    rejectLeaveDialog.setCancelable(true);
-                    rejectLeaveDialog.show();
-                    txtRejectReason.requestFocus();
-                    approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
+            }
+            holder.btnReject.setOnClickListener(v -> {
+                rejectLeaveDialog.setContentView(rejectLeaveView);
+                rejectLeaveDialog.setCancelable(true);
+                rejectLeaveDialog.show();
+                txtRejectReason.setText("");
+                txtRejectReason.requestFocus();
+
+                btnSave.setOnClickListener(v1 -> {
+                    spotsDialog.show();
+                    approveLeaveRequestDto.setLeaveRequestID(leaveRequestsViewModel.getLeaveRequestID().toString());
                     approveLeaveRequestDto.setApproverAccountID(accountID);
                     approveLeaveRequestDto.setRejectComment(txtRejectReason.getText().toString());
-                    btnSave.setOnClickListener(v1 -> RejectLeave(approveLeaveRequestDto));
-                    btnClose.setOnClickListener(v1 -> rejectLeaveDialog.dismiss());
+                    Log.i("info", "approveLeaveRequestDto " + approveLeaveRequestDto);
+                    Call<String> saveMachineCall = retrofitApiInterface.RejectLeaveRequestAsync("Bearer " + token, appKey, companyID, approveLeaveRequestDto);
+                    saveMachineCall.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            try {
+                                if (response.isSuccessful()) {
+                                    if (response.body() != null) {
+                                        spotsDialog.dismiss();
+                                        if (response.code() == 200) {
+                                            serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                            SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                            rejectLeaveDialog.dismiss();
+                                        }
+                                    }
+                                } else {
+                                    if (response.errorBody() != null) {
+                                        spotsDialog.dismiss();
+                                        serviceResponseViewModel = new ServiceResponseViewModel();
+                                        gson = new GsonBuilder().create();
+                                        try {
+                                            serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                            SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                                        } catch (Exception e) {
+                                            SAlertError(e.getMessage(), getContext());
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            spotsDialog.dismiss();
+                            SConnectionFail(t.getMessage(), getContext());
+                        }
+                    });
                 });
-            }
+                btnClose.setOnClickListener(v1 -> rejectLeaveDialog.dismiss());
+            });
 
             try {
 

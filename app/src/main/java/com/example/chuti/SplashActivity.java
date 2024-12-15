@@ -1,6 +1,5 @@
 package com.example.chuti;
 
-import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetDateTimeParser;
 
 import android.app.ActivityOptions;
@@ -15,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.example.chuti.Security.SharedPref;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONObject;
 
@@ -24,7 +24,6 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 public class SplashActivity extends AppCompatActivity {
-
     String token, expireDate;
 
     @Override
@@ -35,7 +34,7 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         token = SharedPref.read("token", "");
 
         if (token.isEmpty()) {
@@ -76,7 +75,20 @@ public class SplashActivity extends AppCompatActivity {
                         currentTimeInMilliseconds = localDate.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli() / 1000;
 
                         if (Long.parseLong(expireDate) > currentTimeInMilliseconds) {
-                            intentActivity(new MainActivity(), this);
+
+                            new Handler().postDelayed(() -> {
+                                System.out.println("Decoded value 2: " + currentTimeInMilliseconds);
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                ActivityOptions options = ActivityOptions.makeCustomAnimation(
+                                        getApplicationContext(),
+                                        R.anim.slide_in_left,
+                                        R.anim.slide_out_right
+                                );
+                                startActivity(i, options.toBundle());
+                                finish();
+
+                            }, 5000);
+
 
                         } else {
                             new Handler().postDelayed(() -> {

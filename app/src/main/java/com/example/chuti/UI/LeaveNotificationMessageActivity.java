@@ -2,7 +2,6 @@ package com.example.chuti.UI;
 
 
 import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
-import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
@@ -10,9 +9,9 @@ import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -23,10 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.chuti.Dto.ApproveLeaveRequestDto;
-import com.example.chuti.FragmentMain;
 import com.example.chuti.MainActivity;
 import com.example.chuti.Model.LeaveRequestsViewModel;
-import com.example.chuti.Model.RemoteMessageViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
@@ -52,8 +49,6 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     String userID, appKey;
-    Intent intent;
-    RemoteMessageViewModel requestData;
 
     public TextView
             txtLeaveName,
@@ -77,10 +72,9 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
     TextInputEditText txtRejectReason;
     DisplayMetrics displayMetrics;
     WindowManager.LayoutParams layoutParams;
-    String leaveReqID;
     ApproveLeaveRequestDto approveLeaveRequestDto = new ApproveLeaveRequestDto();
-
     Toolbar toolbar;
+    String reqID, reqType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +91,8 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
         companyID = SharedPref.read("companyID", "");
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
+        reqType = getIntent().getStringExtra("RequestType");
+        reqID = getIntent().getStringExtra("RequestID");
 
         toolbar = findViewById(R.id.leaveToolbar);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
@@ -115,14 +111,8 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
         btnReject = findViewById(R.id.btnReject);
         btnApprove = findViewById(R.id.btnApprove);
 
-        intent = getIntent();
-        if (intent != null && intent.getExtras() != null) {
-            requestData = getIntent().getParcelableExtra("remoteMessageViewModel");// Retrieve the data passed from the notification
-            if (requestData.getRequestType() != null) {
-                System.out.println("push requestData: " + requestData);
-                GetEmployeePendingLeaveApproval();
-            }
-        }
+        System.out.println("push requestData: " + reqID);
+        GetEmployeePendingLeaveApproval();
 
         //Reject Reason Dialog
         rejectLeaveDialog = new Dialog(this);
@@ -141,11 +131,10 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
         rejectLeaveDialog.setCancelable(false);
 
         btnApprove.setOnClickListener(v -> {
-            leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
-            approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
+            approveLeaveRequestDto.setLeaveRequestID(reqID);
             approveLeaveRequestDto.setApproverAccountID(accountID);
-            builder.setTitle("Chuti Aleart");
-            builder.setMessage("Are You Sure to Approve Leave Request ID: " + leaveReqID + "?")
+            builder.setTitle(R.string.chuti_aleart);
+            builder.setMessage("Are You Sure to Approve Leave Request ID: " + reqID + "?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> {
                         ApproveLeave(approveLeaveRequestDto);
@@ -158,15 +147,59 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
         });
 
         btnReject.setOnClickListener(v -> {
-            leaveReqID = leaveRequestsViewModel.getLeaveRequestID().toString();
             rejectLeaveDialog.setContentView(rejectLeaveView);
             rejectLeaveDialog.setCancelable(true);
             rejectLeaveDialog.show();
+            txtRejectReason.setText("");
             txtRejectReason.requestFocus();
-            approveLeaveRequestDto.setLeaveRequestID(leaveReqID);
-            approveLeaveRequestDto.setApproverAccountID(accountID);
-            approveLeaveRequestDto.setRejectComment(txtRejectReason.getText().toString());
-            btnSave.setOnClickListener(v1 -> RejectLeave(approveLeaveRequestDto));
+
+            btnSave.setOnClickListener(v1 -> {
+                spotsDialog.show();
+                approveLeaveRequestDto.setLeaveRequestID(reqID);
+                approveLeaveRequestDto.setApproverAccountID(accountID);
+                approveLeaveRequestDto.setRejectComment(txtRejectReason.getText().toString());
+                Log.i("info", "approveLeaveRequestDto " + approveLeaveRequestDto);
+                Call<String> saveMachineCall = retrofitApiInterface.RejectLeaveRequestAsync("Bearer " + token, appKey, companyID, approveLeaveRequestDto);
+                saveMachineCall.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        try {
+                            if (response.isSuccessful()) {
+                                if (response.body() != null) {
+                                    spotsDialog.dismiss();
+                                    if (response.code() == 200) {
+                                        serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                        SAlertSuccess(serviceResponseViewModel.getMessage(), LeaveNotificationMessageActivity.this);
+                                        rejectLeaveDialog.dismiss();
+                                        intentActivity(new MainActivity(), LeaveNotificationMessageActivity.this);
+                                    }
+                                }
+                            } else {
+                                if (response.errorBody() != null) {
+                                    spotsDialog.dismiss();
+                                    serviceResponseViewModel = new ServiceResponseViewModel();
+                                    gson = new GsonBuilder().create();
+                                    try {
+                                        serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                        SAlertError(serviceResponseViewModel.getMessage(), LeaveNotificationMessageActivity.this);
+                                    } catch (Exception e) {
+                                        SAlertError(e.getMessage(), LeaveNotificationMessageActivity.this);
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        spotsDialog.dismiss();
+                        SConnectionFail(t.getMessage(), LeaveNotificationMessageActivity.this);
+                    }
+                });
+            });
             btnClose.setOnClickListener(v1 -> rejectLeaveDialog.dismiss());
         });
         // Get the data from the intent
@@ -174,7 +207,7 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
 
     private void GetEmployeePendingLeaveApproval() {
         try {
-            Call<LeaveRequestsViewModel> getContToLocCall = retrofitApiInterface.GetLeaveRequestsForApprovalByIDAsync("Bearer" + " " + token, appKey, companyID, requestData.getRequestId());
+            Call<LeaveRequestsViewModel> getContToLocCall = retrofitApiInterface.GetLeaveRequestsForApprovalByIDAsync("Bearer" + " " + token, appKey, companyID, reqID);
             getContToLocCall.enqueue(new Callback<LeaveRequestsViewModel>() {
                 @Override
                 public void onResponse(Call<LeaveRequestsViewModel> call, Response<LeaveRequestsViewModel> response) {
@@ -316,7 +349,6 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
                             spotsDialog.dismiss();
-                            serviceResponseViewModel = new ServiceResponseViewModel();
                             if (response.code() == 200) {
                                 serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), LeaveNotificationMessageActivity.this);
@@ -349,4 +381,5 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
             }
         });
     }
+
 }

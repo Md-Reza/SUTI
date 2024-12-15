@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,14 +26,18 @@ import androidx.fragment.app.Fragment;
 
 import com.example.chuti.Model.RemoteMessageViewModel;
 import com.example.chuti.Security.SharedPref;
+import com.example.chuti.UI.AnnouncementActivity;
 import com.example.chuti.UI.EmployeeGatepassFragment;
+import com.example.chuti.UI.FragmentAnnouncement;
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.FragmentOutpassApproval;
 import com.example.chuti.UI.GatepassNotificationMessageActivity;
 import com.example.chuti.UI.LeaveNotificationMessageActivity;
 import com.example.chuti.UI.RequestLeaveFragment;
 import com.example.chuti.UI.SettingFragment;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 
 import org.json.JSONObject;
@@ -43,13 +48,11 @@ public class MainActivity extends AppCompatActivity {
 
     ChipNavigationBar bottomNavigationView;
     FloatingActionButton btnLeave, btnGatePass;
-
     String token, accountType;
-
     Dialog dialogClose;
     View logoutView;
-    RemoteMessageViewModel requestData;
-    Intent intent;
+    Intent intent = getIntent();
+    String reqID, reqType = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +61,18 @@ public class MainActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.redOrange));
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+        intent = getIntent();
         WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
         SharedPref.init(this);
-        intent = getIntent();
+
         token = SharedPref.read("token", "");
+        reqType = getIntent().getStringExtra("RequestType");
+        reqID = getIntent().getStringExtra("RequestID");
+        btnGatePass = findViewById(R.id.btnGatePass);
+        btnLeave = findViewById(R.id.btnLeave);
+
         try {
             String[] parts = token.split("\\.", 0);
 
@@ -92,8 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        btnGatePass = findViewById(R.id.btnGatePass);
-        btnLeave = findViewById(R.id.btnLeave);
+
         if (accountType.equals("GATE")) {
             bottomNavigationView.setVisibility(View.GONE);
             btnLeave.setVisibility(View.GONE);
@@ -101,32 +109,36 @@ public class MainActivity extends AppCompatActivity {
             replaceFragment(new FragmentOutpassApproval(), this);
         } else {
 
-            btnLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), this));
-            btnGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), this));
-
             bottomNavigationView.setItemSelected(R.id.bottomNavigationView, true);
-
-            if (getIntent().getExtras() != null) {
-                requestData = getIntent().getParcelableExtra("remoteMessageViewModel");
-                if (requestData.getRequestType() != null) {
-                    switch (requestData.getRequestType()) {
-                        case "LEAVE":
-                            intent = new Intent(this, LeaveNotificationMessageActivity.class);
-                            startActivity(intent);
-                            break;
-                        case "OUTPASS":
-                            intent = new Intent(this, GatepassNotificationMessageActivity.class);
-                            startActivity(intent);
-                            break;
-                        default:
-                            replaceFragment(new FragmentBalance(), this);
-                            break;
+            // replaceFragment(new FragmentBalance(), this);
+            try {
+                if (!reqType.isEmpty()) {
+                    if (reqType.equals("LEAVE")) {
+                        intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                        intent.putExtra("RequestID", reqID);
+                        intent.putExtra("RequestType", reqType);
+                        startActivity(intent);
+                    } else if (reqType.equals("OUTPASS")) {
+                        intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                        intent.putExtra("RequestID", reqID);
+                        intent.putExtra("RequestType", reqType);
+                        startActivity(intent);
                     }
+                    else if (reqType.equals("ANNOUNCEMENT")) {
+                        intent = new Intent(this, AnnouncementActivity.class);
+                        intent.putExtra("RequestID", reqID);
+                        intent.putExtra("RequestType", reqType);
+                        startActivity(intent);
+                    }else {
+                        replaceFragment(new FragmentBalance(), this);
+                    }
+                } else {
+                    replaceFragment(new FragmentBalance(), this);
                 }
-            } else {
+            } catch (NullPointerException e) {
                 replaceFragment(new FragmentBalance(), this);
             }
-
+            bottomNavigationView.setFocusable(false);
             bottomNavigationView.setBackground(null);
             bottomNavigationView.setOnItemSelectedListener(i -> {
                 switch (i) {
@@ -139,10 +151,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.employee:
                         replaceFragment(new FragmentBalance(), this);
                         break;
+                    case R.id.announcement:
+                        replaceFragment(new FragmentAnnouncement(), this);
+                        break;
                 }
             });
         }
-
+        btnLeave.setOnClickListener(v -> replaceFragment(new RequestLeaveFragment(), this));
+        btnGatePass.setOnClickListener(v -> replaceFragment(new EmployeeGatepassFragment(), this));
+        bottomNavigationView.setItemSelected(R.id.bottomNavigationView, false);
         dialogClose = new Dialog(this);
         logoutView = getLayoutInflater().inflate(R.layout.logout_message, null);
         dialogClose.setCancelable(false);
@@ -168,22 +185,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
-
-    }
-
-    @Override
-    protected void onNewIntent(@NonNull Intent intent) {
-        super.onNewIntent(intent);
-        if (intent.getExtras() != null) {
-            requestData = getIntent().getParcelableExtra("remoteMessageViewModel"); // Retrieve the data passed from the notification
-            if (requestData.getRequestType() != null) {
-                getIntent().putExtra("remoteMessageViewModel", requestData);
-                Intent i = new Intent(getApplicationContext(), LeaveNotificationMessageActivity.class);
-                startActivity(i);
-            } else {
-                replaceFragment(new FragmentBalance(), this);
-            }
-        }
     }
 
     @Override

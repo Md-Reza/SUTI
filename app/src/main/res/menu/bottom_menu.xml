@@ -13,7 +13,7 @@
         app:cnb_iconColor="@color/redOrange"/>
 
     <item
-        android:id="@+id/favorites"
+        android:id="@+id/announcement"
         android:icon="@drawable/ic_notifications"
         android:title="@string/announcement"
         app:cnb_iconColor="@color/redOrange" />

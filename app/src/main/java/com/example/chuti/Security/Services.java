@@ -5,6 +5,7 @@ import com.example.chuti.Dto.LoginDto;
 import com.example.chuti.Dto.OutpassDto;
 import com.example.chuti.Dto.ResetPasswordDto;
 import com.example.chuti.Dto.SaveLeaveRequestDto;
+import com.example.chuti.Model.Announcement;
 import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
 import com.example.chuti.Model.EmployeeLeaveRequestViewModel;
@@ -37,6 +38,7 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String userID
     );
+
     @GET("LeaveService/{companyID}/LeaveRequests/{accountID}/{year}")
     Call<List<LeaveRequestsViewModel>> GetEmployeeLeaveRequestAsync(
             @Header("Authorization") String authHeader,
@@ -53,6 +55,7 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String accountID
     );
+
     @POST("LeaveService/{companyID}/SaveLeaveRequest/{accountID}")
     Call<String> SaveLeaveRequestAsync(
             @Header("Authorization") String authHeader,
@@ -113,6 +116,7 @@ public interface Services {
             @Path("companyID") String companyID,
             @Path("accountID") String accountID
     );
+
     @GET("GateService/{companyID}/OutpassRequest/{accountID}")
     Call<OutPassViewModel> GetOutpassRequestAsync(
             @Header("Authorization") String authHeader,
@@ -162,6 +166,7 @@ public interface Services {
             @Path("companyID") String companyID,
             @Body ApproveLeaveRequestDto approveLeaveRequestDto
     );
+
     @POST("EmployeeService/{companyID}/ChangePassword/{accountID}")
     Call<String> ChangePasswordAsync(
             @Header("Authorization") String authHeader,
@@ -187,4 +192,21 @@ public interface Services {
             @Path("accountID") String accountID,
             @Path("outpassID") String outpassID
     );
+
+    @GET("AnnouncementService/{companyID}/Announcements/{year}")
+    Call<List<Announcement>> GetAnnouncementsAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("year") int year
+    );
+
+    @GET("AnnouncementService/{companyID}/AnnouncementDetail/{announcementID}")
+    Call<Announcement> GetAnnouncementAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("announcementID") int announcementID
+    );
+
 }

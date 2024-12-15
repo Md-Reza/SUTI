@@ -69,5 +69,6 @@ dependencies {
     // Firebase/Google dependencies (example)
     implementation ("com.google.firebase:firebase-bom:33.7.0")
     implementation ("com.google.android.gms:play-services-vision:20.1.3")
+    implementation ("com.google.firebase:firebase-messaging:24.0.1")
 
 }

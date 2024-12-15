@@ -32,6 +32,7 @@ import com.example.chuti.Security.BaseURL;
 import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
 import com.example.chuti.UI.EmployeeGatepassFragment;
+import com.example.chuti.UI.FragmentAnnouncement;
 import com.example.chuti.UI.FragmentBalance;
 import com.example.chuti.UI.FragmentMyLeaveRequest;
 import com.example.chuti.UI.FragmentMyOutpassRequest;
@@ -57,7 +58,7 @@ public class FragmentMain extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest, idMnu01;
+    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest, idMnu01,txtAnnouncement;
     TextView txtEmployeeID, txtName;
     EmployeeProfile employeeProfile;
     EmployeeAccount employeeAccount;
@@ -111,6 +112,8 @@ public class FragmentMain extends Fragment {
         txtGatepassHistory.setOnClickListener(v -> replaceFragment(new FragmentMyOutpassRequest(), getContext()));
         mnuMyLeaveRequest = root.findViewById(R.id.mnuMyLeaveRequest);
         mnuMyLeaveRequest.setOnClickListener(v -> replaceFragment(new FragmentMyLeaveRequest(), getContext()));
+        txtAnnouncement = root.findViewById(R.id.txtAnnouncement);
+        txtAnnouncement.setOnClickListener(v -> replaceFragment(new FragmentAnnouncement(), getContext()));
 
         try {
             String[] parts = token.split("\\.", 0);

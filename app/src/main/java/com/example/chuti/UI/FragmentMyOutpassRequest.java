@@ -2,16 +2,18 @@ package com.example.chuti.UI;
 
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragmentWithMultipleBundle;
-import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime;
-import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseFormatter;
+import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetTimeParser;
+import static com.example.chuti.Handlers.DateFormatterHandlers.OffsetTimeParser;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -190,6 +192,7 @@ public class FragmentMyOutpassRequest extends Fragment {
         }
 
         @Override
+        @RequiresApi(api = Build.VERSION_CODES.O)
         public void onBindViewHolder(@NonNull EmployeeOutPassRequestAdapter.ViewHolder holder, int position) {
             final OutPassViewModel leaveRequestsViewModel = leaveRequestsViewModelList.get(position);
 
@@ -217,6 +220,7 @@ public class FragmentMyOutpassRequest extends Fragment {
                         break;
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
+                        holder.btnDelete.setVisibility(View.INVISIBLE);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
                     case 3:
@@ -228,12 +232,12 @@ public class FragmentMyOutpassRequest extends Fragment {
                 }
 
                 try {
-                    holder.txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                    holder.txtFromTime.setText(String.valueOf(OffsetTimeParser(leaveRequestsViewModel.getFromTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
-                    holder.txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
+                    holder.txtToTime.setText(String.valueOf(OffsetTimeParser(leaveRequestsViewModel.getToTime())));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
@@ -256,7 +260,7 @@ public class FragmentMyOutpassRequest extends Fragment {
                 }
 
                 try {
-                    holder.txtReqDate.setText(DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                    holder.txtReqDate.setText(CurrentOffsetTimeParser(leaveRequestsViewModel.getRequestDate()));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }

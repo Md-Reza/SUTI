@@ -53,7 +53,7 @@ public class EmployeeGatepassFragment extends Fragment {
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     ImageView txtFromTimeSelect, txtToTimeSelect;
-    TextView txtFromTime, txtToTime, txtRequestedTime,txtToDateTime,txtFromDateTime;
+    TextView txtFromTime, txtToTime, txtRequestedTime, txtToDateTime, txtFromDateTime;
     private TimePickerDialog timePicker;
     Toolbar toolbar;
     SimpleDateFormat format = new SimpleDateFormat("hh:mm a");
@@ -105,8 +105,16 @@ public class EmployeeGatepassFragment extends Fragment {
 
         txtFromTime.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             try {
-                date1 = format.parse(txtFromTime.getText().toString());
-                date2 = format.parse(txtToTime.getText().toString());
+                String fromTime = txtFromTime.getText().toString();
+                String toTime = txtToTime.getText().toString();
+
+                if (fromTime.isEmpty() || toTime.isEmpty()) {
+                    txtRequestedTime.setText("Please enter both times");
+                    return;
+                }
+
+                date1 = format.parse(fromTime);
+                date2 = format.parse(toTime);
 
                 long difference = date2.getTime() - date1.getTime();
 
@@ -116,14 +124,23 @@ public class EmployeeGatepassFragment extends Fragment {
                 txtRequestedTime.setText("Duration: " + hours + " hours and " + minutes1 + " minutes");
 
             } catch (ParseException e) {
+                txtRequestedTime.setText("Invalid time format");
                 e.printStackTrace();
             }
         });
 
         txtToTime.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
             try {
-                date1 = format.parse(txtFromTime.getText().toString());
-                date2 = format.parse(txtToTime.getText().toString());
+                String fromTime = txtFromTime.getText().toString();
+                String toTime = txtToTime.getText().toString();
+
+                if (fromTime.isEmpty() || toTime.isEmpty()) {
+                    txtRequestedTime.setText("Please enter both times");
+                    return;
+                }
+
+                date1 = format.parse(fromTime);
+                date2 = format.parse(toTime);
 
                 long difference = date2.getTime() - date1.getTime();
 
@@ -133,9 +150,11 @@ public class EmployeeGatepassFragment extends Fragment {
                 txtRequestedTime.setText("Duration: " + hours + " hours and " + minutes1 + " minutes");
 
             } catch (ParseException e) {
+                txtRequestedTime.setText("Invalid time format");
                 e.printStackTrace();
             }
         });
+
 
         btnSubmit.setOnClickListener(v -> SaveGatePass());
 
@@ -231,7 +250,7 @@ public class EmployeeGatepassFragment extends Fragment {
         outpassDto.setFromTime(txtFromDateTime.getText().toString());
         outpassDto.setToTime(txtToDateTime.getText().toString());
         outpassDto.setReason(txtReason.getText().toString());
-        Log.i("info","outpassDto "+outpassDto);
+        Log.i("info", "outpassDto " + outpassDto);
 
         if (txtCheckIsFullDay.isChecked())
             outpassDto.setFullDay(true);
@@ -256,6 +275,10 @@ public class EmployeeGatepassFragment extends Fragment {
                                     e.printStackTrace();
                                 }
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                txtReason.setText("");
+                                txtFromTime.setText("");
+                                txtToTime.setText("");
+                                txtRequestedTime.setText(R.string.total_duration_00_minutes);
                             }
                         }
                     } else if (!response.isSuccessful()) {

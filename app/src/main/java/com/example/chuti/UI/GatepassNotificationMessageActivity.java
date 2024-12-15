@@ -8,8 +8,12 @@ import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +31,8 @@ import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
 import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -55,15 +61,22 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
             txtOutGate,
             txtReason,
             txtReqDate,
-            txtStatusCode, txtEmployeeName, txtJoinedDate,
+            txtEmployeeName, txtJoinedDate,
             txtInGate;
     LinearLayout btnReject, btnApprove;
     OutPassViewModel leaveRequestsViewModel = new OutPassViewModel();
 
     AlertDialog.Builder builder;
     AlertDialog alert;
-
+    String leaveReqID, reqType;
     Toolbar toolbar;
+    Dialog rejectLeaveDialog;
+    View rejectLeaveView;
+    TextInputEditText txtRejectReason;
+    DisplayMetrics displayMetrics;
+    WindowManager.LayoutParams layoutParams;
+    MaterialButton btnSave, btnClose;
+    String reqID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +94,8 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
         companyID = SharedPref.read("companyID", "");
         accountID = SharedPref.read("accountID", "");
         userID = SharedPref.read("uId", "");
+        reqType = getIntent().getStringExtra("RequestType");
+        reqID = getIntent().getStringExtra("RequestID");
 
         toolbar = findViewById(R.id.gateToolbar);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
@@ -100,23 +115,30 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
         btnApprove = findViewById(R.id.btnApprove);
         btnReject = findViewById(R.id.btnReject);
 
-        intent = getIntent();
-        if (intent != null && intent.getExtras() != null) {
-            requestData = getIntent().getParcelableExtra("remoteMessageViewModel");// Retrieve the data passed from the notification
-            if (requestData.getRequestType() != null) {
-                System.out.println("push requestData: " + requestData);
-                GetEmployeeOutPassApproval();
-            }
-        }
+        GetEmployeeOutPassApproval();
+        //Reject Reason Dialog
+        rejectLeaveDialog = new Dialog(this);
+        rejectLeaveView = getLayoutInflater().inflate(R.layout.reject_leave_dialog, null);
+        rejectLeaveDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        btnClose = rejectLeaveView.findViewById(R.id.btnClose);
+        btnSave = rejectLeaveView.findViewById(R.id.btnSave);
+        txtRejectReason = rejectLeaveView.findViewById(R.id.txtRejectReason);
+        displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(rejectLeaveDialog.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        rejectLeaveDialog.setContentView(rejectLeaveView);
+        rejectLeaveDialog.setCancelable(false);
 
 
         btnApprove.setOnClickListener(v -> {
-            String outPassID = leaveRequestsViewModel.getOutPassID().toString();
             builder.setTitle("Chuti Aleart");
-            builder.setMessage("Are You Sure to Approve Outpass Request ID: " + outPassID + "?")
+            builder.setMessage("Are You Sure to Approve Outpass Request ID: " + reqID + "?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> {
-                        ApproveOutPassRequest(outPassID);
+                        ApproveOutPassRequest(reqID);
                     })
                     .setNegativeButton("No", (dialog, id) -> {
                         dialog.cancel();
@@ -127,12 +149,11 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
         });
 
         btnReject.setOnClickListener(v -> {
-            String outPassID = leaveRequestsViewModel.getOutPassID().toString();
             builder.setTitle("Chuti Aleart");
-            builder.setMessage("Are You Sure to Approve Outpass Request ID: " + outPassID + "?")
+            builder.setMessage("Are You Sure to Reject Outpass Request ID: " + reqID + "?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", (dialog, id) -> {
-                        RejectOutPassRequest(outPassID);
+                        RejectOutPassRequest(reqID);
                     })
                     .setNegativeButton("No", (dialog, id) -> {
                         dialog.cancel();
@@ -146,7 +167,7 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
 
     private void GetEmployeeOutPassApproval() {
         try {
-            Call<OutPassViewModel> getContToLocCall = retrofitApiInterface.GetOutpassRequestAsync("Bearer" + " " + token, appKey, companyID, requestData.getRequestId().toString());
+            Call<OutPassViewModel> getContToLocCall = retrofitApiInterface.GetOutpassRequestAsync("Bearer" + " " + token, appKey, companyID, reqID);
             getContToLocCall.enqueue(new Callback<OutPassViewModel>() {
                 @Override
                 public void onResponse(Call<OutPassViewModel> call, Response<OutPassViewModel> response) {
@@ -160,24 +181,6 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
                                     txtDuration.setText(String.format("%dh,%dm", hours, minutes));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
-                                }
-
-                                switch (leaveRequestsViewModel.getStatus()) {
-                                    case 0:
-                                        txtStatusCode.setText(R.string.created);
-                                        txtStatusCode.setBackgroundResource(R.drawable.created_button);
-                                        break;
-                                    case 2:
-                                        txtStatusCode.setText(R.string.approved);
-                                        txtStatusCode.setBackgroundResource(R.drawable.approved_button);
-                                        break;
-                                    case 3:
-                                        txtStatusCode.setText(R.string.rejected);
-                                        txtStatusCode.setBackgroundResource(R.drawable.reject_button);
-                                        break;
-
-                                    default:
-                                        break;
                                 }
 
                                 try {
@@ -271,7 +274,7 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
                             if (response.code() == 200) {
                                 serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), GatepassNotificationMessageActivity.this);
-                                GetEmployeeOutPassApproval();
+                                intentActivity(new MainActivity(), GatepassNotificationMessageActivity.this);
                             }
                         }
                     } else if (!response.isSuccessful()) {
@@ -315,7 +318,7 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
                             if (response.code() == 200) {
                                 serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), GatepassNotificationMessageActivity.this);
-                                GetEmployeeOutPassApproval();
+                                intentActivity(new MainActivity(), GatepassNotificationMessageActivity.this);
                             }
                         }
                     } else if (!response.isSuccessful()) {

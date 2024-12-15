@@ -226,6 +226,7 @@ public class FragmentMyLeaveRequest extends Fragment {
                         break;
                     case 2:
                         holder.txtStatusCode.setText(R.string.approved);
+                        holder.btnDelete.setVisibility(View.INVISIBLE);
                         holder.txtStatusCode.setBackgroundResource(R.drawable.approved_button);
                         break;
                     case 3:

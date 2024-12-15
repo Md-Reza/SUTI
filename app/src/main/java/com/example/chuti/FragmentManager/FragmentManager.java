@@ -21,7 +21,7 @@ public class FragmentManager {
     }
 
     public static void replaceFragmentWithBundle(Fragment fragment, Context context, Bundle bundle) {
-        androidx.fragment.app.FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
+       androidx.fragment.app.FragmentManager fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout);
         fragmentTransaction.replace(R.id.fragment_container, fragment);
