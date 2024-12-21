@@ -47,4 +47,5 @@
     <string name="announcement">Announcement</string>
     <string name="outpass_approval">Outpass Approval</string>
     <string name="chuti_aleart">Chuti Aleart</string>
+    <string name="save_changes">Save Changes</string>
 </resources>

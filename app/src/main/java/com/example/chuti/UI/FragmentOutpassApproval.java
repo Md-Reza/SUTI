@@ -1,6 +1,5 @@
 package com.example.chuti.UI;
 
-import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.Handlers.DateFormatterHandlers.ConvertDateToTime;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
@@ -34,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.chuti.MainActivity;
 import com.example.chuti.Model.OutPassViewModel;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
@@ -108,7 +106,6 @@ public class FragmentOutpassApproval extends Fragment {
         BitmapDrawable drawable = new BitmapDrawable(getResources(), scaledBitmap);
 
         toolbar.setNavigationIcon(drawable);
-
 
         viewOutpass = root.findViewById(R.id.viewOutpass);
         txtOutPassID = root.findViewById(R.id.txtOutPassID);
@@ -264,6 +261,8 @@ public class FragmentOutpassApproval extends Fragment {
                                 serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
                                 SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
                                 viewOutpass.setVisibility(View.GONE);
+                                txtOutPassID.setText("");
+                                txtOutPassID.requestFocus();
                             }
                         }
                     } else {

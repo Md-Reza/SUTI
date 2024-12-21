@@ -68,7 +68,7 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
 
     AlertDialog.Builder builder;
     AlertDialog alert;
-    String leaveReqID, reqType;
+    String leaveReqID, reqType, status;
     Toolbar toolbar;
     Dialog rejectLeaveDialog;
     View rejectLeaveView;
@@ -96,6 +96,7 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
         userID = SharedPref.read("uId", "");
         reqType = getIntent().getStringExtra("RequestType");
         reqID = getIntent().getStringExtra("RequestID");
+        status = getIntent().getStringExtra("Status");
 
         toolbar = findViewById(R.id.gateToolbar);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
@@ -228,7 +229,16 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
-
+                                if (!reqType.equals("Rejected")) {
+                                    btnApprove.setVisibility(View.GONE);
+                                    btnReject.setVisibility(View.GONE);
+                                } else if (!reqType.equals("APPROVED")) {
+                                    btnApprove.setVisibility(View.GONE);
+                                    btnReject.setVisibility(View.GONE);
+                                } else {
+                                    btnApprove.setVisibility(View.VISIBLE);
+                                    btnReject.setVisibility(View.VISIBLE);
+                                }
                             }
                         } else {
                             if (response.errorBody() != null) {

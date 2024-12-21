@@ -5,6 +5,7 @@ import com.example.chuti.Dto.LoginDto;
 import com.example.chuti.Dto.OutpassDto;
 import com.example.chuti.Dto.ResetPasswordDto;
 import com.example.chuti.Dto.SaveLeaveRequestDto;
+import com.example.chuti.Dto.UpdateEmployeeSelfDto;
 import com.example.chuti.Model.Announcement;
 import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeLeaveCatalogViewModel;
@@ -207,6 +208,15 @@ public interface Services {
             @Header("AppKey") String AppKey,
             @Path("companyID") String companyID,
             @Path("announcementID") int announcementID
+    );
+
+    @POST("EmployeeService/{companyID}/UpdateEmployeeSelf/{accountID}")
+    Call<String> UpdateEmployeeSelfAsync(
+            @Header("Authorization") String authHeader,
+            @Header("AppKey") String AppKey,
+            @Path("companyID") String companyID,
+            @Path("accountID") String accountID,
+            @Body UpdateEmployeeSelfDto updateEmployeeSelfDto
     );
 
 }

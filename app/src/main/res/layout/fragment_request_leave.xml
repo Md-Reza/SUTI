@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginBottom="?attr/actionBarSize"
     tools:context=".UI.RequestLeaveFragment">
 
     <LinearLayout
@@ -176,7 +177,7 @@
         <EditText
             android:id="@+id/txtReason"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="100dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"

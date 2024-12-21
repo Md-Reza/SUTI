@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("RequestType", reqType);
                         startActivity(intent);
                     } else if (reqType.equals("OUTPASS")) {
-                        intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                        intent = new Intent(this, GatepassNotificationMessageActivity.class);
                         intent.putExtra("RequestID", reqID);
                         intent.putExtra("RequestType", reqType);
                         startActivity(intent);
@@ -192,10 +192,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             fragment.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == 200) {
-                Toast.makeText(getApplicationContext(), "Take Photo", Toast.LENGTH_LONG).show();
-            }
-            Toast.makeText(getApplicationContext(), "Take Photo", Toast.LENGTH_LONG).show();
         }
     }
 }

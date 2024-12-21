@@ -87,6 +87,7 @@ public class RequestLeaveFragment extends Fragment {
     long daysDifference;
     EditText txtReason;
     Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,6 +158,29 @@ public class RequestLeaveFragment extends Fragment {
         txtFromDate.setText(sdf.format(c.getTime())); // Use c.getTime() to get the Date object
 
         txtFromDateSelect.setOnClickListener(v -> {
+            Drawable iconDrawable = txtFromDateSelect.getDrawable();
+            if (iconDrawable != null) { // Check for null
+                iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            }
+
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+
+            // Date picker dialog
+            picker = new DatePickerDialog(getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        // Set the selected date in the TextView
+                        cldr.set(Calendar.YEAR, year1);
+                        cldr.set(Calendar.MONTH, monthOfYear);
+                        cldr.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        txtFromDate.setText(sdf.format(cldr.getTime())); // Format the selected date
+                    }, year, month, day);
+            picker.show();
+        });
+
+        txtFromDate.setOnClickListener(v -> {
             Drawable iconDrawable = txtFromDateSelect.getDrawable();
             if (iconDrawable != null) { // Check for null
                 iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
@@ -280,6 +304,29 @@ public class RequestLeaveFragment extends Fragment {
             picker.show();
         });
 
+        txtToDate.setOnClickListener(v -> {
+            Drawable iconDrawable = txtToDateSelect.getDrawable();
+            if (iconDrawable != null) { // Check for null
+                iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+            }
+
+            final Calendar cldr = Calendar.getInstance();
+            int day = cldr.get(Calendar.DAY_OF_MONTH);
+            int month = cldr.get(Calendar.MONTH);
+            int year = cldr.get(Calendar.YEAR);
+
+            // Date picker dialog
+            picker = new DatePickerDialog(getContext(),
+                    (view, year1, monthOfYear, dayOfMonth) -> {
+                        // Set the selected date in the TextView
+                        cldr.set(Calendar.YEAR, year1);
+                        cldr.set(Calendar.MONTH, monthOfYear);
+                        cldr.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        txtToDate.setText(sdf.format(cldr.getTime())); // Format the selected date
+                    }, year, month, day);
+            picker.show();
+        });
+
 
         toDate = txtToDate.getText().toString();
     }
@@ -380,7 +427,7 @@ public class RequestLeaveFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Add 1 to the month values to adjust for 0-based indexing in Calendar
             LocalDate startDate = LocalDate.parse(txtFromDate.getText().toString());  // Example start date
-            LocalDate endDate =LocalDate.parse(txtToDate.getText().toString());   // Example end date
+            LocalDate endDate = LocalDate.parse(txtToDate.getText().toString());   // Example end date
 
             // Calculate the difference in days
             daysDifference = ChronoUnit.DAYS.between(startDate, endDate);
@@ -452,6 +499,7 @@ public class RequestLeaveFragment extends Fragment {
             }
         });
     }
+
     private void Clear() {
         txtReason.setText("");
         takePhoto.setImageResource(R.drawable.icon_upload);

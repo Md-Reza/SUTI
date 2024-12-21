@@ -1,31 +1,56 @@
 package com.example.chuti.UI;
 
+import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
+import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
+import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.chuti.Dto.UpdateEmployeeSelfDto;
 import com.example.chuti.FragmentMain;
 import com.example.chuti.LoginActivity;
+import com.example.chuti.MainActivity;
 import com.example.chuti.Model.EmployeeProfile;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
 import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Base64;
 
 import dmax.dialog.SpotsDialog;
 import retrofit2.Call;
@@ -38,10 +63,22 @@ public class SettingFragment extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus, txtEmployeeID;
+    TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus,
+            txtEmployeeID, txtFileName;
     EmployeeProfile employeeProfile;
     Toolbar toolbar;
-    String employeeName,hrmsID;
+    String employeeName, hrmsID;
+
+    TextInputEditText txtEditEmployeeName, txtEditEmail, txtEditPhoneNumber;
+    ImageView takePhoto, arrow_button;
+    Button btnBrowse, btnSave;
+    LinearLayout itemHiddenView;
+    private static final int GALLERY_REQ_CODE = 1000;
+
+    Bitmap bitmap;
+    ByteArrayOutputStream stream;
+    byte[] byteImageArray;
+    String encodeImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,6 +111,15 @@ public class SettingFragment extends Fragment {
         txtResetPassword = root.findViewById(R.id.txtResetPassword);
         txtStatus = root.findViewById(R.id.txtStatus);
         txtEmployeeID = root.findViewById(R.id.txtEmployeeID);
+        txtEditEmployeeName = root.findViewById(R.id.txtEditEmployeeName);
+        txtEditEmail = root.findViewById(R.id.txtEditEmail);
+        txtEditPhoneNumber = root.findViewById(R.id.txtEditPhoneNumber);
+        takePhoto = root.findViewById(R.id.takePhoto);
+        btnBrowse = root.findViewById(R.id.btnBrowse);
+        btnSave = root.findViewById(R.id.btnSave);
+        arrow_button = root.findViewById(R.id.arrow_button);
+        itemHiddenView = root.findViewById(R.id.itemHiddenView);
+        txtFileName = root.findViewById(R.id.txtFileName);
 
         txtLogOut.setOnClickListener(v -> {
             SharedPref.remove("token", "");
@@ -85,6 +131,32 @@ public class SettingFragment extends Fragment {
         txtResetPassword.setOnClickListener(v -> replaceFragment(new FragmentResetPassword(), getContext()));
 
         GetEmployee();
+
+        arrow_button.setOnClickListener(v -> {
+            if (itemHiddenView.getVisibility() == View.VISIBLE) {
+                TransitionManager.beginDelayedTransition(itemHiddenView, new AutoTransition());
+                itemHiddenView.setVisibility(View.GONE);
+                arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+            } else {
+                TransitionManager.beginDelayedTransition(itemHiddenView, new AutoTransition());
+                itemHiddenView.setVisibility(View.VISIBLE);
+                arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+            }
+        });
+
+        btnBrowse.setOnClickListener(v -> {
+            Intent iGallery = new Intent(Intent.ACTION_PICK);
+            iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(iGallery, GALLERY_REQ_CODE);
+        });
+        takePhoto.setOnClickListener(v -> {
+            Intent iGallery = new Intent(Intent.ACTION_PICK);
+            iGallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(iGallery, GALLERY_REQ_CODE);
+        });
+
+        btnSave.setOnClickListener(v -> UpdateEmployeeSelf());
+
         return root;
     }
 
@@ -107,11 +179,15 @@ public class SettingFragment extends Fragment {
                             employeeProfile = response.body();
                             txtEmployeeName.setText(employeeProfile.getEmployeeName());
                             txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
+                            txtEditEmployeeName.setText(employeeProfile.getEmployeeName());
+                            txtEditEmail.setText(employeeProfile.getEmailAddress());
+                            txtEditPhoneNumber.setText(employeeProfile.getPhoneNo());
+
                             txtJoiningDate.setText(DateTimeParseMonthYearFormatter(employeeProfile.getJoiningDate()));
-                            employeeName=employeeProfile.getEmployeeName();
-                            hrmsID=employeeProfile.getHrEmployeeID();
-                            SharedPref.write("employeeName",employeeName);
-                            SharedPref.write("hrmsID",hrmsID);
+                            employeeName = employeeProfile.getEmployeeName();
+                            hrmsID = employeeProfile.getHrEmployeeID();
+                            SharedPref.write("employeeName", employeeName);
+                            SharedPref.write("hrmsID", hrmsID);
                             Boolean enable = employeeProfile.getEnabled();
                             if (enable)
                                 txtStatus.setText("ACTIVE");
@@ -145,5 +221,129 @@ public class SettingFragment extends Fragment {
             e.printStackTrace();
         }
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == GALLERY_REQ_CODE) {
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                if (data != null) {
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), data.getData());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, stream);
+
+                byteImageArray = stream.toByteArray();
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(byteImageArray, 0,
+                        byteImageArray.length);
+                takePhoto.setImageBitmap(bitmap);
+                takePhoto.setScaleType(ImageView.ScaleType.FIT_XY);
+                Uri selectedImageUri = data.getData();
+                String fileName = getFileName(selectedImageUri);
+                txtFileName.setText(fileName);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    encodeImage = Base64.getEncoder().encodeToString(byteImageArray);
+                }
+            }
+        }
+    }
+
+    public String getFileName(Uri uri) {
+        String fileName = null;
+        long size = 0;
+        if (uri.getScheme().equals("content")) {
+            Cursor cursor = getActivity().getContentResolver().query(uri, null, null, null, null);
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
+                    if (nameIndex != -1) {
+                        fileName = cursor.getString(nameIndex);
+                    }
+                    if (sizeIndex != -1) {
+                        size = cursor.getLong(sizeIndex);
+                    }
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+
+        if (fileName == null) {
+            fileName = uri.getLastPathSegment();
+        }
+        return fileName;
+    }
+    private void UpdateEmployeeSelf() {
+        spotsDialog.show();
+        UpdateEmployeeSelfDto updateEmployeeSelfDto = new UpdateEmployeeSelfDto();
+        updateEmployeeSelfDto.setEmployeeName(txtEditEmployeeName.getText().toString());
+        updateEmployeeSelfDto.setEmailAddress(txtEditEmail.getText().toString());
+        updateEmployeeSelfDto.setPhoneNo(txtEditPhoneNumber.getText().toString());
+        updateEmployeeSelfDto.setProfileImageString(encodeImage);
+        updateEmployeeSelfDto.setProfileImageName(txtFileName.getText().toString());
+
+
+        Call<String> saveMachineCall = retrofitApiInterface.UpdateEmployeeSelfAsync("Bearer " + token, appKey, companyID, accountID, updateEmployeeSelfDto);
+        saveMachineCall.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            if (response.code() == 200) {
+                                serviceResponseViewModel = gson.fromJson(response.body(), ServiceResponseViewModel.class);
+                                SAlertSuccess(serviceResponseViewModel.getMessage(), getContext());
+                                if (itemHiddenView.getVisibility() == View.VISIBLE) {
+                                    TransitionManager.beginDelayedTransition(itemHiddenView, new AutoTransition());
+                                    itemHiddenView.setVisibility(View.GONE);
+                                    arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+                                } else {
+                                    TransitionManager.beginDelayedTransition(itemHiddenView, new AutoTransition());
+                                    itemHiddenView.setVisibility(View.VISIBLE);
+                                    arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+                                }
+                            }
+                        }
+                    } else if (!response.isSuccessful()) {
+                        if (response.errorBody() != null) {
+                            spotsDialog.dismiss();
+                            serviceResponseViewModel = new ServiceResponseViewModel();
+                            gson = new GsonBuilder().create();
+                            try {
+                                serviceResponseViewModel = gson.fromJson(response.errorBody().string(), ServiceResponseViewModel.class);
+                                SAlertError(serviceResponseViewModel.getMessage(), getContext());
+                            } catch (Exception e) {
+                                SAlertError(e.getMessage(), getContext());
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                spotsDialog.dismiss();
+                SConnectionFail(t.getMessage(), getContext());
+            }
+        });
     }
 }

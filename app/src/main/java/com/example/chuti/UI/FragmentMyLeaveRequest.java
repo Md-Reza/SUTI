@@ -51,7 +51,6 @@ public class FragmentMyLeaveRequest extends Fragment {
     String token, accountID, companyID;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    List<EmployeeLeaveCatalogViewModel> employeeLeaveCatalogViewModel = new ArrayList<>();
     Spinner catalogSpinner;
     String userID, appKey, periodYear;
     Toolbar toolbar;

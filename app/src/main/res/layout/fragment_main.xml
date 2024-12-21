@@ -160,6 +160,7 @@
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/banner_top_background"
                 android:elevation="3dp"
+                android:visibility="visible"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -36,12 +36,13 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Map<String, String> data = remoteMessage.getData();
         String reqType = data.get("RequestType");
         String reqID = data.get("RequestID");
+        String status = data.get("Status");
 
-        showNotification(title, body, reqType, reqID);
+        showNotification(title, body, reqType, reqID,status);
 
     }
 
-    private void showNotification(String title, String body, String RequestType, String RequestID) {
+    private void showNotification(String title, String body, String RequestType, String RequestID, String Status) {
 
         if (RequestType.equals("LEAVE")) {
             intent = new Intent(this, LeaveNotificationMessageActivity.class);
@@ -60,6 +61,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         }
         intent.putExtra("RequestID", RequestID);
         intent.putExtra("RequestType", RequestType);
+        intent.putExtra("Status", Status);
 
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);

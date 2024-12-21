@@ -6,6 +6,7 @@ import static com.example.chuti.Handlers.SMessageHandler.SAlertSuccess;
 import static com.example.chuti.Handlers.SMessageHandler.SConnectionFail;
 
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.icu.text.SimpleDateFormat;
@@ -184,6 +185,47 @@ public class EmployeeGatepassFragment extends Fragment {
 
             }, hour, minutes, false);
 
+            timePicker.show();
+            timePicker.setOnDismissListener(dialog -> {
+                try {
+                    date1 = format.parse(txtFromTime.getText().toString());
+                    date2 = format.parse(txtToTime.getText().toString());
+
+                    long difference = date2.getTime() - date1.getTime();
+
+                    long hours = (difference / (1000 * 60 * 60)) % 24;
+                    long minutes1 = (difference / (1000 * 60)) % 60;
+
+                    txtRequestedTime.setText("Duration: " + hours + " hours and " + minutes1 + " minutes");
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+        txtFromTime.setOnClickListener(v -> {
+            Drawable iconDrawable = txtFromTimeSelect.getDrawable();
+            iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+
+            final Calendar cldr = Calendar.getInstance();
+            int hour = cldr.get(Calendar.HOUR_OF_DAY);
+            int minutes = cldr.get(Calendar.MINUTE);
+            sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            format = new SimpleDateFormat("hh:mm a"); // Use 12-hour format with AM/PM
+
+            timePicker = new TimePickerDialog(getContext(), (tp, sHour, sMinute) -> {
+                // Convert selected 24-hour time to 12-hour format
+                Calendar selectedTime = Calendar.getInstance();
+                selectedTime.set(Calendar.HOUR_OF_DAY, sHour);
+                selectedTime.set(Calendar.MINUTE, sMinute);
+
+                format = new SimpleDateFormat("hh:mm a"); // 12-hour format with AM/PM
+                txtFromTime.setText(format.format(selectedTime.getTime()));
+                txtFromDateTime.setText(sdf.format(selectedTime.getTime()));
+
+            }, hour, minutes, false);
+            timePicker.show();
+
             try {
                 date1 = format.parse(txtFromTime.getText().toString());
                 date2 = format.parse(txtToTime.getText().toString());
@@ -198,7 +240,6 @@ public class EmployeeGatepassFragment extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            timePicker.show();
         });
     }
 
@@ -238,6 +279,46 @@ public class EmployeeGatepassFragment extends Fragment {
             }
             timePicker.show();
         });
+        txtToTime.setOnClickListener(v -> {
+            Drawable iconDrawable = txtToTimeSelect.getDrawable();
+            iconDrawable.setColorFilter(getResources().getColor(R.color.redOrange), PorterDuff.Mode.SRC_IN);
+
+            cldr = Calendar.getInstance();
+            int hour = cldr.get(Calendar.HOUR_OF_DAY);
+            int minutes = cldr.get(Calendar.MINUTE);
+            sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            timePicker = new TimePickerDialog(getContext(), (tp, sHour, sMinute) -> {
+                // Convert selected time to 12-hour format with AM/PM
+                Calendar selectedTime = Calendar.getInstance();
+                selectedTime.set(Calendar.HOUR_OF_DAY, sHour);
+                selectedTime.set(Calendar.MINUTE, sMinute);
+
+                format = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+                txtToTime.setText(format.format(selectedTime.getTime()));
+                txtToDateTime.setText(sdf.format(selectedTime.getTime()));
+            }, hour, minutes, false);
+
+
+            timePicker.show();
+            timePicker.setOnDismissListener(dialog -> {
+                try {
+                    date1 = format.parse(txtFromTime.getText().toString());
+                    date2 = format.parse(txtToTime.getText().toString());
+
+                    long difference = date2.getTime() - date1.getTime();
+
+                    long hours = (difference / (1000 * 60 * 60)) % 24;
+                    long minutes1 = (difference / (1000 * 60)) % 60;
+
+                    txtRequestedTime.setText("Duration: " + hours + " hours and " + minutes1 + " minutes");
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            });
+
+        });
+
     }
 
     private void SaveGatePass() {
@@ -250,7 +331,6 @@ public class EmployeeGatepassFragment extends Fragment {
         outpassDto.setFromTime(txtFromDateTime.getText().toString());
         outpassDto.setToTime(txtToDateTime.getText().toString());
         outpassDto.setReason(txtReason.getText().toString());
-        Log.i("info", "outpassDto " + outpassDto);
 
         if (txtCheckIsFullDay.isChecked())
             outpassDto.setFullDay(true);

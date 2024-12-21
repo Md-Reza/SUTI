@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginBottom="?attr/actionBarSize"
     android:orientation="vertical"
     tools:context=".UI.FragmentAnnouncement">
 
@@ -16,7 +17,6 @@
         android:layout_marginBottom="10dp"
         android:background="@drawable/spinner_item_background"
         android:spinnerMode="dropdown" />
-
 
     <LinearLayout
         android:id="@+id/layoutLeaveApproval"

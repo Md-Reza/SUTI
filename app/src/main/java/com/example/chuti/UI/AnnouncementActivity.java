@@ -10,10 +10,12 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,11 +25,14 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.example.chuti.MainActivity;
 import com.example.chuti.Model.Announcement;
@@ -67,6 +72,8 @@ public class AnnouncementActivity extends AppCompatActivity {
 
     String reqID, reqType;
     Toolbar toolbar;
+    ImageView arrow_button;
+    LinearLayout itemHiddenView,itemLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -86,12 +93,30 @@ public class AnnouncementActivity extends AppCompatActivity {
         reqType = getIntent().getStringExtra("RequestType");
         reqID = getIntent().getStringExtra("RequestID");
 
+        txtAnnouncementText=findViewById(R.id.txtAnnouncementText);
+        txtAnnouncementTitle=findViewById(R.id.txtAnnouncementTitle);
+        txtPublishedDate=findViewById(R.id.txtPublishedDate);
+        arrow_button=findViewById(R.id.arrow_button);
+        itemLayout=findViewById(R.id.itemLayout);
+        itemHiddenView=findViewById(R.id.itemHiddenView);
+
         toolbar = findViewById(R.id.annToolbar);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
         toolbar.setTitle("Announcement");
         toolbar.setSubtitle("");
         toolbar.setNavigationOnClickListener(v -> intentActivity(new MainActivity(), this));
 
+        arrow_button.setOnClickListener(v -> {
+            if (itemHiddenView.getVisibility() == View.VISIBLE) {
+                TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+                itemHiddenView.setVisibility(View.GONE);
+                arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+            } else {
+                TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+                itemHiddenView.setVisibility(View.VISIBLE);
+                arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+            }
+        });
 
         Announcement();
     }
@@ -106,6 +131,8 @@ public class AnnouncementActivity extends AppCompatActivity {
                     try {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
+
+                                Log.i("info", "anna " + response.body());
                                 spotsDialog.dismiss();
                                 try {
                                     txtAnnouncementText.setText(response.body().getAnnouncementText());

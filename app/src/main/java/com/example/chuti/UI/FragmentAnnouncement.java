@@ -14,12 +14,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -37,6 +41,8 @@ import com.ismaeldivita.chipnavigation.ChipNavigationBar;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import dmax.dialog.SpotsDialog;
@@ -57,6 +63,7 @@ public class FragmentAnnouncement extends Fragment {
     RecyclerView annaouncementRecyclerView;
     AnnouncementAdapter announcementAdapter;
     ChipNavigationBar bottomNavigationView;
+    List<Announcement> announcementList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -137,11 +144,17 @@ public class FragmentAnnouncement extends Fragment {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
-                                announcementAdapter = new AnnouncementAdapter(getContext(), response.body());
+                                announcementList = new ArrayList<>();
+                                announcementList = response.body();
+                                // Sort the list in descending order
+                                Collections.sort(announcementList, (u1, u2) -> {
+                                    return u2.getAnnouncementID() - u1.getAnnouncementID(); // Descending order
+                                });
+                                announcementAdapter = new AnnouncementAdapter(getContext(), announcementList);
                                 LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
                                 annaouncementRecyclerView.setLayoutManager(mLayoutManager);
                                 annaouncementRecyclerView.setAdapter(announcementAdapter);
-                                bottomNavigationView.showBadge(R.id.announcement,response.body().size());
+                                bottomNavigationView.showBadge(R.id.announcement, response.body().size());
                             }
                         } else {
                             if (response.errorBody() != null) {
@@ -233,12 +246,31 @@ public class FragmentAnnouncement extends Fragment {
                     txtPublishedDate,
                     txtAnnouncementTitle,
                     txtAnnouncementText;
+            ImageView arrow_button;
+
+            LinearLayout itemHiddenView, itemLayout;
+
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
+                arrow_button = itemView.findViewById(R.id.arrow_button);
+                itemHiddenView = itemView.findViewById(R.id.itemHiddenView);
+                itemLayout = itemView.findViewById(R.id.itemLayout);
                 txtPublishedDate = itemView.findViewById(R.id.txtPublishedDate);
                 txtAnnouncementTitle = itemView.findViewById(R.id.txtAnnouncementTitle);
                 txtAnnouncementText = itemView.findViewById(R.id.txtAnnouncementText);
+
+                itemView.findViewById(R.id.arrow_button).setOnClickListener(v -> {
+                    if (itemHiddenView.getVisibility() == View.VISIBLE) {
+                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+                        itemHiddenView.setVisibility(View.GONE);
+                        arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+                    } else {
+                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+                        itemHiddenView.setVisibility(View.VISIBLE);
+                        arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+                    }
+                });
             }
         }
     }

@@ -223,6 +223,16 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
                                 }
                                 try {
 
+                                    if (!reqType.equals("LEAVE")) {
+                                        btnApprove.setVisibility(View.GONE);
+                                        btnReject.setVisibility(View.GONE);
+                                        txtReason.setText(leaveRequestsViewModel.getLastComment());
+                                    } else {
+                                        btnApprove.setVisibility(View.VISIBLE);
+                                        btnReject.setVisibility(View.VISIBLE);
+                                        txtReason.setText(leaveRequestsViewModel.getReason());
+                                    }
+
                                     txtLeaveName.setText(leaveRequestsViewModel.getLeaveTypeName());
                                     if (leaveRequestsViewModel.getLeaveTypeName().equals("Casual Leave"))
                                         txtLeaveName.setBackgroundResource(R.drawable.casual_leave_button);
@@ -244,11 +254,7 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
-                                try {
-                                    txtReason.setText(leaveRequestsViewModel.getReason());
-                                } catch (NullPointerException e) {
-                                    e.printStackTrace();
-                                }
+
                                 try {
                                     txtNoOfDays.setText(leaveRequestsViewModel.getNoOfDays() + " Days");
                                 } catch (NullPointerException e) {
