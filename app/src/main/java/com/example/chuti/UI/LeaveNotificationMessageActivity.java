@@ -74,7 +74,7 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
     WindowManager.LayoutParams layoutParams;
     ApproveLeaveRequestDto approveLeaveRequestDto = new ApproveLeaveRequestDto();
     Toolbar toolbar;
-    String reqID, reqType;
+    String reqID, reqType,status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,7 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
         userID = SharedPref.read("uId", "");
         reqType = getIntent().getStringExtra("RequestType");
         reqID = getIntent().getStringExtra("RequestID");
+        status = getIntent().getStringExtra("Status");
 
         toolbar = findViewById(R.id.leaveToolbar);
         toolbar.setNavigationIcon(R.drawable.baseline_arrow_back_24);
@@ -223,7 +224,7 @@ public class LeaveNotificationMessageActivity extends AppCompatActivity {
                                 }
                                 try {
 
-                                    if (!reqType.equals("LEAVE")) {
+                                    if (status.equals("REJECTED")) {
                                         btnApprove.setVisibility(View.GONE);
                                         btnReject.setVisibility(View.GONE);
                                         txtReason.setText(leaveRequestsViewModel.getLastComment());

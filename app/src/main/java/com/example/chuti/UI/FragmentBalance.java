@@ -153,6 +153,7 @@ public class FragmentBalance extends Fragment {
             txtGatePass.setBackgroundResource(R.drawable.button_background_n);
             txtLeaveApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtOutPassApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             GetEmployeeOutPass();
         });
         txtLeaveApproval.setOnClickListener(v -> {
@@ -163,6 +164,7 @@ public class FragmentBalance extends Fragment {
             txtLeaveApproval.setBackgroundResource(R.drawable.button_background_n);
             txtGatePass.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             txtPendingApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
+            txtOutPassApproval.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
             GetEmployeeLeaveRequest();
         });
         txtOutPassApproval.setOnClickListener(v -> {

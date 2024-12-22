@@ -5,12 +5,15 @@ import static com.example.chuti.Handlers.DateFormatterHandlers.CurrentOffsetTime
 import static com.example.chuti.Handlers.SMessageHandler.SAlertError;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,12 +31,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.chuti.FragmentMain;
+import com.example.chuti.MainActivity;
 import com.example.chuti.Model.Announcement;
 import com.example.chuti.Model.ServiceResponseViewModel;
 import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
 import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
+import com.example.chuti.Utility.ChutiDB;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ismaeldivita.chipnavigation.ChipNavigationBar;
@@ -65,6 +70,9 @@ public class FragmentAnnouncement extends Fragment {
     ChipNavigationBar bottomNavigationView;
     List<Announcement> announcementList;
 
+    public ChutiDB dbHandler = new ChutiDB(getContext());
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,6 +97,8 @@ public class FragmentAnnouncement extends Fragment {
             toolbar.setTitle(R.string.chuti);
             replaceFragment(new FragmentMain(), getContext());
         });
+
+        dbHandler = new ChutiDB(getContext());
 
         bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
 
@@ -146,15 +156,20 @@ public class FragmentAnnouncement extends Fragment {
                                 spotsDialog.dismiss();
                                 announcementList = new ArrayList<>();
                                 announcementList = response.body();
-                                // Sort the list in descending order
-                                Collections.sort(announcementList, (u1, u2) -> {
-                                    return u2.getAnnouncementID() - u1.getAnnouncementID(); // Descending order
-                                });
-                                announcementAdapter = new AnnouncementAdapter(getContext(), announcementList);
-                                LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-                                annaouncementRecyclerView.setLayoutManager(mLayoutManager);
-                                annaouncementRecyclerView.setAdapter(announcementAdapter);
-                                bottomNavigationView.showBadge(R.id.announcement, response.body().size());
+
+                                for (Announcement announcement : announcementList) {
+                                    if (!dbHandler.doesAnnouncementExist(announcement.getAnnouncementID())) {
+                                        dbHandler.saveAnnouncement(
+                                                announcement.getAnnouncementID(),
+                                                announcement.getAnnouncementPeriod(),
+                                                announcement.getAnnouncementTitle(),
+                                                announcement.getAnnouncementText(),
+                                                announcement.getPublishedDate(),
+                                                announcement.getModifiedDate()
+                                        );
+                                    }
+                                }
+                                GetAnnouncement();
                             }
                         } else {
                             if (response.errorBody() != null) {
@@ -188,7 +203,22 @@ public class FragmentAnnouncement extends Fragment {
         }
     }
 
-    public static class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.ViewHolder> {
+    private void GetAnnouncement() {
+        announcementList = dbHandler.readAllAnnouncements();
+
+        // Sort the list in descending order
+        Collections.sort(announcementList, (u1, u2) -> {
+            return u2.getAnnouncementID() - u1.getAnnouncementID(); // Descending order
+        });
+
+        announcementAdapter = new AnnouncementAdapter(getContext(), announcementList);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        annaouncementRecyclerView.setLayoutManager(mLayoutManager);
+        annaouncementRecyclerView.setAdapter(announcementAdapter);
+        bottomNavigationView.showBadge(R.id.announcement, dbHandler.countAnnouncements());
+    }
+
+    public class AnnouncementAdapter extends RecyclerView.Adapter<AnnouncementAdapter.ViewHolder> {
         Context context;
         List<Announcement> announcementList;
 
@@ -209,6 +239,28 @@ public class FragmentAnnouncement extends Fragment {
         @RequiresApi(api = Build.VERSION_CODES.O)
         public void onBindViewHolder(@NonNull AnnouncementAdapter.ViewHolder holder, int position) {
             final Announcement leaveRequestsViewModel = announcementList.get(position);
+
+            holder.arrow_button.setOnClickListener(v -> {
+
+                if (holder.itemHiddenView.getVisibility() == View.VISIBLE) {
+                    TransitionManager.beginDelayedTransition(holder.itemLayout, new AutoTransition());
+                    holder.itemHiddenView.setVisibility(View.GONE);
+                    holder.arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+                } else {
+                    TransitionManager.beginDelayedTransition(holder.itemLayout, new AutoTransition());
+                    holder.itemHiddenView.setVisibility(View.VISIBLE);
+                    holder.arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+
+                    dbHandler.updateAnnouncement(leaveRequestsViewModel.getAnnouncementID(), 1);
+                }
+            });
+
+            holder.itemLayout.setOnClickListener(v -> GetAnnouncement());
+
+            if (leaveRequestsViewModel.getIsRead() == 1)
+                holder.itemLayout.setBackgroundResource(R.drawable.banner_background);
+            else holder.itemLayout.setBackgroundResource(R.drawable.banner_top_background);
+
 
             try {
 
@@ -260,18 +312,41 @@ public class FragmentAnnouncement extends Fragment {
                 txtAnnouncementTitle = itemView.findViewById(R.id.txtAnnouncementTitle);
                 txtAnnouncementText = itemView.findViewById(R.id.txtAnnouncementText);
 
-                itemView.findViewById(R.id.arrow_button).setOnClickListener(v -> {
-                    if (itemHiddenView.getVisibility() == View.VISIBLE) {
-                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
-                        itemHiddenView.setVisibility(View.GONE);
-                        arrow_button.setImageResource(R.drawable.icon_expand_more_24);
-                    } else {
-                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
-                        itemHiddenView.setVisibility(View.VISIBLE);
-                        arrow_button.setImageResource(R.drawable.icon_expand_less_24);
-                    }
-                });
+//                itemView.findViewById(R.id.arrow_button).setOnClickListener(v -> {
+//                    if (itemHiddenView.getVisibility() == View.VISIBLE) {
+//                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+//                        itemHiddenView.setVisibility(View.GONE);
+//                        arrow_button.setImageResource(R.drawable.icon_expand_more_24);
+//                    } else {
+//                        TransitionManager.beginDelayedTransition(itemLayout, new AutoTransition());
+//                        itemHiddenView.setVisibility(View.VISIBLE);
+//                        arrow_button.setImageResource(R.drawable.icon_expand_less_24);
+//
+//                        dbHandler.updateAnnouncement(leaveRequestsViewModel.getAnnouncementID(), 1);
+//                        GetAnnouncement();
+//                    }
+//                });
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Hide the FAB
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Show the FAB again when the fragment is not visible
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
         }
     }
 

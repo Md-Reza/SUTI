@@ -12,6 +12,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -64,11 +65,10 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
             txtEmployeeName, txtJoinedDate,
             txtInGate;
     LinearLayout btnReject, btnApprove;
-    OutPassViewModel leaveRequestsViewModel = new OutPassViewModel();
 
     AlertDialog.Builder builder;
     AlertDialog alert;
-    String leaveReqID, reqType, status;
+    String  reqType, status;
     Toolbar toolbar;
     Dialog rejectLeaveDialog;
     View rejectLeaveView;
@@ -176,68 +176,70 @@ public class GatepassNotificationMessageActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             if (response.body() != null) {
                                 spotsDialog.dismiss();
+                                Log.i("info","Gate Pass "+ response.body());
+
                                 try {
-                                    int hours = leaveRequestsViewModel.getDurationMin() / 60;  // Divide total minutes by 60 to get hours
-                                    int minutes = leaveRequestsViewModel.getDurationMin() % 60;
+                                    int hours = response.body().getDurationMin() / 60;  // Divide total minutes by 60 to get hours
+                                    int minutes = response.body().getDurationMin() % 60;
                                     txtDuration.setText(String.format("%dh,%dm", hours, minutes));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtEmployeeName.setText(leaveRequestsViewModel.getEmployeeCompactViewModel().getEmployeeName() + "(" + leaveRequestsViewModel.getEmployeeCompactViewModel().getHrEmployeeID() + ")");
+                                    txtEmployeeName.setText(response.body().getEmployeeCompactViewModel().getEmployeeName() + "(" + response.body().getEmployeeCompactViewModel().getHrEmployeeID() + ")");
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtJoinedDate.setText("Joined Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getEmployeeCompactViewModel().getJoiningDate()));
+                                    txtJoinedDate.setText("Joined Date: " + DateTimeParseFormatter(response.body().getEmployeeCompactViewModel().getJoiningDate()));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtFromTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getFromTime())));
+                                    txtFromTime.setText(String.valueOf(ConvertDateToTime(response.body().getFromTime())));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
                                 try {
-                                    txtToTime.setText(String.valueOf(ConvertDateToTime(leaveRequestsViewModel.getToTime())));
+                                    txtToTime.setText(String.valueOf(ConvertDateToTime(response.body().getToTime())));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtOutGate.setText(leaveRequestsViewModel.getOutGateCode());
+                                    txtOutGate.setText(response.body().getOutGateCode());
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
                                 try {
-                                    txtInGate.setText(leaveRequestsViewModel.getInGateCode());
+                                    txtInGate.setText(response.body().getInGateCode());
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtReason.setText(leaveRequestsViewModel.getReason());
+                                    txtReason.setText(response.body().getReason());
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
 
                                 try {
-                                    txtReqDate.setText("Request Date: " + DateTimeParseFormatter(leaveRequestsViewModel.getRequestDate()));
+                                    txtReqDate.setText("Request Date: " + DateTimeParseFormatter(response.body().getRequestDate()));
                                 } catch (NullPointerException e) {
                                     e.printStackTrace();
                                 }
-                                if (!reqType.equals("Rejected")) {
+
+                                if (status.equals("REJECTED")) {
                                     btnApprove.setVisibility(View.GONE);
                                     btnReject.setVisibility(View.GONE);
-                                } else if (!reqType.equals("APPROVED")) {
-                                    btnApprove.setVisibility(View.GONE);
-                                    btnReject.setVisibility(View.GONE);
+                                    txtReason.setText(response.body().getReason());
                                 } else {
                                     btnApprove.setVisibility(View.VISIBLE);
                                     btnReject.setVisibility(View.VISIBLE);
+                                    txtReason.setText(response.body().getReason());
                                 }
                             }
                         } else {

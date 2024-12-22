@@ -131,7 +131,7 @@
                     android:drawableLeft="@drawable/icon_person"
                     android:drawablePadding="10dp"
                     android:inputType="text"
-                    android:maxLength="20"
+                    android:maxLength="100"
                     android:padding="15dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -157,7 +157,7 @@
                     android:drawableLeft="@drawable/icon_email"
                     android:drawablePadding="10dp"
                     android:inputType="text"
-                    android:maxLength="20"
+                    android:maxLength="200"
                     android:padding="15dp" />
 
             </com.google.android.material.textfield.TextInputLayout>

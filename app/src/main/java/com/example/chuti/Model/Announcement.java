@@ -28,6 +28,18 @@ public class Announcement {
     @SerializedName("modifiedDate")
     @Expose
     private String modifiedDate;
+    private int isRead;
+
+
+    public int getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(int isRead) {
+        this.isRead = isRead;
+    }
+
+
 
     public Integer getAnnouncementID() {
         return announcementID;

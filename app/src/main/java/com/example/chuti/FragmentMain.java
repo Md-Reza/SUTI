@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.chuti.Model.Announcement;
 import com.example.chuti.Model.EmployeeAccount;
 import com.example.chuti.Model.EmployeeProfile;
 import com.example.chuti.Model.ServiceResponseViewModel;
@@ -38,6 +39,7 @@ import com.example.chuti.UI.FragmentMyLeaveRequest;
 import com.example.chuti.UI.FragmentMyOutpassRequest;
 import com.example.chuti.UI.GatePassQRFragment;
 import com.example.chuti.UI.RequestLeaveFragment;
+import com.example.chuti.Utility.ChutiDB;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -58,8 +60,8 @@ public class FragmentMain extends Fragment {
     String token, accountID, companyID, userID, appKey;
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
-    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest, idMnu01,txtAnnouncement;
-    TextView txtEmployeeID, txtName;
+    LinearLayout mnuEmpGatePass, txtGatepassHistory, mnuLeaveRequest, mnuMyLeaveRequest, idMnu01, txtAnnouncement;
+    TextView txtEmployeeID, txtName, txtNotificationCounter, txtAnnouncementTitle;
     EmployeeProfile employeeProfile;
     EmployeeAccount employeeAccount;
     Toolbar toolbar;
@@ -67,7 +69,9 @@ public class FragmentMain extends Fragment {
 
     Dialog dialogClose;
     View logoutView;
-    String employeeName,hrmsID;
+    String employeeName, hrmsID;
+
+    public ChutiDB dbHandler = new ChutiDB(getContext());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +110,8 @@ public class FragmentMain extends Fragment {
         txtEmployeeID = root.findViewById(R.id.txtEmployeeID);
         txtName = root.findViewById(R.id.txtName);
         idMnu01 = root.findViewById(R.id.idMnu01);
+        txtNotificationCounter = root.findViewById(R.id.txtNotificationCounter);
+        txtAnnouncementTitle = root.findViewById(R.id.txtAnnouncementTitle);
 
 
         txtGatepassHistory = root.findViewById(R.id.txtGatepassHistory);
@@ -167,6 +173,17 @@ public class FragmentMain extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), callback);
 
+        dbHandler = new ChutiDB(getContext());
+        txtNotificationCounter.setText(String.valueOf(dbHandler.countAnnouncements()));
+        txtNotificationCounter.setOnClickListener(v -> replaceFragment(new FragmentAnnouncement(), getContext()));
+
+        try {
+            Announcement announcement = dbHandler.getLastAnnouncement();
+            txtAnnouncementTitle.setText(announcement.getAnnouncementTitle());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return root;
     }
 
@@ -184,10 +201,10 @@ public class FragmentMain extends Fragment {
                             employeeProfile = response.body();
                             txtEmployeeID.setText(employeeProfile.getHrEmployeeID());
                             txtName.setText(employeeProfile.getEmployeeName());
-                            employeeName=employeeProfile.getEmployeeName();
-                            hrmsID=employeeProfile.getHrEmployeeID();
-                            SharedPref.write("employeeName",employeeName);
-                            SharedPref.write("hrmsID",hrmsID);
+                            employeeName = employeeProfile.getEmployeeName();
+                            hrmsID = employeeProfile.getHrEmployeeID();
+                            SharedPref.write("employeeName", employeeName);
+                            SharedPref.write("hrmsID", hrmsID);
 
                             if (employeeProfile.getAccountType().equals(3)) {
                                 idMnu01.setEnabled(false);

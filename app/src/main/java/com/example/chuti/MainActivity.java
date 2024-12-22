@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog dialogClose;
     View logoutView;
     Intent intent = getIntent();
-    String reqID, reqType = null;
+    String reqID, reqType = null,status;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,17 +117,20 @@ public class MainActivity extends AppCompatActivity {
                         intent = new Intent(this, LeaveNotificationMessageActivity.class);
                         intent.putExtra("RequestID", reqID);
                         intent.putExtra("RequestType", reqType);
+                        intent.putExtra("Status", status);
                         startActivity(intent);
                     } else if (reqType.equals("OUTPASS")) {
                         intent = new Intent(this, GatepassNotificationMessageActivity.class);
                         intent.putExtra("RequestID", reqID);
                         intent.putExtra("RequestType", reqType);
+                        intent.putExtra("Status", status);
                         startActivity(intent);
                     }
                     else if (reqType.equals("ANNOUNCEMENT")) {
                         intent = new Intent(this, AnnouncementActivity.class);
                         intent.putExtra("RequestID", reqID);
                         intent.putExtra("RequestType", reqType);
+                        intent.putExtra("Status", status);
                         startActivity(intent);
                     }else {
                         replaceFragment(new FragmentBalance(), this);
@@ -192,6 +195,15 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         for (Fragment fragment : getSupportFragmentManager().getFragments()) {
             fragment.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    // Method to change the visibility of the FAB from a Fragment
+    public void setFabVisibility(int visibility) {
+        if (btnLeave != null) {
+            btnLeave.setVisibility(visibility);  // Visibility can be View.VISIBLE, View.INVISIBLE, or View.GONE
+        }
+        if (btnGatePass != null) {
+            btnGatePass.setVisibility(visibility);  // Visibility can be View.VISIBLE, View.INVISIBLE, or View.GONE
         }
     }
 }
