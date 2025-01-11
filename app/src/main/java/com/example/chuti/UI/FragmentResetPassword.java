@@ -244,4 +244,24 @@ public class FragmentResetPassword extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Hide the FAB
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Show the FAB again when the fragment is not visible
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
+        }
+    }
 }

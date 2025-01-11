@@ -1,5 +1,6 @@
 package com.example.chuti.UI;
 
+import static androidx.core.app.ActivityCompat.recreate;
 import static com.example.chuti.FragmentManager.FragmentManager.intentActivity;
 import static com.example.chuti.FragmentManager.FragmentManager.replaceFragment;
 import static com.example.chuti.Handlers.DateFormatterHandlers.DateTimeParseMonthYearFormatter;
@@ -43,6 +44,7 @@ import com.example.chuti.R;
 import com.example.chuti.Security.BaseURL;
 import com.example.chuti.Security.Services;
 import com.example.chuti.Security.SharedPref;
+import com.example.chuti.Utility.LanguageManager;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
@@ -64,7 +66,7 @@ public class SettingFragment extends Fragment {
     SpotsDialog spotsDialog;
     ServiceResponseViewModel serviceResponseViewModel = new ServiceResponseViewModel();
     TextView txtJoiningDate, txtLogOut, txtEmployeeName, txtResetPassword, txtStatus,
-            txtEmployeeID, txtFileName;
+            txtEmployeeID, txtFileName,txtLangEnglish,txtLangBangla;
     EmployeeProfile employeeProfile;
     Toolbar toolbar;
     String employeeName, hrmsID;
@@ -105,6 +107,8 @@ public class SettingFragment extends Fragment {
             replaceFragment(new FragmentMain(), getContext());
         });
 
+        LanguageManager languageManager=new LanguageManager(getContext());
+
         txtJoiningDate = root.findViewById(R.id.txtJoiningDate);
         txtLogOut = root.findViewById(R.id.txtLogOut);
         txtEmployeeName = root.findViewById(R.id.txtEmployeeName);
@@ -120,6 +124,8 @@ public class SettingFragment extends Fragment {
         arrow_button = root.findViewById(R.id.arrow_button);
         itemHiddenView = root.findViewById(R.id.itemHiddenView);
         txtFileName = root.findViewById(R.id.txtFileName);
+        txtLangBangla = root.findViewById(R.id.txtLangBangla);
+        txtLangEnglish = root.findViewById(R.id.txtLangEnglish);
 
         txtLogOut.setOnClickListener(v -> {
             SharedPref.remove("token", "");
@@ -157,6 +163,15 @@ public class SettingFragment extends Fragment {
 
         btnSave.setOnClickListener(v -> UpdateEmployeeSelf());
 
+        txtLangBangla.setOnClickListener(v -> {
+            languageManager.updateResource("bn");
+            getActivity().recreate();
+        });
+        txtLangEnglish.setOnClickListener(v -> {
+            languageManager.updateResource("en");
+            getActivity().recreate();
+        });
+
         return root;
     }
 
@@ -190,9 +205,9 @@ public class SettingFragment extends Fragment {
                             SharedPref.write("hrmsID", hrmsID);
                             Boolean enable = employeeProfile.getEnabled();
                             if (enable)
-                                txtStatus.setText("ACTIVE");
+                                txtStatus.setText(R.string.active);
                             else
-                                txtStatus.setText("INACTIVE");
+                                txtStatus.setText(R.string.inactive);
 
                         } else {
                             // Handle API error response

@@ -196,7 +196,7 @@
                         android:layout_gravity="center_vertical"
                         android:fontFamily="@font/segoe_ui_regular"
                         android:gravity="center_vertical"
-                        android:text="Latest Announcement"
+                        android:text="@string/latest_announcement"
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="normal" />
@@ -262,7 +262,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:gravity="center|center_vertical"
-                                android:text="My Leave\n Requests"
+                                android:text="@string/my_leave_n_requests"
                                 android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="normal" />
@@ -293,7 +293,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center|center_vertical"
-                                android:text="My Outpass\n Requests"
+                                android:text="@string/my_outpass_n_requests"
                                 android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="normal" />
@@ -324,7 +324,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginBottom="5dp"
                                 android:gravity="center|center_vertical"
-                                android:text="Announcement"
+                                android:text="@string/announcement"
                                 android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="normal" />

@@ -54,12 +54,12 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
+                        android:text="@string/leave_type"
                         android:gravity="center_vertical"
                         android:textColor="@color/black"
                         android:textSize="14sp"
                         android:textStyle="bold" />
-
-
+                    
                     <TextView
                         android:id="@+id/txtStatusCode"
                         android:layout_width="100dp"
@@ -68,7 +68,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_gravity="center_vertical"
                         android:gravity="center"
-                        android:text="Accepted"
+                        android:text="@string/accepted"
                         android:textColor="@color/white"
                         android:textStyle="bold"
                         android:textSize="12sp" />
@@ -116,7 +116,6 @@
                             android:text="September 2024"
                             android:textColor="@color/black"
                             android:textSize="12sp" />
-
 
                         <TextView
                             android:id="@+id/txtLeaveName"
@@ -207,6 +206,7 @@
                         android:layout_marginEnd="5dp"
                         android:gravity="center_vertical"
                         android:textStyle="normal"
+                        android:text="@string/reason"
                         android:textSize="11sp"
                         android:textColor="@color/black"
                         app:layout_constraintBottom_toBottomOf="parent"

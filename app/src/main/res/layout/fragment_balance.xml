@@ -103,7 +103,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center"
-                            android:text="Casual"
+                            android:text="@string/casual_leave"
                             android:textColor="@color/redOrange"
                             android:textSize="15sp" />
 
@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
                             android:gravity="center"
-                            android:text="Sick"
+                            android:text="@string/sick"
                             android:textColor="@color/colorPrimarySecond"
                             android:textSize="15sp" />
 
@@ -319,7 +319,7 @@
                         android:background="@drawable/button_background_n"
                         android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="My Leave \n Request"
+                        android:text="@string/my_leave_n_request"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -363,7 +363,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Outpass\n Requests"
+                        android:text="@string/outpass_n_requests"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -408,7 +408,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Leave\n Aprroval"
+                        android:text="@string/leave_n_aprroval"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -453,7 +453,7 @@
                         android:layout_marginEnd="5dp"
                         android:fontFamily="@font/seg_ui_semibold"
                         android:gravity="center"
-                        android:text="Outpass\n Aprroval"
+                        android:text="@string/outpass_n_aprroval"
                         android:textColor="@color/black"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"

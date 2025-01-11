@@ -206,4 +206,41 @@ public class MainActivity extends AppCompatActivity {
             btnGatePass.setVisibility(visibility);  // Visibility can be View.VISIBLE, View.INVISIBLE, or View.GONE
         }
     }
+
+    @Override
+    protected void onNewIntent(@NonNull Intent intent) {
+        super.onNewIntent(intent);
+        reqType = intent.getStringExtra("RequestType");
+
+        try {
+            if (!reqType.isEmpty()) {
+                if (reqType.equals("LEAVE")) {
+                    intent = new Intent(this, LeaveNotificationMessageActivity.class);
+                    intent.putExtra("RequestID", reqID);
+                    intent.putExtra("RequestType", reqType);
+                    intent.putExtra("Status", status);
+                    startActivity(intent);
+                } else if (reqType.equals("OUTPASS")) {
+                    intent = new Intent(this, GatepassNotificationMessageActivity.class);
+                    intent.putExtra("RequestID", reqID);
+                    intent.putExtra("RequestType", reqType);
+                    intent.putExtra("Status", status);
+                    startActivity(intent);
+                }
+                else if (reqType.equals("ANNOUNCEMENT")) {
+                    intent = new Intent(this, AnnouncementActivity.class);
+                    intent.putExtra("RequestID", reqID);
+                    intent.putExtra("RequestType", reqType);
+                    intent.putExtra("Status", status);
+                    startActivity(intent);
+                }else {
+                    replaceFragment(new FragmentBalance(), this);
+                }
+            } else {
+                replaceFragment(new FragmentBalance(), this);
+            }
+        } catch (NullPointerException e) {
+            replaceFragment(new FragmentBalance(), this);
+        }
+    }
 }

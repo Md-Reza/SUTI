@@ -380,16 +380,16 @@ public class FragmentBalance extends Fragment {
             try {
 
                 try {
-                    holder.txtLeaveType.setText(String.format("%d %s", leaveRequestsViewModel.getNoOfDays(), leaveRequestsViewModel.getLeaveTypeName()));
+                    holder.txtLeaveType.setText(leaveRequestsViewModel.getNoOfDays()+" "+leaveRequestsViewModel.getLeaveTypeName());
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
                 try {
 
                     holder.txtLeaveName.setText(leaveRequestsViewModel.getLeaveTypeName());
-                    if (leaveRequestsViewModel.getLeaveTypeName().equals("Casual Leave"))
+                    if (leaveRequestsViewModel.getLeaveTypeName().equals(getString(R.string.casual_leave)))
                         holder.txtLeaveName.setBackgroundResource(R.drawable.casual_leave_button);
-                    else if (leaveRequestsViewModel.getLeaveTypeName().equals("Earn Leave")) {
+                    else if (leaveRequestsViewModel.getLeaveTypeName().equals(getString(R.string.earn_leave))) {
                         holder.txtLeaveName.setBackgroundResource(R.drawable.earn_leave_button);
                     } else
                         holder.txtLeaveName.setBackgroundResource(R.drawable.sick_leave_button);

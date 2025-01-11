@@ -48,4 +48,19 @@
     <string name="outpass_approval">Outpass Approval</string>
     <string name="chuti_aleart">Chuti Aleart</string>
     <string name="save_changes">Save Changes</string>
+    <string name="my_leave_n_request">My Leave \n Request</string>
+    <string name="casual_leave">Casual Leave</string>
+    <string name="earn_leave">Earn Leave</string>
+    <string name="outpass_n_requests">Outpass\n Requests</string>
+    <string name="leave_n_aprroval">Leave\n Aprroval</string>
+    <string name="outpass_n_aprroval">Outpass\n Aprroval</string>
+    <string name="my_leave_n_requests">My Leave\n Requests</string>
+    <string name="my_outpass_n_requests">My Outpass\n Requests</string>
+    <string name="log_out">Log Out</string>
+    <string name="latest_announcement">Latest Announcement</string>
+    <string name="active">ACTIVE</string>
+    <string name="inactive">INACTIVE</string>
+    <string name="sick">Sick</string>
+    <string name="leave_type">Leave Type</string>
+    <string name="accepted">Accepted</string>
 </resources>

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.chuti.MainActivity;
 import com.example.chuti.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
@@ -22,7 +23,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 
 public class GatePassQRFragment extends Fragment {
-
     ImageView txtBarcode;
     Toolbar toolbar;
     Bundle bundle;
@@ -83,5 +83,25 @@ public class GatePassQRFragment extends Fragment {
         }
 
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Hide the FAB
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Show the FAB again when the fragment is not visible
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).setFabVisibility(View.VISIBLE);
+        }
     }
 }

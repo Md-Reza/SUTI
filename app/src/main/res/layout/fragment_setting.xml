@@ -92,6 +92,36 @@
                     android:layout_height="wrap_content"
                     android:visibility="visible" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_round_shape"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtLangEnglish"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:text="English" />
+
+                    <TextView
+                        android:id="@+id/txtLangBangla"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:text="বাংলা" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -304,7 +334,7 @@
             android:drawableStart="@drawable/icon_change_password"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="Change Password"
+            android:text="@string/change_password"
             android:textColor="@color/black"
             android:textSize="13sp" />
 
@@ -331,7 +361,7 @@
             android:drawableStart="@drawable/icon_logout"
             android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:text="Log Out"
+            android:text="@string/log_out"
             android:textColor="@color/red"
             android:textSize="13sp" />
 
